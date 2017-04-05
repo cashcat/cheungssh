@@ -174,6 +174,10 @@ class CheungSSHAnalyLog(object):
 			
 			
 			
+			try:
+				os.makedirs(os.path.basename(realname))
+			except:
+				pass
 			if  _type=="remote":
 				tfile=realname
 				sid=msgpack.unpackb(REDIS.hget("CHB-0383740494845",tfile.split("/")[-1]))["sid"]
