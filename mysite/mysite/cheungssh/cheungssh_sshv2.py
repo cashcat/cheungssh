@@ -147,6 +147,7 @@ class CheungSSH_SSH(object):
 			"stage":"done",      
 			"status":False,          
 		}
+		log_name=  "log.%s.%s"  %(tid,sid)   
 		try:
 			if not self.active:raise CheungSSHError("未能与主机建立连接")
 			#data=self.clean_buffer()
@@ -154,7 +155,6 @@ class CheungSSH_SSH(object):
 			
 			
 			#self.set_prompt()
-			log_name=  "log.%s.%s"  %(tid,sid)   
 			self.shell.send("%s\n"%cmd)
 			cheungssh_info['content']=self.recv(sid=sid,tid=tid)
 			self.shell.send("echo $?\n")

@@ -81,7 +81,7 @@ class DockerAdmin(CheungSSHControler):
 			self.REDIS.set("docker.images",self.all_image)
 			cheungssh_info["status"]=True
 		except Exception,e:
-			print "redis错误",e
+			print "redis错误",e,22222222222222222222222222
 			cheungssh_info["status"]=False
 			cheungssh_info["content"]=str(e)
 		return cheungssh_info
@@ -94,7 +94,7 @@ class DockerAdmin(CheungSSHControler):
 			self.REDIS.set("docker.containers",self.all_container)
 			cheungssh_info["status"]=True
 		except Exception,e:
-			print "redis错误",e
+			print "redis错误",e,33333333333333333333333333333333333333
 			cheungssh_info["status"]=False
 			cheungssh_info["content"]=str(e)
 		return cheungssh_info
@@ -209,7 +209,7 @@ class DockerAdmin(CheungSSHControler):
 			self.format_docker_image_list(images,alias,ip,sid)
 			self.format_docker_container_list(container,alias,ip,sid)
 		except Exception,e:
-			print "redis错误",e
+			print "redis错误",e,1111111111111111111111
 			cheungssh_info["status"]=False
 			cheungssh_info["content"]=str(e)
 		return cheungssh_info
