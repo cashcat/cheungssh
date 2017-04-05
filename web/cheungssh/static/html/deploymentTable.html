@@ -1,0 +1,88 @@
+<div class="panel panel-default" id="" style="display: block; overflow: auto;">
+
+    <p class="navbar-form" style="width:100%;margin-bottom:10px;">
+    <div class="input-group" style="padding:10px;">
+        <input type="text" class="form-control searchValue" placeholder="搜索任意关键字" style="width:100%;" >
+        <span class="input-group-btn" >
+                        <button class="btn btn-success">搜索</button>
+                </span>
+    </div>
+    </p>
+
+
+    <div class="panel-heading" style="z-index: 1;background: white;">
+        <button  id="createDeploymentApp" class="btn btn-xs btn-success glyphicon glyphicon-plus "></button>
+        <button  id="refreshDeploymentApp" class="btn btn-xs btn-default  glyphicon glyphicon-refresh "></button>
+
+
+
+    </div>
+
+
+    <table class="table table-hover table-bordered  table-striped  table-condensed  table-responsive"  >
+        <thead>
+        <tr >
+            <th>应用</th>
+            <th>状态</th>
+            <th>最后时间</th>
+            <th>归属</th>
+            <th>主机数</th>
+            <th>模式</th>
+            <th>定时启动</th>
+            <th style="min-width: 60px;">操作</th>
+        </tr>
+        </thead>
+        <tbody id="showDeploymentTbody">
+
+
+        </tbody>
+
+    </table>
+</div>
+
+
+
+
+
+<div id="showDeploymentNotice"  style="z-index: 1004;width:auto;height: 200px;position: fixed;left: 0px;right: 0px;top: 40%;bottom: 60%;margin: auto;display:none;" >
+    <div class="modal "
+         style="overflow:hidden;overflow-y:hidden;position:relative;left:0px;right:0px;bottom:0px;top:0px;margin:auto;display:block;">
+        <div class="modal-dialog">
+            <div class="modal-content  ">
+                <div class="modal-header" style="cursor: move;">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+
+                    <h4 class="glyphicon glyphicon-question-sign" style="color: black">部署</h4>
+                </div>
+
+                <div class="modal-body clearfix ">
+                    <div class="col-md-2 col-xs-2 col-md-offset-3 col-xs-offset-3">
+                        <button id="showDeploymentDetail" class=" btn btn-sm btn-primary">
+				<span class="glyphicon glyphicon-eye-open"></span>
+				<span>详情</span>
+			</button>
+
+                    </div>
+                    <div class="col-md-2 col-xs-5 col-md-offset-2 col-xs-offset-2">
+                        <button id="startDeploymentTask" class=" btn btn-sm btn-success">
+				<span class=" glyphicon glyphicon-play-circle"></span>
+				<span>启动</span>
+			</button>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="closeButton">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<script src="../js/deploymentTable.js"></script>

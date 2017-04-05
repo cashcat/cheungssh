@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" href="../img/cheungssh.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"
+          charset="UTF-8">
+
+    <title>CheungSSH</title>
+
+    <link href="../css/jquery-ui.css" rel="stylesheet">
+    <link href="../css/bootstrap-3.3.5-dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+
+    <!--主页面的css-->
+</head>
+
+<body style="overflow-y:hidden">
+
+<style>
+    #menu .sectionLine:hover {
+        background: #22282e;
+    }
+
+    #showUsername:hover {
+        background: #008fbf;
+
+    }
+
+    .dropdown:hover {
+        background: #008fbf;
+    }
+
+    .dropdown li:hover {
+        background: #eaedf1;
+        cursor: pointer;
+    }
+
+    ::-webkit-scrollbar {
+        width: 0px;
+    }
+
+	/*
+    table {
+        table-layout: fixed;
+    }
+
+    td {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+	*/
+	.loginNotify::-webkit-scrollbar-thumb{
+        border-radius: 5px;
+	        background: #09C;
+
+    }
+	.loginNotify::-webkit-scrollbar {
+        width: 10px;
+    }
+	.cheungsshAreaContent,.ui-menu::-webkit-scrollbar-thumb{
+		border-radius: 5px;
+                background: #09C;
+	}
+	.cheungsshAreaContent,.ui-menu::-webkit-scrollbar{
+		        width: 8px;
+	}
+
+
+    .ui-menu {
+        height: auto;
+        max-height:80%;
+    }
+	
+
+
+</style>
+
+<!--主页面-->
+
+
+<div id="allMain" style="overflow: hidden">
+    <!--导航区域-->
+    <div style="background: #09C;height: 50px;" class="clearfix">
+        <span id="showMenu"
+              style=";cursor:pointer;margin-left:15px;float: left;line-height: 50px;color: white;font-size: 150%;"
+              class="glyphicon glyphicon-align-justify"></span>
+
+        <span style="font-size: 150%;float: left;padding-left: 15px;font-family: 华文中体;font-weight: bold;color: white;line-height: 50px;">CheungSSH</span>
+        <span id=""
+              style="display:none;font-size: 120%;float: right;padding-right: 15px;padding-left:10px;border-left:1px solid #008fbf;font-family: 华文中体;font-weight: bold;color: white;line-height: 50px;cursor:pointer">用户名</span>
+
+
+        <div class="dropdown"
+             style="font-size: 120%;float: right;padding-right: 15px;padding-left:10px;border-left:1px solid #008fbf;font-family: 华文中体;font-weight: bold;color: white;line-height: 50px;">
+  <span id="showUsername" class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"
+        style="cursor:pointer;">
+  </span>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <li id="powerOff" role="presentation"
+                    style="border-bottom:1px solid #eaedf1;height:50px;padding-left:15px;color:black">
+                    <span class="glyphicon glyphicon-off"></span>
+                    <span>注销</span>
+                </li>
+                <li id="admin" role="presentation"
+                    style="border-bottom:1px solid #eaedf1;height:50px;padding-left:15px;color:black">
+                    <span class="glyphicon glyphicon-user"></span>
+                    <span>账户</span>
+                </li>
+                <!--
+                <li role="presentation" style="height:50px;padding-left:15px;color:black" >
+                    <span class="fa fa-cog fa-spin fa-lg fa-fw" style="width:inherit"></span>
+                    <span >设置</span>
+                </li>
+                -->
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="  glyphicon glyphicon-ok  alert alert-success" id="showSuccessNotic"
+         style="position:fixed;left: 40%;right: 40%;z-index: 1004;top: 10%;display: none;"> 操作成功!
+    </div>
+
+    <!--菜单和子页区域-->
+    <div id="menuAndSonePage" class="clearfix" style="overflow:hidden;">
+        <!--菜单区域-->
+        <div id="menu"
+             style=";position:relative;overflow:auto;background: #293038;width: 180px;height: 100%;;color: white;float:left">
+
+
+            <!--
+                    <div>
+                        <div style="font-size: 12px; ;padding: 10px;position:relative" >
+                            <span class="glyphicon glyphicon-globe" style="font-size: 150%; "></span>
+                            <span  style=";font-size: 150%;margin-left: 10px;" >服务器</span>
+                    <span class="fa fa-angle-right fa-2x" style="position:absolute;right:10px;"></span>
+                        </div>
+
+
+                    </div>
+            -->
+
+
+        </div>
+
+
+        <div id="showMainContent"
+             style="float:right;height: 100%;overflow: auto;position:relative;padding-top:20px;"></div>
+
+
+    </div>
+
+</div>
+
+
+<div  class="loginNotify" id="loginNotifyParent" style="display:none;z-index: 10;border: 1px solid #09C;width: 250px;height: 200px;position: fixed;bottom: 0px;right: 20px;overflow: auto;background:white;">
+    <div id="loginNotifyPannel" style="cursor: pointer;z-index: 11;width: 250px;padding: 5px;height: 30px;position: fixed;;border-bottom: 1px dashed #b0b0b0;background: #09C;text-align: center;font-family: 华文仿宋;color: white;font-weight: bold;"><span class="glyphicon glyphicon-info-sign"></span><span>登录通知</span></div>
+    <div id="loginNotify" class="input-group loginNotify" style="top: 30px;;width: 100%;;background: white;">
+
+
+    </div>
+</div>
+
+
+<div id="shadow"
+     style="display:none;position: absolute;  top: 0px; bottom: 0px ;left: 0px; right: 0px; z-index: 1003;background: rgba(0,0,0,0.4); "></div>
+<!--
+<img id="" src="../img/loading.gif"
+     style="z-index: 1004;width:5%;margin:auto;position:fixed;top:0px;bottom:0px;right:0px;left:0px;display: none;"/>
+-->
+
+
+<div id="loadPic"
+     style="text-align: center;padding: 10px;color: white;font-weight:bold   ;border-radius:8px;background: rgba(0,0,0,0.5);;z-index: 1004;width: 200px;height:40px;margin:auto;position:fixed;top:0px;bottom:0px;right:0px;left:0px;display: none;">
+<i class="fa fa-refresh fa-spin"></i>
+    <span style="letter-spacing: 4px;">请稍后...</span>
+</div>
+
+
+
+<div id="showSuccessNoticeIphone"
+     style="z-index: 1004;width:20%;height: 20%;margin:auto;position:fixed;top:0px;bottom:0px;right:0px;left:0px;display: none;"></div>
+
+
+<div id="showErrorInfoDIV"
+     style="z-index: 1005;display:none;position: absolute;  top: 0px; bottom: 0px ;left: 0px; right: 0px; ;">
+
+
+    <div style="width:auto;height: 200px;position: fixed;left: 0px;right: 0px;top: 40%;bottom: 60%;margin: auto;;"
+         id="">
+        <div class="modal "
+             style="overflow:hidden;overflow-y:hidden;position:relative;left:0px;right:0px;bottom:0px;top:0px;margin:auto;display:block;">
+            <div class="modal-dialog">
+                <div class="modal-content  ">
+                    <div class="modal-header" style="cursor: move;">
+
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+
+                        <h4 class=" glyphicon glyphicon-alert " style="color: red;">错误</h4>
+                    </div>
+
+                    <div class="modal-body  ">
+                        <p id="showWarnContent" style="text-align:center;;color:red; font-weight:bold;">请确认您的消息?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="closeButton">好的</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!--编辑框-->
+
+<div id="editDiv"
+     style="position: fixed;left: 0px;right: 0px;top: 0px;bottom: 60%;margin: auto;display:none ;z-index: 1004;">
+    <div class="modal  "
+         style="overflow:auto;display:block;">
+        <div class="modal-dialog" style="left: 0px; margin-top: 0px;padding:0px;padding-top: 0px;">
+            <div class="modal-content ">
+                <div class="modal-header" style="cursor:move;">
+
+
+                    <h4 class=" glyphicon glyphicon-edit">更新配置</h4>
+                </div>
+
+                <form class="form-horizontal" role="form">
+                    <div id="showEditList">
+                    </div>
+
+                    <!--密码选项区域-->
+                    <div>
+                        <div class="col-md-12 input-group" style="padding-bottom: 5px;"><span class="input-group-addon"
+                                                                                              style="width: 90px;">&nbsp;登录方式</span>
+                            <div class="dropdown" style="width: auto;">
+                                <!--由程序初始化值-->
+                                <button class="btn btn-default " type="button" id="login_method"
+                                        style="width: 100%;" value="PASSWORD">
+                                    密码
+                                </button>
+                                <ul id="passwordAndKey" class="dropdown-menu" style="width: 100%; display: none;">
+                                    <li class="form-control ng-pristine ng-valid ng-touched" value="PASSWORD"
+                                        style="padding-top: 10px;" id="selectedPassword">密码
+                                    </li>
+                                    <li class="form-control ng-pristine ng-valid ng-touched" value="KEY"
+                                        style="padding-top: 10px;" id="selectedKey">秘钥
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!--密码和秘钥的输入区域-->
+
+                        <div id="passwordFrame" class="col-md-12 input-group"
+                             style="padding-bottom: 5px;display: none;">
+                            <span class="input-group-addon" style="width: 90px;">&nbsp;密码</span>
+                            <input id="password" type="password" class="form-control ng-pristine ng-valid ng-touched">
+                        </div>
+
+                        <div id="keyFrame" class="col-md-12 input-group" style="padding-bottom: 5px;display: none;">
+                            <span class="input-group-addon" style="width: 90px;">&nbsp;秘钥</span>
+                            <div class="dropdown">
+                                <!--密码和秘钥按钮-->
+                                <button id="key_file" class="btn btn-default dropdown-toggle" type="button"
+                                        style="width: 100%;">
+                                    <i class="caret"></i>
+                                </button>
+                                <ul class="dropdown-menu" style="display: block;width: 100%;display: none;"
+                                    id="showKeyList">
+                                    <!--这里显示keyfile清单-->
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!--密码和秘钥的输入区域-->
+
+
+                        <div id="showEditListTail" style="display: none;">
+                            <!--sudo选项-->
+                            <div class="col-md-12 input-group" style="padding-bottom: 5px;">
+                                <span id="sudo" value="N" class="input-group-addon "
+                                      style="width: 90px;cursor: pointer;">
+                                <i class="glyphicon glyphicon-unchecked"></i> sudo
+                                </span>
+                                <input id="sudo_password" type="password"
+                                       class="form-control ng-pristine ng-valid ng-touched ">
+                            </div>
+
+                            <div class="col-md-12 input-group" style="padding-bottom: 5px;">
+                          <span id="su" value="N" class="input-group-addon " style="width: 90px;cursor: pointer;">
+                              <i class="glyphicon glyphicon-unchecked "></i> su
+                          </span>
+                                <input id="su_password" type="password"
+                                       class="form-control ng-pristine ng-valid ng-touched">
+                            </div>
+                        </div>
+
+                </form>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="advanceOption">高级</button>
+
+                    <button type="button" class="btn btn-success" data-dismiss="modal" id="updateServerConfig">更新
+                    </button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal" id="createConfig"
+                            style="display: none">创建
+                    </button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="closeEditButton">放弃</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+
+<div id="showWarnDIV"
+     style="z-index: 1005;display:block;position: absolute;  top: 0px; bottom: 0px ;left: 0px; right: 0px; ;">
+
+
+    <div style="width:auto;height: 200px;position: fixed;left: 0px;right: 0px;top: 10%;bottom: 60%;margin: auto;;"
+         id="">
+        <div class="modal "
+             style="overflow:hidden;overflow-y:hidden;position:relative;left:0px;right:0px;bottom:0px;top:0px;margin:auto;display:block;">
+            <div class="modal-dialog">
+                <div class="modal-content  ">
+                    <div class="modal-header" style="cursor: move;">
+
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+
+                        <h4 class=" glyphicon glyphicon-alert " style="color: red;font-weight:bold;">警告！</h4>
+                    </div>
+
+                    <div class="modal-body  ">
+				<p>CheungSSH为了提高运行稳定性，需要在您添加<span style="color:red;font-weight:bold;font-size:20px;">被管理的</span>Linux/Unix服务器到CheungSSH自动化系统之前，在被管理服务器上做如下操作:</p>
+				<pre style="font-size:10px;">1. [root@Bei-GuanLi ~]# echo  "AcceptEnv PS1" >> /etc/ssh/sshd_config #允许设置变量
+2. [root@Bei-GuanLi ~]# /etc/init.d/sshd restart #重启服务
+3. 每添加一个被管理服务器之前，都需要做如上操作
+4. 设置完毕后，即可在CheungSSH添加该服务器
+4. 注意，是在被管理的服务器上，而不是CheungSSH控制系统上！</pre>
+				
+                    </div>
+                    <div class="modal-footer clearfix">
+			<span style="float:left;">
+			<input type="checkbox" id="readWarn"><span style="margin-left:5px;font-weight:bold;">我已经阅读，并且知道如何操作.如果不理解一定要咨询作者！</span></input>
+			</span>
+                        <button  style="float:right;display:none;" type="button" class="btn btn-danger" data-dismiss="modal" id="closeWarnButton">我知道了</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!--下面加载js-->
+
+<script src="../js/jquery-2.2.3.min.js"></script>
+<script src="../js/jquery-1.8.3.min.js"></script>
+<script>
+    var jQuery1_8 = jQuery.noConflict(true);
+</script>
+<script src="../js/jquery-ui.min.js"></script>
+<script src="../js/jquery.nicescroll.min.js"></script>
+<script src="../js/dropzone.js"></script>
+<script src="../js/auto-line-number.js"></script>
+<script src="../jqueryui/development-bundle/ui/jquery.effects.core.js"></script>
+<script src="../jqueryui/development-bundle/ui/minified/jquery.effects.shake.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+
+<script src="../js/CheungSSHGlobal.js"></script>
+
+<script src="../js/index.js"></script>
+<script src="../js/qunee-min.js"></script>
+<script src="../js/PopupMenu.js"></script>
+<script src="../js/q.js"></script>
+
+
+<div style="z-index: 20;display:none;position: fixed;bottom:0px;color: black;letter-spacing: 1px; text-align: center;background: red">
+    ©2016
+    CheungSSH 版权所有
+</div>
+
+
+</body>
+</html>
+
+

@@ -1,0 +1,229 @@
+
+<div class="panel panel-default table-responsive" id="showServers" style="display: block; overflow: auto;">
+
+    <p class="navbar-form" style="width:100%;margin-bottom:10px;">
+    <div class="input-group" style="padding:10px;">
+        <input type="text" class="form-control searchValue" placeholder="搜索任意关键字" style="width:100%;" >
+        <span class="input-group-btn" >
+                        <button class="btn btn-success">搜索</button>
+                </span>
+    </div>
+    </p>
+
+    <div class="panel-heading" style="z-index: 1;background: white;">
+        <button class="btn btn-success btn-xs" id="createApp" type="button"><span
+                class="glyphicon glyphicon-plus"></span></button>
+        <button class="btn btn-default btn-xs"  id="refreshApp"><span
+               class="glyphicon glyphicon-refresh"></span></button>
+
+    </div>
+
+    <table class="table table-bordered table-hover table-striped  table-condensed "  >
+        <thead>
+        <tr >
+            <th>服务器</th>
+            <th>应用</th>
+            <th>状态</th>
+            <th>归属</th>
+            <th>时间</th>
+            <th>操作</th>
+
+        </tr>
+        </thead>
+        <tbody id="appTbody">
+
+        </tbody>
+
+    </table>
+</div>
+
+<div  style="position: fixed;left: 0px;right: 0px;top: 100px;bottom: 0%;margin: auto;display:none ;z-index: 1004;" id="AppDiv">
+
+    <div class="modal "
+         style="height: 100%;;overflow:hidden;overflow-y:hidden;position:relative;left:0px;right:0px;bottom:0px;top:0px;margin:auto;display:block;">
+        <div class="modal-dialog">
+            <div class="modal-content  " >
+                <div class="modal-header" style="cursor: move;">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+
+                    <h4 class=" glyphicon glyphicon-success  glyphicon glyphicon-edit "  style="color: green;">应用管理</h4>
+                </div>
+
+
+                <div class="modal-body clearfix">
+
+
+                    <form class="form-horizontal" >
+
+                        <div class="form-group">
+                            <label   class="col-md-2 col-xs-3 control-label"  >服务器</label>
+                            <div class="col-md-10 col-xs-9">
+                                <input  id="appHost" style="border: none;border-bottom: 1px solid black;outline: none;cursor: pointer;width: 100%;"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label   class="col-md-2  col-xs-3 control-label"  >应用名</label>
+                            <div class="col-md-10 col-xs-9">
+                                <input  id="appName" style="border: none;border-bottom: 1px solid black;outline: none;cursor: pointer;width: 100%;"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label   class="col-md-2 col-xs-3  control-label"  >命令</label>
+                            <div class="col-md-10 col-xs-9">
+                                <input id="appCommand" style="border: none;border-bottom: 1px solid black;outline: none;cursor: pointer;width: 100%;"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label   class="col-md-2 col-xs-3  control-label"  >检查命令</label>
+                            <div class="col-md-10 col-xs-9">
+                                <input  id="appCheckCommand" placeholder="默认是echo  $? 检查"  style="border-radius: 0px;border: none;border-bottom: 1px solid black;outline: none;cursor: pointer;width: 100%;"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label   class="col-md-2 col-xs-3 control-label"  >归属用户</label>
+                            <div class="col-md-10 col-xs-9">
+                                <select class="form-control" id="appOwner">
+                                </select>
+                            </div>
+                        </div>
+
+
+
+                    </form>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal" id="confirmCreateApp">保存</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="cancelApp">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<div id="showAppHost"
+     style="z-index: 1004;position: fixed;left: 0px;right: 0px;top:100px;margin: auto;display:none;">
+    <div class="modal  "
+         style="overflow: visible;position:relative;left:0px;right:0px;bottom:0px;top:0px;margin:auto;display:block;">
+        <div class="modal-dialog" style="left: 0px; margin-top: 0px;padding:0px;padding-top: 0px;">
+            <div class="modal-content " >
+                <div class="modal-header" style="cursor: move;">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+
+                    <h4 class=" glyphicon glyphicon-filter " style="color: green;cursor:pointer;">选择服务器</h4>
+                </div>
+
+                <div class="modal-body">
+                    <table class="table table-bordered table-hover table-striped  table-condensed">
+                        <thead>
+                        <tr>
+                            <th>主机组</th>
+                            <th>主机</th>
+                        </tr>
+                        </thead>
+                        <tbody id="appHostTbody">
+
+                        <!--
+                        这里是tr，每一行
+
+                        -->
+                        </tbody>
+
+                    </table>
+
+
+                    <!---->
+
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="cacelAppHost" style="float:left;">取消
+                    </button>
+                    <button type="button" class="btn btn-success" id="confirmAppHost" style="float:right;">确定
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div id="showAppDetailInfo"  style="overflow: auto; z-index: 1004; width: auto; height: 100%; position: fixed; left: 0px; right: 0px; top: 0px; bottom: 0px; display: none;" >
+
+    <div class="modal "
+         style="height: 100%;;overflow:hidden;overflow-y:hidden;position:relative;left:0px;right:0px;bottom:0px;top:0px;margin:auto;display:block;">
+        <div class="modal-dialog">
+            <div class="modal-content  ">
+                <div class="modal-header" style="cursor: move;">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+
+                    <h4 class=" glyphicon glyphicon-success  glyphicon glyphicon-info-sign " >应用进程信息</h4>
+                </div>
+
+
+                <div class="modal-body">
+
+                    <div     class="col-md-12  col-sm-12 col-xs-12 col-lg-12  input-group">
+                        <div class="col-md-12  col-sm-12 col-xs-12 col-lg-12 "  style="border-bottom: 1px solid #b0b0b0;margin-top:10px;">
+                            <label class="control-label col-md-2 col-lg-2 col-sm-4 col-xs-3">服务器</label>
+                            <div  id="appDetailServer"  class="col-md-10 col-lg-10 col-xs-9 col-sm-10"></div>
+                        </div>
+                        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 " style="border-bottom: 1px solid #b0b0b0;margin-top:10px;">
+                            <label class="control-label col-md-2 col-lg-2 col-sm-4 col-xs-3 ">应用名</label>
+                            <div  id="appDetailName"  class="col-md-10 col-lg-10 col-xs-9 col-sm-10"></div>
+                        </div>
+                        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 " style="border-bottom: 1px solid #b0b0b0;margin-top:10px;">
+                            <label class="control-label col-md-2 col-lg-2 col-sm-4 col-xs-3">状态</label>
+                            <div    class="col-md-10 col-lg-10 col-xs-9 col-sm-10">
+                                <label id="appDetailStatus"  class="label"></label>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 " style="border-bottom: 1px solid #b0b0b0;margin-top:10px;">
+                            <label class="control-label col-md-2 col-lg-2 col-sm-4 col-xs-3">归属</label>
+                            <div   id="appDetailOwner" class="col-md-10 col-lg-10 col-xs-9 col-sm-10"></div>
+                        </div>
+                        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 " style="border-bottom: 1px solid #b0b0b0;margin-top:10px;">
+                            <label class="control-label col-md-2 col-lg-2 col-sm-4 col-xs-3">响应时间</label>
+                            <div  id="appDetailTime" style="word-wrap: break-word;word-break:break-all;"  class="col-md-10 col-lg-10 col-xs-9 col-sm-10"></div>
+                        </div>
+                        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 " style="border-bottom: 1px solid #b0b0b0;margin-top:10px;">
+                            <label class="control-label col-md-2 col-lg-2 col-sm-4 col-xs-3">命令</label>
+                            <div  id="appDetailCommand" style="word-wrap: break-word;word-break:break-all;"  class="col-md-10 col-lg-10 col-xs-9 col-sm-10"></div>
+                        </div>
+
+                        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 " style="border-bottom: 1px solid #b0b0b0;margin-top:10px;">
+                            <label class="control-label col-md-2 col-lg-2 col-sm-4 col-xs-3">检查命令</label>
+                            <div  id="appDetailCheckCommand" style="word-wrap: break-word;word-break:break-all;"  class="col-md-10 col-lg-10 col-xs-9 col-sm-10"></div>
+                        </div>
+                        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 " style="margin-top:10px;">
+                            <label class="control-label col-md-2 col-lg-2 col-sm-4 col-xs-3">消息</label>
+                            <pre  id="appDetailContent" style=";border: none;word-wrap:break-word;white-space: pre-wrap; "  class="col-md-10 col-lg-10 col-xs-9 col-sm-10"></pre>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"  id="closeAppDetail">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="../js/appExecute.js"></script>

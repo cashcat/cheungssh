@@ -1,0 +1,2 @@
+class CheungSSHError(Exception):
+	pass
