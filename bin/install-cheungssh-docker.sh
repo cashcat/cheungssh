@@ -224,7 +224,7 @@ EOF
 	create_swap
 
 	echo "正在启动容器(端口$port,$pwd)，请稍后..."
-	start_docker=`docker run  -tid -p $port:80  --net host -v $(pwd)/../:/home/cheungssh registry.cn-hangzhou.aliyuncs.com/cheungssh/official-zhangqichuan-cheungssh-web3.0-docker-centos-20170404   /bin/bash`
+	start_docker=`docker run  -tid -p $port:80   -v $(pwd)/../:/home/cheungssh registry.cn-hangzhou.aliyuncs.com/cheungssh/official-zhangqichuan-cheungssh-web3.0-docker-centos-20170404   /bin/bash`
 	if [ $? -ne 0 ]
 	then
 		echo  "启动容器失败，请您联系CheungSSH作者！"
