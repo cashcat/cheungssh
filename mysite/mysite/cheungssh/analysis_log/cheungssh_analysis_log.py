@@ -175,7 +175,7 @@ class CheungSSHAnalyLog(object):
 			
 			
 			try:
-				os.makedirs(os.path.basename(realname))
+				os.makedirs(os.path.dirname(realname))
 			except:
 				pass
 			if  _type=="remote":
