@@ -63,8 +63,8 @@ class ControlerCenter(object):
 		pass
 	def upload_script_and_execute_command(self,**parameters):
 		cheungssh_info={"status":False,"content":""}
-		if not parameters["username"]  == "root":
-			raise CheungSSHError("非管理员账号，不能采集目标服务器资产")
+		#if not parameters["username"]  == "root":
+		#	raise CheungSSHError("非管理员账号，不能采集目标服务器资产")
 		try:
 			
 			ssh=CheungSSH_SSH()
