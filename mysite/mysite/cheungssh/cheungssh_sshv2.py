@@ -203,7 +203,7 @@ class CheungSSH_SSH(object):
 		cheungssh_info={"status":False,"content":""}
 		try:
 			if self.username=="root":raise CheungSSHError("root不能sudo")
-			self.shell.send('sudo su - root\n')
+			self.shell.send('sudo su  root\n')
 			buff=''
 			_buff=""
 			while True:
@@ -216,12 +216,12 @@ class CheungSSH_SSH(object):
 							raise CheungSSHError("sudo密码错误")
 						elif re.search('%s.*sudoers' %self.username,_buff):
 							raise CheungSSHError("您的账户没有配置sudo权限")
-						elif re.search(self.base_prompt,_buff.split('\n')[-1]):
+						elif re.search(self.cheungssh_prompt,_buff.split('\n')[-1]):
 							
 							cheungssh_info["status"]=True
 							cheungssh_info["content"]=""	
 							return cheungssh_info
-				elif re.search(self.base_prompt,buff.split('\n')[-1]): 
+				elif re.search(self.cheungssh_prompt,buff.split('\n')[-1]): 
 					
 					cheungssh_info["status"]=True
 					return cheungssh_info
@@ -234,7 +234,7 @@ class CheungSSH_SSH(object):
 		cheungssh_info={"status":False,"content":""}
 		try:
 			if self.username=="root":raise CheungSSHError("您当前已经是超级管理员!")
-			self.shell.send("su  - root\n")
+			self.shell.send("su   root\n")
 			buff=''
 			_buff=""
 			while True:
@@ -245,7 +245,7 @@ class CheungSSH_SSH(object):
 						_buff+=self.shell.recv(1024)
 						if re.search("^su",_buff.split("\n")[-2]):
 							raise CheungSSHError("su密码错误")
-						elif re.search(self.base_prompt,_buff.split("\n")[-1]):
+						elif re.search(self.cheungssh_prompt,_buff.split("\n")[-1]):
 							cheungssh_info["status"]=True
 							return  cheungssh_info 
 							

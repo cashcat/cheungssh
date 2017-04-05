@@ -254,7 +254,9 @@ function loadFileUploadHTML(){
 
 $(function () {
 
+	alert(1)
     var browserInfo = navigator.userAgent.toLowerCase();
+	console.log(browserInfo)
 
     if (!browserInfo.match(/webkit/)) {
         document.getElementById("showWarnContent").innerHTML = "很抱歉,您当前必须使用谷歌内核的浏览器操作CheugnSSH系统！" +

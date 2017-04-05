@@ -1793,7 +1793,6 @@ def get_date_analysis_log(request):
 	username=request.user.username
 	full_path=os.path.join(cheungssh_settings.upload_logfile_dir,username,filename)
 	real_path=os.path.join(cheungssh_settings.upload_logfile_dir,username,realname)
-	print real_path,3333333333333333333333333333333333333333,username
 	return CheungSSHAnalyLog.get_logfile_date(full_path,real_path,_type)
 @login_check.login_check("创建远程日志分析路径")
 @ajax_http
