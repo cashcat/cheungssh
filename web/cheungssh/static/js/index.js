@@ -189,6 +189,19 @@ var menu = [
 ];
 
 
+function checkGoogle(){
+var browserInfo = navigator.userAgent.toLowerCase();
+        console.log(browserInfo)
+
+    if (!browserInfo.match(/webkit/)) {
+		alert("抱歉，您必须使用谷歌浏览器访问本系统，或者360浏览器的极速模式!")
+
+    }
+
+
+
+}
+
 function showAndCloseSection(div) {
     //关闭点击div下一个兄弟元素
     //加颜色
@@ -1080,6 +1093,12 @@ $(function () {
 	document.getElementById("closeWarnButton").onclick=function(){
 		$("#showWarnDIV").hide("fast");
 	}
+
+
+
+
+
+	checkGoogle();
 
 
 })
