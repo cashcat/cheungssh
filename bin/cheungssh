@@ -50,6 +50,7 @@ start(){
 		echo "CheungSSH 启动成功！"
 		echo  "CheungSSH 运行中..." > /home/cheungssh/pid/cheungssh.status 2>/dev/null
 	fi
+	service rsyslog restart 2&>/dev/null
 	sh /home/cheungssh/bin/add_crond.sh
 }
 status(){
