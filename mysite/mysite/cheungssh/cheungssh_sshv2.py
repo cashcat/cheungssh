@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 #coding:utf-8
 #Author: Cheung Kei-Chuen CheungSSH 张其川
 import paramiko,re,socket,os,sys,json,time
@@ -12,9 +12,7 @@ REDIS=cache.master_client
 class CheungSSH_SSH(object):
 	def __init__(self):
 		self.base_prompt = r'(>|#|\]|\$|\)) *$'
-		self.active=False
 		self.prompt=""
-		self.cheungssh_prompt=re.escape("[CheungSSH-Virtual-Acount@CheungSSH-Automatic-System]#")
 	def login(self,**kws):
 		cheungssh_info={"status":False,"content":""}
 		try:
@@ -49,7 +47,6 @@ class CheungSSH_SSH(object):
 				ssh.connect(self.ip,self.port,self.username,pkey=key)
 			self.channel=ssh
 			self.shell = ssh.invoke_shell(width=1000,height=1000)
-			self.active=True
 			data=self.clean_buffer()
 			if not data["status"]:raise CheungSSHError(data["content"])
 			if self.sudo=="Y":
@@ -104,13 +101,13 @@ class CheungSSH_SSH(object):
 		return cheungssh_info
 	def recv(self,sid="",tid="",ignore=False):
 		buff=''
-		
-		while (not re.search(self.cheungssh_prompt,buff.split('\n')[-1])) :
-			_buff=self.shell.recv(10240)
+		while (not re.search(self.base_prompt,buff.split('\n')[-1])) :
+			time.sleep(0.2)
+			_buff=self.shell.recv(1024)
 			buff+=_buff
 			if not ignore:self.log(sid=sid,tid=tid,content_segment=_buff)
 		return buff
-	def disk_log(self,sid,content=""): 
+	def disk_log(self,sid,content=""):
 		pass
 	def log(self,sid='',tid='',content_segment=""): 
 		
@@ -123,16 +120,13 @@ class CheungSSH_SSH(object):
 		log_content=json.dumps(log_content,encoding="utf-8",ensure_ascii=False)
 		REDIS.rpush(log_name,log_content)
 			
-		
 	def clean_buffer(self):
 		cheungssh_info={"status":False,"content":""}
 		try:
-			if  not self.active: raise CheungSSHError("已经与主机断开连接")
 			#self.shell.send('\n')
-			
+			#time.sleep(0.5)
 			buff=""
-			#while (not re.search(self.base_prompt.split('\r\n')[-1],buff)):
-			while (not re.search(self.cheungssh_prompt.split('\r\n')[-1],buff)):
+			while (not re.search(self.base_prompt.split('\r\n')[-1],buff)):
 				buff+=self.shell.recv(512)
 			cheungssh_info["status"]=True
 		except Exception,e:
@@ -149,7 +143,6 @@ class CheungSSH_SSH(object):
 		}
 		log_name=  "log.%s.%s"  %(tid,sid)   
 		try:
-			if not self.active:raise CheungSSHError("未能与主机建立连接")
 			#data=self.clean_buffer()
 			#if not data["status"]:raise CheungSSHError(data["content"]) 
 			
@@ -159,8 +152,9 @@ class CheungSSH_SSH(object):
 			cheungssh_info['content']=self.recv(sid=sid,tid=tid)
 			self.shell.send("echo $?\n")
 			_status=self.recv(sid=sid,tid=tid,ignore=True)
-			status=re.search('echo \$\?\\r\\n(.*)\\r\\n%s'%self.prompt,_status).group(1)
-			status=int(status)
+			#print _status.split("adsfasdf"),self.base_prompt
+			status=re.findall('echo \$\?\\r\\n(\d+)',_status)
+			status=int(status[0])
 			if status==0:
 				cheungssh_info["status"]=True
 				log_content["status"]=True 
@@ -170,12 +164,10 @@ class CheungSSH_SSH(object):
 		except Exception,e:
 			cheungssh_info["status"]=False
 			cheungssh_info["content"] =  str(e)
-		
 		_log_content=json.dumps(log_content,encoding="utf-8",ensure_ascii=False)
 		REDIS.lpush(log_name,_log_content)
 		
 		if not ignore:
-			
 			log_content["content"]=cheungssh_info["content"]
 			self.write_command_log(tid,log_content)
 		return cheungssh_info
@@ -197,13 +189,12 @@ class CheungSSH_SSH(object):
 		except Exception,e:
 			print "写入日志报错",str(e)
 			pass
-		
-
+	
 	def sudo_login(self):
 		cheungssh_info={"status":False,"content":""}
 		try:
 			if self.username=="root":raise CheungSSHError("root不能sudo")
-			self.shell.send('sudo su  root\n')
+			self.shell.send('sudo su - root\n')
 			buff=''
 			_buff=""
 			while True:
@@ -216,12 +207,12 @@ class CheungSSH_SSH(object):
 							raise CheungSSHError("sudo密码错误")
 						elif re.search('%s.*sudoers' %self.username,_buff):
 							raise CheungSSHError("您的账户没有配置sudo权限")
-						elif re.search(self.cheungssh_prompt,_buff.split('\n')[-1]):
+						elif re.search(self.base_prompt,_buff.split('\n')[-1]):
 							
 							cheungssh_info["status"]=True
 							cheungssh_info["content"]=""	
 							return cheungssh_info
-				elif re.search(self.cheungssh_prompt,buff.split('\n')[-1]): 
+				elif re.search(self.base_prompt,buff.split('\n')[-1]): 
 					
 					cheungssh_info["status"]=True
 					return cheungssh_info
@@ -234,7 +225,7 @@ class CheungSSH_SSH(object):
 		cheungssh_info={"status":False,"content":""}
 		try:
 			if self.username=="root":raise CheungSSHError("您当前已经是超级管理员!")
-			self.shell.send("su   root\n")
+			self.shell.send("su  - root\n")
 			buff=''
 			_buff=""
 			while True:
@@ -245,25 +236,25 @@ class CheungSSH_SSH(object):
 						_buff+=self.shell.recv(1024)
 						if re.search("^su",_buff.split("\n")[-2]):
 							raise CheungSSHError("su密码错误")
-						elif re.search(self.cheungssh_prompt,_buff.split("\n")[-1]):
+						elif re.search(self.base_prompt,_buff.split("\n")[-1]):
 							cheungssh_info["status"]=True
 							return  cheungssh_info 
-							
+						
 				
 		except Exception,e:
 			cheungssh_info["status"]=False
 			cheungssh_info["content"]=str(e)
 		return cheungssh_info
 	def set_prompt(self):
-		
+	
 		self.shell.send("export PS1='[\u@\h]\$'\n")
 		buff=''
 		"""while not re.search(self.base_prompt,buff.split('\n')[-1]):
 			_buff=self.shell.recv(1024)
 			buff+=_buff"""
-		
+	
 		while True:
-			
+			time.sleep(2)
 			if self.shell.recv_ready():
 				_buff=self.shell.recv(1024)
 				buff+=_buff
@@ -274,7 +265,6 @@ class CheungSSH_SSH(object):
 	def logout(self):
 		try:
 			self.channel.close()
-			self.active=False
 		except Exception,e:
 			pass
 		print "已经注销"

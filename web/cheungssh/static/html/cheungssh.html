@@ -320,47 +320,6 @@
 
 
 
-<div id="showWarnDIV"
-     style="z-index: 1005;display:block;position: absolute;  top: 0px; bottom: 0px ;left: 0px; right: 0px; ;">
-
-
-    <div style="width:auto;height: 200px;position: fixed;left: 0px;right: 0px;top: 10%;bottom: 60%;margin: auto;;"
-         id="">
-        <div class="modal "
-             style="overflow:hidden;overflow-y:hidden;position:relative;left:0px;right:0px;bottom:0px;top:0px;margin:auto;display:block;">
-            <div class="modal-dialog">
-                <div class="modal-content  ">
-                    <div class="modal-header" style="cursor: move;">
-
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-
-                        <h4 class=" glyphicon glyphicon-alert " style="color: red;font-weight:bold;">警告！</h4>
-                    </div>
-
-                    <div class="modal-body  ">
-				<p>CheungSSH为了提高运行稳定性，需要在您添加<span style="color:red;font-weight:bold;font-size:20px;">被管理的</span>Linux/Unix服务器到CheungSSH自动化系统之前，在被管理服务器上做如下操作:</p>
-				<pre style="font-size:10px;">1. [root@Bei-GuanLi ~]# echo  "AcceptEnv PS1" >> /etc/ssh/sshd_config #允许设置变量
-2. [root@Bei-GuanLi ~]# /etc/init.d/sshd restart #重启服务
-3. 每添加一个被管理服务器之前，都需要做如上操作
-4. 设置完毕后，即可在CheungSSH添加该服务器
-5. 注意，是在被管理的服务器上，而不是CheungSSH控制系统上！
-6. 再次注意，是必须,否则真用不了.
-</pre>
-
-				
-                    </div>
-                    <div class="modal-footer clearfix">
-			<span style="float:left;">
-			<input type="checkbox" id="readWarn"><span style="margin-left:5px;font-weight:bold;">我已经阅读，并且知道如何操作.如果不理解一定要咨询作者！</span></input>
-			</span>
-                        <button  style="float:right;display:none;" type="button" class="btn btn-danger" data-dismiss="modal" id="closeWarnButton">我知道了</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</div>
 
 
 <!--下面加载js-->

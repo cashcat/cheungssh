@@ -1,4 +1,5 @@
 #coding:utf-8
+from cheungssh_middleware.cheungssh_middleware import CheungSSHMiddleware
 from analysis_log.cheungssh_analysis_log import CheungSSHAnalyLog
 from analysis_log.cheungssh_web_analysis_view import CheungSSHAnalysisWebView
 from crontab.cheungssh_crontab_controler import CheungSSHCrontabControler
@@ -694,7 +695,7 @@ def command_history(request):
 def my_command_history(request):
 	cheungssh_info={"content":[],"status":True}
 	username=request.user.username
-	history=REDIS.lrange("command.history",-5,-1)
+	history=REDIS.lrange("command.history",0,5)[::-1]
 	for line in history:
 		line=json.loads(line)
 		owner=line["owner"]
@@ -1812,3 +1813,7 @@ def get_remote_analysis_logfile_info(request):
 def delete_remote_analysis_logfile_info(request):
 	tid=request.GET.get("tid")
 	return CheungSSHAnalysisWebView.delete_remote_analysis_logfile_info(tid)
+@login_check.login_check("删除远程日志分析路径")
+@ajax_http
+def get_to_web_middleware_info(request):
+	return CheungSSHMiddleware.get_to_web_middleware_info()

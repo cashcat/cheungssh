@@ -98,5 +98,6 @@ urlpatterns = patterns('',
 	url(r"^cheungssh/add_remote_analysis_logfile/","mysite.cheungssh.cheungssh.add_remote_analysis_logfile"),
 	url(r"^cheungssh/get_remote_analysis_logfile_info/","mysite.cheungssh.cheungssh.get_remote_analysis_logfile_info"),
 	url(r"^cheungssh/delete_remote_analysis_logfile_info/","mysite.cheungssh.cheungssh.delete_remote_analysis_logfile_info"),
+	url(r"^cheungssh/get_to_web_middleware_info/$","mysite.cheungssh.cheungssh.get_to_web_middleware_info"),
 	)
 

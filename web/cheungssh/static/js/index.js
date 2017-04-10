@@ -1081,18 +1081,6 @@ $(function () {
             loginUserNotify();
         }, 30000);
     }
-	//警告提示
-	document.getElementById("readWarn").onclick=function(){
-			if (this.checked){
-				document.getElementById("closeWarnButton").style.display="block";
-			}
-			else{
-				document.getElementById("closeWarnButton").style.display="none";
-			}
-	}
-	document.getElementById("closeWarnButton").onclick=function(){
-		$("#showWarnDIV").hide("fast");
-	}
 
 
 
