@@ -228,6 +228,14 @@ $(document).on("click","#appDeploy",function(){
 
 })
 
+$(document).on("click","#oracle",function(){
+	loadOracle();
+})
+
+function loadOracle(){
+	$("#showMainCOntent").load("static/html/oracle.html")
+}
+
 
 $(document).on("click","#fileUploadMenu",function(){
     loadFileUploadHTML();

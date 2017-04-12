@@ -153,6 +153,7 @@ var getLogDateURL=headURL+"cheungssh/get_date_analysis_log/";
 var addRemoteAanalysisLogfileURL=headURL+"cheungssh/add_remote_analysis_logfile/";
 var getRemoteAanalysisLogfileInfoURL=headURL+"cheungssh/get_remote_analysis_logfile_info/";
 var delRemoteAanalysisLogfileInfoURL=headURL+"cheungssh/delete_remote_analysis_logfile_info/";
+var getMiddleWareInfoURL=headURL+"cheungssh/get_to_web_middleware_info/";
 
 
 

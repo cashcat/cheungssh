@@ -183,6 +183,22 @@ var menu = [
             },
         }
     },
+	{
+		"中间软件":{
+				"class":"glyphicon glyphicon-briefcase",
+				"id":"middleware",
+				"subMenu":{
+					"Oracle":{
+						"class":"glyphicon glyphicon-king",
+						"id":"oracle",
+					},
+					"MySQL":{
+						"class":"glyphicon glyphicon-queen",
+						"id":"mysql"
+					},
+				}
+				}
+	},
 
 
 
@@ -566,6 +582,14 @@ function loadNetworkHTML(){
 
 }
 
+
+$(document).on("click","#oracle",function(){
+	loadOracle();
+})
+
+function loadOracle(){
+	$("#showMainContent").load("../html/oracle.html");
+}
 
 function loadLoginSuccessHTML() {
     $("#showMainContent").load("../html/loginSuccess.html");
@@ -1086,7 +1110,6 @@ $(function () {
 
 
 
-	checkGoogle();
 
 
 })
