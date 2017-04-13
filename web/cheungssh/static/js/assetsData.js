@@ -315,6 +315,28 @@ function loadHistoryAssetsData(sid) {
 }
 
 
+function exportAssets(){
+	jQuery.ajax({
+		"url":getCurrentAssetsDataExportURL,
+		"dataType":"jsonp",
+		"beforeSend":start_load_pic,
+		"complete":stop_load_pic,
+		"type":"get",
+		"error":errorAjax,
+		"success":function(data){
+			responseCheck(data)
+			if(!data.status){
+				showErrorInfo(data.content);
+				return false;
+			}
+			else{
+				var downloadURL=data.content;
+				window.location.href=downloadURL;//下载返回的地址
+			}
+		}
+	})
+
+}
 //关闭画图的函数
 
 //初始化加载
@@ -339,6 +361,10 @@ $(function () {
         $("#showHistoryAssetsTr").children().remove(); //删除历史表头
         $("#showHistoryAssetsTbody").children().remove();
     }
+	//绑定导出按钮
+	document.getElementById("exportAssets").onclick=function(){
+		exportAssets();
+	}
 
 
 

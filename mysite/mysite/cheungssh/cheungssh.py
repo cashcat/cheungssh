@@ -1,4 +1,7 @@
 #coding:utf-8
+import csv
+import codecs
+
 from cheungssh_middleware.cheungssh_middleware import CheungSSHMiddleware
 from analysis_log.cheungssh_analysis_log import CheungSSHAnalyLog
 from analysis_log.cheungssh_web_analysis_view import CheungSSHAnalysisWebView
@@ -1270,6 +1273,50 @@ def get_docker_container_progress(request):
 		cheungssh_info["status"]=False
 		cheungssh_info["content"]=str(e)
 	return cheungssh_info
+@login_check.login_check('查看资产信息')
+@permission_check('cheungssh.assets_list')
+@ajax_http
+def get_current_assets_data_export(request):
+	cheungssh_info={"status":False,"content":""}
+	tid=time.strftime("%Y%m%d%H%M",time.localtime())
+	try:
+		data=REDIS.get("current.assets")
+		if data is None:data={}
+		else:data=json.loads(data)
+		title=["主机"]
+		_title=[]
+		for sid in data.keys():
+			a=data[sid]["data"]
+			for t in a.keys():
+				name=a[t]["name"]
+				title.append(name)
+				_title.append(t)
+			break;
+		filename='/home/cheungssh/download/%s.csv' %tid
+		f = file(filename ,'wb')
+		f.write(codecs.BOM_UTF8)
+		writer = csv.writer(f,dialect='excel')
+		writer.writerow(title)
+
+		for sid in data.keys():
+			alias=data[sid]["alias"]
+			_data=data[sid]["data"]
+			_value=[alias]
+			for key in _title:
+				value=_data[key]["value"]
+				value=re.sub("\r|\n|\r\n"," ",value)
+				_value.append(value)
+			writer.writerow(_value)
+		f.close()
+		cheungssh_info={"status":True,"content":"/cheungssh/download/file/%s.csv" % tid}
+	except Exception,e:
+		cheungssh_info["status"]=False
+		cheungssh_info["content"]=str(e)
+	return cheungssh_info
+
+
+
+
 @login_check.login_check('查看资产信息')
 @permission_check('cheungssh.assets_list')
 @ajax_http
