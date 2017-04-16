@@ -241,6 +241,7 @@ service docker restart
 docker  start  ${start_docker} 
 case \"\$1\" in
 	start)
+		setenforce 0  2&>/dev/null
 		docker exec -ti ${start_docker} sh /home/cheungssh/bin/cheungssh start
 		;;
 	*)
