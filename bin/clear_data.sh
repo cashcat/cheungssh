@@ -19,7 +19,10 @@ find  /issue/cheungssh/cheungssh -type f -name '*sh'  -exec  sed -i  's/
 /bin/rm  -r /issue/cheungssh/cheungssh/upload/*
 /bin/rm  -r /issue/cheungssh/cheungssh/conf/*rdb
 /bin/rm  -r /issue/cheungssh/cheungssh/conf/*aof
-/bin/rm  -r /issue/cheungssh/cheungssh/soft/*
+/bin/cp  -r /home/cheungssh/soft/* /issue/cheungssh//cheungssh/soft/
+cd /issue/cheungssh//cheungssh/soft/
+/bin/rm -r get-pip.py IP  mod_python-3.4.1   msgpack-python-0.4.8  redis-3.2.8    tcl8.6.6
+cd -
 /bin/rm  -r /issue/cheungssh/cheungssh/.sshd
 /bin/rm  -r /issue/cheungssh/cheungssh/.bash_history
 /bin/rm  -r /issue/cheungssh/cheungssh/.bash_logout

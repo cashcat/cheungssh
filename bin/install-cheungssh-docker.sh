@@ -221,6 +221,16 @@ EOF
 	else
 		echo  "解压redis完成"
 	fi
+	tar xvf mod_python-3.4.1.tar.gz
+	if [ $? -ne 0 ]
+	then
+		echo  "解压mod_python失败"
+		exit 1
+	else
+		echo  "解压mod_python完成"
+	fi
+
+
 	create_swap
 
 	echo "正在启动容器(端口$port,$pwd)，请稍后..."
