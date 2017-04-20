@@ -146,7 +146,7 @@ EOF
 
 		#如果没有安装过docker，就地安装
 		rpm -vih $pwd/epel-release-6-8.noarch.rpm #安装docker的源
-		yum install -y  bzip2 device-mapper-event-libs  docker-engine #联网安装docker服务，如果您的主机没有联网，就需要您手工下载docker进行源码编译安装,如果编译安装则需要GCC环境,所以建议您联网安装
+		yum install -y  bzip2 device-mapper-event-libs  docker-io #联网安装docker服务，如果您的主机没有联网，就需要您手工下载docker进行源码编译安装,如果编译安装则需要GCC环境,所以建议您联网安装
 		if [ $? -ne 0 ]
 		then
 			echo  "安装docker服务失败了，请联系CheungSSH作者解决"
