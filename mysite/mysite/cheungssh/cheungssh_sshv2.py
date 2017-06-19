@@ -15,6 +15,7 @@ class CheungSSH_SSH(object):
 		self.prompt=""
 	def login(self,**kws):
 		cheungssh_info={"status":False,"content":""}
+		self.kws=kws
 		try:
 			self.owner=kws["owner"]
 			self.su=kws["su"]
@@ -31,6 +32,7 @@ class CheungSSH_SSH(object):
 			self.su=kws["su"]
 			self.su_password=kws["su_password"]
 			self.port = int(self.port)
+			self.os_type=kws["os_type"]
 			ssh = paramiko.SSHClient()
 			if self.login_method=='PASSWORD':
 				ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -234,7 +236,7 @@ class CheungSSH_SSH(object):
 					self.shell.send("%s\n" %self.su_password)
 					while True:
 						_buff+=self.shell.recv(1024)
-						if re.search("^su",_buff.split("\n")[-2]):
+						if re.search("^su",_buff.split("\n")[-2]) or re.search("Authentication",_buff.split("\n")[-2]):
 							raise CheungSSHError("su密码错误")
 						elif re.search(self.base_prompt,_buff.split("\n")[-1]):
 							cheungssh_info["status"]=True

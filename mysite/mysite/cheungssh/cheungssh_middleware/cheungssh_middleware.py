@@ -16,7 +16,7 @@ from cheungssh_thread_queue import *
 
 class CheungSSHMiddleware(object):
 	def __init__(self):
-		self.collect_oracle_cmd="find / -type f -name  lsnrctl"
+		self.collect_oracle_cmd="find / -type f -name  tnslsnr"
 		pass
 
 	def login(self,**kws):
@@ -36,16 +36,20 @@ class CheungSSHMiddleware(object):
 				raise CheungSSHError(data["content"])
 			content=data["content"].split("\r\n")[:-1]
 			for line in content:
-				ora=re.search("^/.*oracle/.*lsnrctl$",line)
+				ora=re.search("^/.*oracle/.*tnslsnr$",line)
 				
 				if ora:
 					line=ora.group()
-					version=re.search("oracle/.*([0-9]{2}(\.\d+)?)",line).group(1)
+					try:
+						version=re.search("oracle/.*([0-9]{2}(\.\d+)?)",line).group(1)
+					except IndexError:
+						continue
 					parrent_dir=os.path.dirname(line)
 					user="oracle"
 					data=ssh.execute(cmd="ps -fel|grep -v  $$")
-					if not data["status"]:
-						raise CheungSSHError(data["content"])
+					#if not data["status"]:
+					#	raise CheungSSHError(data["content"])
+					
 					content=data["content"]
 					run_time="未运行"
 					for ps in content.split("\r\n"):
@@ -81,7 +85,7 @@ class CheungSSHMiddleware(object):
 			cheungssh_info={"content":data_info,"status":True}
 		except Exception,e:
 			print "Oracel Error",str(e),type(e)
-			cheungssh_info={"content":data_info,"status":False}
+			cheungssh_info={"content":str(e),"status":False}
 		_data=msgpack.packb(cheungssh_info)
 		REDIS.hset("CHB-5984849XSLW3O",_s["id"],_data)
 	def run(self):

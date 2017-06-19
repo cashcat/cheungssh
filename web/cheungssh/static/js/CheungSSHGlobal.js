@@ -155,7 +155,7 @@ var getRemoteAanalysisLogfileInfoURL=headURL+"cheungssh/get_remote_analysis_logf
 var delRemoteAanalysisLogfileInfoURL=headURL+"cheungssh/delete_remote_analysis_logfile_info/";
 var getMiddleWareInfoURL=headURL+"cheungssh/get_to_web_middleware_info/";
 var getCurrentAssetsDataExportURL=headURL+"cheungssh/get_current_assets_data_export/";
-
+var getSystemVersionURL=headURL+"cheungssh/get_os_type/";
 
 
 /*

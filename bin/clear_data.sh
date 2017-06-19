@@ -1,4 +1,10 @@
 #!/bin/bash
+#导出数据库最新表
+mysql  -uroot  -pzhang cheungssh -e " delete  from auth_permission where id in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,78,79,80,81,82,83);"
+echo  "DROP database IF EXISTS cheungssh;" >  /home/cheungssh/conf/cheungssh.sql
+echo  "create database cheungssh default charset='utf8';" >>  /home/cheungssh/conf/cheungssh.sql
+echo  "use cheungssh;" >> /home/cheungssh/conf/cheungssh.sql
+mysqldump  -uroot -pzhang cheungssh >> /home/cheungssh/conf/cheungssh.sql
 /bin/rm -r /issue/cheungssh/cheungssh/ 2>/dev/null
 /bin/cp  -r /home/cheungssh /issue/cheungssh/
 /bin/rm -r /issue/cheungssh/cheungssh/.ssh

@@ -94,6 +94,7 @@ function createServerLine(serverLine) {
 
     //第七个字段 密码值
     var td = document.createElement("td");
+	td.style.display="none";
     td.className = "password";
     td.textContent = serverLine.password;
     tr.appendChild(td);
@@ -106,6 +107,7 @@ function createServerLine(serverLine) {
 
     //第九个字段 秘钥密码
     var td = document.createElement("td");
+	td.style.display="none";
     td.className = "keyfile_password";
     td.textContent = serverLine.keyfile_password;
     tr.appendChild(td);
@@ -125,8 +127,8 @@ function createServerLine(serverLine) {
 
 
     //第十二个字段 sudo密码
-
     var td = document.createElement("td");
+	td.style.display="none";
     td.className = "sudo_password";
     td.textContent = serverLine.sudo_password;
     tr.appendChild(td);
@@ -140,6 +142,7 @@ function createServerLine(serverLine) {
 
     //第十三个字段 su密码
     var td = document.createElement("td");
+	td.style.display="none";
     td.className = "su_password";
     td.textContent = serverLine.su_password;
     tr.appendChild(td);
@@ -202,6 +205,11 @@ function createServerLine(serverLine) {
     tr.appendChild(td);
 
 
+    //第十五个字段 系统
+    var td = document.createElement("td");
+    td.className = "system";
+    td.textContent = serverLine.os_type;
+    tr.appendChild(td);
     //第十五个字段 备注
     var td = document.createElement("td");
     td.className = "description";
@@ -313,6 +321,7 @@ function loadServerLineToTable(editButton) {
     var su = $(tr).find(".su")[0].textContent;
     var suPassword = $(tr).find(".su_password")[0].textContent;
     var description = $(tr).find(".description")[0].textContent;
+    var system=$(tr).find(".system")[0].textContent;
     //把数据装载进入编辑框中的对象
 
     document.getElementById("ip").value = ip;//ip
@@ -331,10 +340,18 @@ function loadServerLineToTable(editButton) {
     document.getElementById("group").value = group;
     document.getElementById("username").value = username;
     var loginMethodSelect = document.getElementById("loginMethod");
+    var systemSelect = document.getElementById("system");
     //选择登录方式
     for(var i=0; i<loginMethodSelect.options.length; i++){
         if(loginMethodSelect.options[i].textContent == loginMethod){
             loginMethodSelect.options[i].selected = true;
+            break;
+        }
+    }
+    //选定系统类型
+    for(var i=0; i<systemSelect.options.length; i++){
+        if(systemSelect.options[i].textContent == system){
+            systemSelect.options[i].selected = true;
             break;
         }
     }
@@ -381,7 +398,6 @@ function loadServerLineToTable(editButton) {
     document.getElementById("suPassword").value = suPassword
     document.getElementById("description").value = description;
     //连接设备
-    console.log(window.allServersList);
 
     //删除此前的记录
     $("#linkDevice").find(".glyphicon-check").removeClass("glyphicon-check").addClass("glyphicon-unchecked");
@@ -597,7 +613,7 @@ function getServerConfigFromTable() {
     var group = document.getElementById("group").value;
     var username = document.getElementById("username").value;
     var loginMethod = document.getElementById("loginMethod").value;
-
+    var system=document.getElementById("system").value
     var password = document.getElementById("password").value;
     var keyfile = document.getElementById("keyfile").value;
     var keyfilePassword = document.getElementById("keyfilePassword").value;
@@ -655,6 +671,7 @@ function getServerConfigFromTable() {
         "su_password": suPassword,
         "description": description,
         "link_device":link,
+	"os_type":system,
     };
 
 
@@ -747,6 +764,7 @@ function modifyServerConfigTable(serverConfig) {
     $(tr).find(".sudo_password")[0].textContent = serverConfig.sudo_password;
     $(tr).find(".su")[0].textContent = serverConfig.su;
     $(tr).find(".su_password")[0].textContent = serverConfig.su_password;
+    $(tr).find(".system")[0].textContent = serverConfig.os_type;
     $(tr).find(".description")[0].textContent = serverConfig.description;
 
 
@@ -863,6 +881,7 @@ function createServerAndDevice(){
 
 //初始化加载
 $(function () {//c
+	getSystemVersion()//获取操作系统类型
     $( ".modal-content" ).draggable();//窗口拖动
     //批量创建
     document.getElementById("batchAddServers").onclick = function () {

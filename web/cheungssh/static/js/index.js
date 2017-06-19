@@ -902,6 +902,33 @@ function allSSHCheck() {
     }
 }
 
+//获取操作系统版本类型
+function getSystemVersion(){
+	jQuery.ajax({
+		"url":getSystemVersionURL,
+		"error":errorAjax,
+		"dataType":"jsonp",
+		"type":"GET",
+		"success":function(data){
+			responseCheck(data)
+			if (!data.status){
+				showErrrorInfo(data.content);
+				return false;
+			}
+			else{
+				content=data.content;
+				$("#system").children().remove();//清空
+				var system=document.getElementById("system");
+				for(var i=0;i<content.length;i++){
+					var option=document.createElement("option");
+					option.textContent=content[i];
+					system.appendChild(option);
+				}
+				
+			}
+		}
+	})
+}
 
 //所有页面加载前，必须加载此区域
 function initCheungSSH() {

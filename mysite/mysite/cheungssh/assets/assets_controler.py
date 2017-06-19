@@ -13,13 +13,13 @@ from cheungssh_thread_queue import CheungSSHPool
 from django.core.cache import cache
 from cheungssh_sshv2 import CheungSSH_SSH
 from assets_list import assets_conf
+import copy
 from custom_assets_class import custom_assets
 REDIS=cache.master_client
 redis_assets_conf=REDIS.get("assets.conf")
-if redis_assets_conf is None:
-	REDIS.set("assets.conf",json.dumps(assets_conf,encoding="utf8",ensure_ascii=False))
-else:
-	assets_conf=json.loads(redis_assets_conf) 
+REDIS.set("assets.conf",json.dumps(assets_conf,encoding="utf8",ensure_ascii=False))
+#else:
+#	assets_conf=json.loads(redis_assets_conf) 
 class ControlerCenter(object):
 	def __init__(self,servers_list=[],task_type="multi"):
 		
@@ -76,38 +76,47 @@ class ControlerCenter(object):
 				alias =parameters["alias"]
 				
 				info={} 
-				tmp_assets_conf=copy.deepcopy(assets_conf) 
-				custom_assets_class_list=REDIS.get("custom.assets.class.list")
-				if not custom_assets_class_list is None:
-					custom_assets_class_list=msgpack.unpackb(custom_assets_class_list)
-				else:
-					custom_assets_class_list={}
-				tmp_assets_conf=dict(tmp_assets_conf,**custom_assets_class_list)
-				for asset in tmp_assets_conf.keys():
+				#tmp_assets_conf=copy.deepcopy(assets_conf) 
+				#custom_assets_class_list=REDIS.get("custom.assets.class.list")
+				#if not custom_assets_class_list is None:
+				#	custom_assets_class_list=msgpack.unpackb(custom_assets_class_list)
+				#else:
+				#	custom_assets_class_list={}
+				#tmp_assets_conf=dict(tmp_assets_conf,**custom_assets_class_list)
+				#for asset in tmp_assets_conf.keys():
+				assets_conf=copy.deepcopy(assets_conf)
+				for asset in assets_conf.keys():
 					
 					
-					if tmp_assets_conf[asset].has_key("asset_type"):
-						if tmp_assets_conf[asset]["asset_type"]=="static":
+					if assets_conf[asset].has_key("asset_type"):
+						if assets_conf[asset]["asset_type"]=="static":
 							
-							tmp_assets_conf[asset]["value"]=tmp_assets_conf[asset]["value"]
+							assets_conf[asset]["value"]=assets_conf[asset]["value"]
 							continue
 					if asset=="time":
-						tmp_assets_conf[asset]["value"]=self.time 
+						assets_conf[asset]["value"]=self.time 
 						continue
-					data=ssh.execute(cmd=tmp_assets_conf[asset]["command"],sid=parameters["id"],tid=0,ignore=True) 
+					cmd=assets_conf[asset]["command"][ssh.kws['os_type']]
+					data=ssh.execute(cmd=cmd,sid=parameters["id"],tid=0,ignore=True) 
 					if data["status"] is True:
 						
 						try:
-							result=data["content"].split('\n')[1].strip('\r')
+							result="\n".join(data["content"].split('\r\n')[1:-1])
+							print data['content'].split('OKD'),8888888888888888888888888888888888888888888
 						except Exception,e:
 							result="获取数据失败 %s" % str(e)
 					else:
 						result="获取数据失败 %s" % data["content"]
-					tmp_assets_conf[asset]["value"]=result 
-				self.assets_data[sid]={"sid":sid,"alias":alias,"data":tmp_assets_conf}
+					assets_conf[asset]["value"]=result 
+				self.assets_data[sid]={"sid":sid,"alias":alias,"data":assets_conf}
 				print "已经取得资产信息."
 			except ValueError:
 				raise CheungSSHError("获取资产数据失败!")
+		except KeyError,e:
+			print "服务器类型不对称的错误: ",str(e)
+			cheungssh_info["status"]=False
+			cheungssh_info["content"]=str(e)
+				
 		except Exception,e:
 			print "采集报错: ",str(e)
 			cheungssh_info["status"]=False

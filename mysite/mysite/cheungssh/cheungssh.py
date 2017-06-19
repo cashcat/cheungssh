@@ -1,7 +1,11 @@
 #coding:utf-8
+import sys,os,json,random,commands,queue_task,time,threading
+sys.path.append('/home/cheungssh/bin')
+sys.path.append('/home/cheungssh/mysite/mysite/cheungssh')
+sys.path.append('/home/cheungssh/mysite/mysite/cheungssh/deployment_protocol')
 import csv
 import codecs
-
+from cheungssh_system_version import cheungssh_os
 from cheungssh_middleware.cheungssh_middleware import CheungSSHMiddleware
 from analysis_log.cheungssh_analysis_log import CheungSSHAnalyLog
 from analysis_log.cheungssh_web_analysis_view import CheungSSHAnalysisWebView
@@ -23,15 +27,11 @@ from django.shortcuts import render_to_response
 from django.contrib.auth import authenticate,login,logout
 from mysite.cheungssh.models import ServerConf
 import path_search,crond_record
-import sys,os,json,random,commands,queue_task,time,threading
 from permission_check import permission_check
 from Return_http import ajax_http
 from parameters import parameters
 from cheungssh_thread_queue import CheungSSHPool
 import cheungssh_modul_controler
-sys.path.append('/home/cheungssh/bin')
-sys.path.append('/home/cheungssh/mysite/mysite/cheungssh')
-sys.path.append('/home/cheungssh/mysite/mysite/cheungssh/deployment_protocol')
 from crontab.cheungssh_crontab_controler import CheungSSHCrontabControler
 from cheungssh_script import CheungSSHScript
 import IP
@@ -1864,3 +1864,7 @@ def delete_remote_analysis_logfile_info(request):
 @ajax_http
 def get_to_web_middleware_info(request):
 	return CheungSSHMiddleware.get_to_web_middleware_info()
+
+@ajax_http
+def get_os_type(request):
+	return {"content":cheungssh_os.CheungSSHOSVersion.os_type,"status":True}

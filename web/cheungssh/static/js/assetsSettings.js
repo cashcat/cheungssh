@@ -233,6 +233,8 @@ function deleteAssetTable(team){
 
 function createAssetOption(){
     //点击新增按钮
+    showErrorInfo("该功能已经升级，为了确保实用性，您需要经过作者的指导后才能自定义添加资产项");
+    return false;
     cleanAssetTable();//清除编辑表格产生的数据
     $("#editAssetDiv").show("fast");
 }
