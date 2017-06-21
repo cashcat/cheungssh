@@ -74,7 +74,7 @@ update_yum(){
 		# 备份原有的yum源文件
 		ls /etc/yum.repos.d/*repo |xargs -i  mv {} {}.bak
 		#增加Yum源
-		/bin/cp $CHOME/conf/CentOS* /etc/yum.repos.d/ #更新Yum源
+		/bin/cp $(echo  "$CHOME/conf/CentOS`echo  "import platform;print platform.dist()[1][0]"|python`*") /etc/yum.repos.d/
 		yum clean all  && yum makecache
 		if [ $? -ne 0 ]
 		then
@@ -487,7 +487,7 @@ reset_redhat_yum(){
 	if [ ! -f /tmp/cheungssh.yum.update ]
 	then
 		ls /etc/yum.repos.d/*repo |xargs -i  mv {} {}.bak
-		/bin/cp $CHOME/conf/CentOS* /etc/yum.repos.d/ #更新Yum源
+		/bin/cp $(echo  "$CHOME/conf/CentOS`echo  "import platform;print platform.dist()[1][0]"|python`*") /etc/yum.repos.d/
 		# 把redhat的yum源设置为公网源
 		rpm -qa |grep yum |xargs rpm -e --nodeps
 		if  [ $os_version == "6" ]
@@ -499,10 +499,10 @@ reset_redhat_yum(){
 			sed -i  's/$releasever/6/g' /etc/yum.repos.d/CentOS6-Base-163.repo
 		elif [ $os_version == "7" ]
 		then
-			rpm -vih /home/cheungssh/soft/7-python-iniparse-0.3.1-2.1.el6.noarch.rpm    --nodeps
-			rpm -vih /home/cheungssh/soft/7-yum-metadata-parser-1.1.2-16.el6.x86_64.rpm --nodeps
+			rpm -vih /home/cheungssh/soft/7-python-iniparse-0.4-9.el7.noarch.rpm        --nodeps
+			rpm -vih /home/cheungssh/soft/7-yum-metadata-parser-1.1.4-10.el7.x86_64.rpm --nodeps
 			rpm -vih /home/cheungssh/soft/7-python-urlgrabber-3.10-8.el7.noarch.rpm     --nodeps
-			rpm -vih /home/cheungssh/soft/7-yum-3.2.29-81.el6.centos.noarch.rpm  /home/cheungssh/soft/7-yum-plugin-fastestmirror-1.1.31-40.el7.noarch.rpm  --nodeps
+			rpm -vih /home/cheungssh/soft/7-yum-3.4.3-150.el7.centos.noarch.rpm  /home/cheungssh/soft/7-yum-plugin-fastestmirror-1.1.31-40.el7.noarch.rpm  --nodeps
 			sed -i  's/$releasever/7/g' /etc/yum.repos.d/CentOS7-Base-163.repo
 		elif [ $os_version == "5" ]
 		then
