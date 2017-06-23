@@ -259,3 +259,49 @@ class CheungSSHFileTransfer(object):
 		return cheungssh_info
 	def __del__(self):
 		self.logout()
+	"""
+	def get_path(self,path):
+		cheungssh_info={"content":"","status":False}
+		try:
+			all_path={}
+			for son_path in self.sftp.listdir(path):
+				full_path=os.path.join(path,son.filename)
+				info={full_path:{
+					"type":"",
+					"attr":"",
+					"perm":"",
+					"info":"",}
+					}
+				
+				try:
+					self.sftp.listdir(full_path)
+					info["perm"]=True
+				except Exception,e:
+					e=str(e)
+					if re.search('Permission',e):
+						info["info"]="您的账号无权访问该路径资源"
+					else:
+						info["info"]=e
+					info["perm"]=False
+				
+				
+				
+				if re.search("\.pdf$",full_path,flags=re.IGNORECASE):
+					info["type"]="pdf"
+				elif re.search('\.(rar|war|zip|tgz|gz|jar|egg|iso|tar|bz2|7-zip|)$',full_path,flags=re.IGNORECASE):
+					info["type"]="rar"
+				elif re.search('\.(xls|xlsx|csv)$',full_path)
+					info['type']="xls"
+				elif re.search('\.txt',full_path):
+					info['type']='txt'
+				else:
+					info['type']="unknow"
+		except Exception,e:
+			e=str(e)
+			if re.search('Permission',e):
+				cheungssh_info["content"]="您的账号无权访问该路径资源"
+			else:
+				cheungssh_info["content"]=e
+			cheungssh_info["status"]=False
+		return cheungssh_info
+		"""

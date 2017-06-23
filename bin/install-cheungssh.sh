@@ -4,7 +4,7 @@ setenforce 0 #关闭您的selinux，以免不能正确操作
 os_name=`echo  "import platform;print platform.dist()[0]"|python`
 os_version=`echo  "import platform;print platform.dist()[1][0]"|python`
 CHOME="/home/cheungssh"
-trap "echo 'CheungSSH官方QQ群: 517241115'" EXIT
+trap "echo  'CheungSSH官方QQ群: 517241115'" EXIT
 useradd cheungssh 2>/dev/null
 pwd=`dirname $0`
 mkdir -p $CHOME/pid
@@ -25,6 +25,9 @@ fi
 
 /bin/cp -r ${pwd}/../ /home/cheungssh
 chown cheungssh.cheungssh -R /home/cheungssh
+
+#删除osa，因为会导致安装失败
+rpm -e osa --nodeps 2>/dev/null
 
 #不支持Python3
 
@@ -207,7 +210,7 @@ make_install_software(){
 		./configure --with-apxs=$apxs && make && make install
 		if [ $? -ne 0 ]
 		then
-			echo  "安装mod_python失败，请使用报错信息咨询CheungSSH作者解决."
+			echo  "安装mod_python失败，可能是您升级过Python导致的问题，如果确实升级过，请告知CheungSSH作者，并使用报错信息咨询CheungSSH作者解决."
 			exit 1
 		else
 			version_file=`find  /usr/lib*/python*/site-packages/mod_python -type f -name version.py `

@@ -42,6 +42,8 @@ cd -
 /bin/rm  -r /issue/cheungssh/cheungssh/.viminfo
 /bin/rm  -r /issue/cheungssh/cheungssh/.vim
 /bin/rm  -r /issue/cheungssh/cheungssh/.mysql_history
+/bin/rm  -r /issue/cheungssh/cheungssh/bin/2
+/bin/rm  -r /issue/cheungssh/cheungssh/bin/auth.sql
 cd /issue/cheungssh
 filename=cheungssh_web3.0_source_`date +%F`.tar.gz
 tar zcvf $filename cheungssh
