@@ -72,6 +72,7 @@ class CheungSSHActiveSSH(CheungSSH_SSH):
 				if data["content"]=="已注销":
 					raise CheungSSHError(data["content"])
 			cheungssh_info["status"]=True
+			cheungssh_info["content"]=re.sub("""\x1B\[[0-9;]*[mK]""","",cheungssh_info["content"])
 		except Exception,e:
 			cheungssh_info["content"]=str(e)
 		return cheungssh_info
