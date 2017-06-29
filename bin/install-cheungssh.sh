@@ -487,6 +487,8 @@ init_mysql_server(){
 
 
 reset_redhat_yum(){
+	# 处理GPG秘钥问题
+	#rpm --import /home/cheungssh/conf/RPM-GPG-KEY-CentOS-6
 	if [ ! -f /tmp/cheungssh.yum.update ]
 	then
 		ls /etc/yum.repos.d/*repo |xargs -i  mv {} {}.bak
@@ -495,6 +497,8 @@ reset_redhat_yum(){
 		rpm -qa |grep yum |xargs rpm -e --nodeps
 		if  [ $os_version == "6" ]
 		then
+			# 处理GPG秘钥问题
+			rpm --import /home/cheungssh/conf/RPM-GPG-KEY-CentOS-6
 			rpm  -vih /home/cheungssh/soft/6-python-iniparse-0.3.1-2.1.el6.noarch.rpm    --nodeps
 			rpm  -vih /home/cheungssh/soft/6-yum-metadata-parser-1.1.2-16.el6.x86_64.rpm --nodeps
 			rpm  -vih /home/cheungssh/soft/6-python-urlgrabber-3.9.1-11.el6.noarch.rpm   --nodeps
@@ -502,6 +506,8 @@ reset_redhat_yum(){
 			sed -i  's/$releasever/6/g' /etc/yum.repos.d/CentOS6-Base-163.repo
 		elif [ $os_version == "7" ]
 		then
+			# 处理GPG秘钥问题
+			rpm --import /home/cheungssh/conf/RPM-GPG-KEY-CentOS-7
 			rpm -vih /home/cheungssh/soft/7-python-iniparse-0.4-9.el7.noarch.rpm        --nodeps
 			rpm -vih /home/cheungssh/soft/7-yum-metadata-parser-1.1.4-10.el7.x86_64.rpm --nodeps
 			rpm -vih /home/cheungssh/soft/7-python-urlgrabber-3.10-8.el7.noarch.rpm     --nodeps

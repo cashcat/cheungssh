@@ -6,6 +6,7 @@
 
 
 var menu = [
+
     {
         "日志绘图": {
             "class": "glyphicon glyphicon-picture",
