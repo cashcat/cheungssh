@@ -535,14 +535,14 @@ check_internet
 if [ $os_name == "centos" ]
 then
 	update_yum
-	yum install  -y $software_list
+	yum install  -y $software_list --skip-broken
 elif [ $os_name == "Ubuntu" ]
 then
 	apt-get install  -y  $software_list
 elif [ $os_name == "redhat" ]
 then
 	reset_redhat_yum
-	yum install  -y $software_list
+	yum install  -y $software_list --skip-broken
 else
 	echo  "不支持的操作系统，当前只支持安装在Redhat/CentOS/Ubuntu上。"
 	exit 1
