@@ -1,3 +1,19 @@
+
+<style>
+
+
+
+    #tmpTmp ::-webkit-scrollbar {
+        width: 3px;
+    }
+    #tmpTmp ::-webkit-scrollbar-thumb {
+        background: #09C;
+        border-radius: 4px;
+
+
+    }
+</style>
+<div id="tmpTmp">
 <!--历史画图-->
 <div id="showAssetParentDIV"
      style="display:none;position: fixed;  top: 0px; bottom: 0px ;left: 0px; right: 0px; z-index: 1003;background: black; ">
@@ -53,7 +69,7 @@
 </div>
 
 
-<div class="panel panel-default" id="showServers" style="display: block; overflow: auto;">
+<div class="panel panel-default " id="showServers" style="display: block; overflow: auto;">
 
         <p class="navbar-form" style="width:100%;margin-bottom:10px;">
         <div class="input-group" style="padding:10px;">
@@ -75,7 +91,7 @@
 
     </div>
 
-    <table class="table  table-hover  table-condensed ">
+    <table class="table  table-hover  table-condensed">
         <thead>
         <tr id="assetsDataThead">
             <!--
@@ -93,6 +109,8 @@
     </table>
 </div>
 
+
+</div>
 <!--用来显示画图的-->
 <script src="../js/Chart.js"></script>
 <script src="../js/assetsData.js"></script>

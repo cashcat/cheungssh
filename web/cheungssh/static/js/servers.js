@@ -879,8 +879,13 @@ function createServerAndDevice(){
 
 
 
+
+
 //初始化加载
 $(function () {//c
+
+
+
 	getSystemVersion()//获取操作系统类型
     $( ".modal-content" ).draggable();//窗口拖动
     //批量创建

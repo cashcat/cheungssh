@@ -208,6 +208,10 @@ function loadWebSSHHTML(){
 
 }
 
+function loadTrain(){
+    $("#showMainContent").load("static/html/train.html");
+}
+
 function loadCommand(){
     $("#showMainContent").load("static/html/command.html");
 }
@@ -225,7 +229,11 @@ function loadHome() {
 
 $(document).on("click","#appDeploy",function(){
     loadAppDeployHTML();
+})
 
+$(document).on("click","#train",function(){
+	console.log(11111)
+	loadTrain()
 })
 
 $(document).on("click","#oracle",function(){

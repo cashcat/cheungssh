@@ -6,7 +6,12 @@
 
 
 var menu = [
-
+    {
+	"培训介绍":{
+		"class":"glyphicon glyphicon-film",
+		"id":"train"
+	}
+    },
     {
         "日志绘图": {
             "class": "glyphicon glyphicon-picture",
@@ -583,6 +588,14 @@ function loadNetworkHTML(){
 
 }
 
+
+function loadTrain(){
+	$("#showMainContent").load("../html/train.html");
+}
+
+$(document).on("click","#train",function(){
+	loadTrain();
+})
 
 $(document).on("click","#oracle",function(){
 	loadOracle();

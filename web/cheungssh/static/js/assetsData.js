@@ -205,7 +205,8 @@ function loadAssetsData() {
                                                     if(!assets["data"][assetName]){
                                                         continue;//没有值就下一次循环
                                                     }
-                                                    assetClassDataTime.push(assets["data"]["time"].value);//获取时间
+							console.log(assets["data"])
+                                                    assetClassDataTime.push(assets["data"]["time"]["value"]);//获取时间
                                                     assetClassDataValue.push(assets["data"][assetName].value);//获取值
                                                 }
                                             }

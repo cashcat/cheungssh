@@ -16,12 +16,18 @@ from assets_list import assets_conf
 import copy
 from custom_assets_class import custom_assets
 REDIS=cache.master_client
-redis_assets_conf=REDIS.get("assets.conf")
+
+assets_conf["time"]={
+		"value":"",
+		"name":"采集时间"
+	}
+
+
+
 REDIS.set("assets.conf",json.dumps(assets_conf,encoding="utf8",ensure_ascii=False))
-#else:
-#	assets_conf=json.loads(redis_assets_conf) 
 class ControlerCenter(object):
 	def __init__(self,servers_list=[],task_type="multi"):
+		self.assets_conf=assets_conf
 		
 		
 		self.servers_list=servers_list
@@ -84,31 +90,30 @@ class ControlerCenter(object):
 				#	custom_assets_class_list={}
 				#tmp_assets_conf=dict(tmp_assets_conf,**custom_assets_class_list)
 				#for asset in tmp_assets_conf.keys():
-				assets_conf=copy.deepcopy(assets_conf)
-				for asset in assets_conf.keys():
+				_assets_conf=copy.deepcopy(self.assets_conf)
+				for asset in _assets_conf.keys():
 					
 					
-					if assets_conf[asset].has_key("asset_type"):
-						if assets_conf[asset]["asset_type"]=="static":
+					if _assets_conf[asset].has_key("asset_type"):
+						if _assets_conf[asset]["asset_type"]=="static":
 							
-							assets_conf[asset]["value"]=assets_conf[asset]["value"]
 							continue
 					if asset=="time":
-						assets_conf[asset]["value"]=self.time 
+						_assets_conf[asset]["value"]=self.time 
 						continue
-					cmd=assets_conf[asset]["command"][ssh.kws['os_type']]
+					cmd=_assets_conf[asset]["command"][ssh.kws['os_type']]
 					data=ssh.execute(cmd=cmd,sid=parameters["id"],tid=0,ignore=True) 
 					if data["status"] is True:
 						
 						try:
 							result="\n".join(data["content"].split('\r\n')[1:-1])
-							print data['content'].split('OKD'),8888888888888888888888888888888888888888888
+							#print data['content'].split('OKD'),8888888888888888888888888888888888888888888
 						except Exception,e:
 							result="获取数据失败 %s" % str(e)
 					else:
 						result="获取数据失败 %s" % data["content"]
-					assets_conf[asset]["value"]=result 
-				self.assets_data[sid]={"sid":sid,"alias":alias,"data":assets_conf}
+					_assets_conf[asset]["value"]=result 
+				self.assets_data[sid]={"sid":sid,"alias":alias,"data":_assets_conf}
 				print "已经取得资产信息."
 			except ValueError:
 				raise CheungSSHError("获取资产数据失败!")
