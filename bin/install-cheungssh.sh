@@ -179,7 +179,21 @@ import_sql(){
 }
 
 make_install_software(){
-
+	#安装redis
+	cd $CHOME/soft;tar xvf redis-2.10.3.tar.gz
+	if [ $? -ne 0 ]
+	then
+		echo  "解压redis-2.10.3.tar.gz失败"
+		exit 1
+	else
+		cd redis-2.10.3
+		python setup.py install
+		if  [ $? -ne 0 ]
+		then
+			echo "安装redis客户端失败"
+			exit 1
+		fi
+	fi
 	#安装redis服务
 	cd $CHOME/soft/;tar xvf redis-3.2.8.tar.gz
 	if [ $? -ne 0 ]
