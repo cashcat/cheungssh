@@ -379,6 +379,10 @@ def config_modify(request):
 		cheungssh_info['content']=str(e)
 		cheungssh_info["status"]=False
 	return cheungssh_info
+
+
+
+
 @login_check.login_check('创建服务器')
 @permission_check('cheungssh.create_server')
 @ajax_http
