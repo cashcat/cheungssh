@@ -15,7 +15,7 @@ import cheungssh_sshv2
 class CheungSSHCrontab(object):
 	def __init__(self):
 		pass
-	def get_crontab_list(self,server_info):######data应该是存放的ip的相关登录信息
+	def get_crontab_list(self,server_info):
 		collect_time=time.strftime('%Y-%m-%d %H:%M:%S',time.localtime())
 		cheungssh_info={"content":"","status":False}
 		cmd="/usr/bin/crontab -l"
@@ -25,15 +25,15 @@ class CheungSSHCrontab(object):
 			ssh=cheungssh_sshv2.CheungSSH_SSH()
 			status=ssh.login(**server_info)
 			if not status["status"]:
-				######登录是失败的
+				
 				raise CheungSSHError(status["content"])
 			else:
-				########登录成功的
+				
 				data=ssh.execute(cmd,ignore=True)
 				if not data["status"]:
 					raise CheungSSHError(data["content"])
 				else:
-					######命令执行结果成功了
+					
 					#print "结果:",data["content"]
 					crontab_list=data["content"]
 					id=0
@@ -51,7 +51,7 @@ class CheungSSHCrontab(object):
 							crontab_time=" ".join(line.split()[:5])
 							crontab_cmd=" ".join(line.split()[5:][:-1])
 							if len(crontab_cmd)==0:
-								if not len(line.split())==6:######考虑只有一个命令的情况，没有注释的情况或者参数的情况
+								if not len(line.split())==6:
 									continue
 								else:
 									crontab_cmd=" ".join(line.split()[5:])

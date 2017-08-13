@@ -306,7 +306,7 @@ class WebSocket(threading.Thread):#继承Thread
                     g_code_length = 0
                     self.length_buffer = 0
             self.buffer = ""
-	    break  #####既然没有了连接，就断开吧
+	    break  
 
 
 class WebSocketServer(object):

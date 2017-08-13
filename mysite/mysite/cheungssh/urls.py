@@ -2,22 +2,22 @@
 from django.conf.urls import patterns, include, url
 import mysite
 urlpatterns = patterns('',
-	url(r'^/$',"mysite.cheungssh.cheungssh.cheungssh_redirect"),##########不采用缓存， 有的时候会发生redis的错误
-	url(r'^$',"mysite.cheungssh.cheungssh.cheungssh_redirect"),##########不采用缓存， 有的时候会发生redis的错误
-	url(r'^cheungssh/$',"mysite.cheungssh.cheungssh.cheungssh_redirect"),##########不采用缓存， 有的时候会发生redis的错误
-	url(r'^cheungssh$',"mysite.cheungssh.cheungssh.cheungssh_redirect"),##########不采用缓存， 有的时候会发生redis的错误
+	url(r'^/$',"mysite.cheungssh.cheungssh.cheungssh_redirect"),
+	url(r'^$',"mysite.cheungssh.cheungssh.cheungssh_redirect"),
+	url(r'^cheungssh/$',"mysite.cheungssh.cheungssh.cheungssh_redirect"),
+	url(r'^cheungssh$',"mysite.cheungssh.cheungssh.cheungssh_redirect"),
 	url(r'^cheungssh/login/$','mysite.cheungssh.cheungssh.cheungssh_login'),
 	url(r'^cheungssh/login_success_log/$','mysite.cheungssh.cheungssh.login_success_log'),
 	url(r'^cheungssh/logout/$','mysite.cheungssh.cheungssh.cheungssh_logout'),
-	########url(r'^cheungssh/test/$',mysite.cheungssh.cheungssh.test.as_view()), ########类视图
+	
 	url(r'^cheungssh/ssh_status/$','mysite.cheungssh.cheungssh.ssh_status'),
 	url(r'^cheungssh/ssh_check/$','mysite.cheungssh.cheungssh.ssh_check'),
 	url(r'^cheungssh/execute_command/$','mysite.cheungssh.cheungssh.execute_command'),
 	url(r'^cheungssh/get_command_result/$','mysite.cheungssh.cheungssh.get_command_result'),
-	url(r'^cheungssh/command_history/$','mysite.cheungssh.cheungssh.command_history'),#####命令操作日志
+	url(r'^cheungssh/command_history/$','mysite.cheungssh.cheungssh.command_history'),
 	url(r'^cheungssh/my_command_history/?$','mysite.cheungssh.cheungssh.my_command_history'),
 	url(r'^cheungssh/upload/test/$','mysite.cheungssh.cheungssh.upload_file_test'),
-	url(r'^cheungssh/get_my_file_list/$','mysite.cheungssh.cheungssh.get_my_file_list'),#####获取自己上传过的文件清单
+	url(r'^cheungssh/get_my_file_list/$','mysite.cheungssh.cheungssh.get_my_file_list'),
 	url(r'^cheungssh/pathsearch/$','mysite.cheungssh.cheungssh.pathsearch'),
 	url(r'^cheungssh/config_del/$','mysite.cheungssh.cheungssh.config_del'),
 	url(r'^cheungssh/config_add/$','mysite.cheungssh.cheungssh.config_add'),
@@ -33,22 +33,22 @@ urlpatterns = patterns('',
 	url(r"^cheungssh/showiplimit/$","mysite.cheungssh.cheungssh.show_ip_limit"),
 	url(r"^cheungssh/showipthreshold/$","mysite.cheungssh.cheungssh.show_ip_threshold"),
 	url(r"^cheungssh/deliplimit/$","mysite.cheungssh.cheungssh.del_ip_limit"),
-	url(r"^cheungssh/modify_iplimit/$","mysite.cheungssh.cheungssh.modify_ip_limit"),#####设置安全登录阈值
+	url(r"^cheungssh/modify_iplimit/$","mysite.cheungssh.cheungssh.modify_ip_limit"),
 	url(r'^cheungssh/updatefile/$',"mysite.cheungssh.cheungssh.up_file_content"),
 	url(r"^cheungssh/catfilelist/$","mysite.cheungssh.cheungssh.catfilelist"),
 	url(r"^cheungssh/setfilelist/$","mysite.cheungssh.cheungssh.setfilelist"),
 	url(r"^cheungssh/whoami/","mysite.cheungssh.cheungssh.whoami"),
 	url(r"^cheungssh/dashboard/","mysite.cheungssh.cheungssh.get_dashboard"),
-	url(r"^cheungssh/execute_app/$","mysite.cheungssh.cheungssh.execute_app"),#######执行app
-	url(r"^cheungssh/delete_app/$","mysite.cheungssh.cheungssh.delete_app"),#######删除app
-	url(r"^cheungssh/create_app/$","mysite.cheungssh.cheungssh.create_app"),#######创建和修改APP
-	url(r"^cheungssh/get_app_list/$","mysite.cheungssh.cheungssh.get_app_list"),#######获取app清单
+	url(r"^cheungssh/execute_app/$","mysite.cheungssh.cheungssh.execute_app"),
+	url(r"^cheungssh/delete_app/$","mysite.cheungssh.cheungssh.delete_app"),
+	url(r"^cheungssh/create_app/$","mysite.cheungssh.cheungssh.create_app"),
+	url(r"^cheungssh/get_app_list/$","mysite.cheungssh.cheungssh.get_app_list"),
 	url(r"^cheungssh/custom_assets_class/$","mysite.cheungssh.cheungssh.custom_assets_class"),
 	url(r"^cheungssh/custom_increate_asset/$","mysite.cheungssh.cheungssh.increate_asset"),
 	url(r"^cheungssh/load_assets_list/$","mysite.cheungssh.cheungssh.load_assets_list"),
 	url(r"^cheungssh/delete_assets/$","mysite.cheungssh.cheungssh.delete_asset_list"),
 	url(r"^cheungssh/docker_images_list/$","mysite.cheungssh.cheungssh.docker_images_list"),
-	#####url(r"^cheungssh/docker_images_history/$","mysite.cheungssh.cheungssh.docker_image_count"),######好像没用
+	
 	url(r"^cheungssh/docker_containers_list/$","mysite.cheungssh.cheungssh.docker_containers_list"),
 	url(r"^cheungssh/docker_containers_history/$","mysite.cheungssh.cheungssh.docker_container_count"),
 	url(r"^cheungssh/docker_container_start/$","mysite.cheungssh.cheungssh.docker_container_start"),
@@ -80,26 +80,26 @@ urlpatterns = patterns('',
 	url(r"^cheungssh/delete_deployment_task/$","mysite.cheungssh.cheungssh.delete_deployment_task"),
 	url(r"^cheungssh/start_deployment_task/$","mysite.cheungssh.cheungssh.start_deployment_task"),
 	url(r"^cheungssh/get_deployment_progress/$","mysite.cheungssh.cheungssh.get_deployment_progress"),
-	url(r"^cheungssh/batch_create_servers/$","mysite.cheungssh.cheungssh.batch_create_servers"),#####批量创建服务器
-	url(r"^cheungssh/get_login_user_list/$","mysite.cheungssh.cheungssh.get_login_user_list"),#######获取登录用户
-	url(r"^cheungssh/page_access_history/$","mysite.cheungssh.cheungssh.page_access_history"),#####页面访问记录
-	url(r"^cheungssh/add_device/$","mysite.cheungssh.cheungssh.add_device"),#####添加网络设备
-	url(r"^cheungssh/get_device/$","mysite.cheungssh.cheungssh.get_device"),#####获取网络设备
-	url(r"^cheungssh/save_topology/$","mysite.cheungssh.cheungssh.save_topology"),#####保存网络拓扑
-	url(r"^cheungssh/my_topology/$","mysite.cheungssh.cheungssh.my_topology"),#####保存网络拓扑
-	url(r"^cheungssh/ssh/$","mysite.cheungssh.cheungssh.active_ssh"),#####单个执行命令
-	url(r"^cheungssh/get_active_ssh_result/$","mysite.cheungssh.cheungssh.get_active_ssh_result"),#####单个执行命令
-	url(r"^cheungssh/add_active_ssh_command/$","mysite.cheungssh.cheungssh.add_active_ssh_command"),#####添加单独执行命令
-	url(r"^cheungssh/get_crontab_list/$","mysite.cheungssh.cheungssh.get_crontab_list"),#####访问计划任务列表
-	url(r"^cheungssh/delete_crontab_list/$","mysite.cheungssh.cheungssh.delete_crontab_list"),######删除计划任务列表
-	url(r"^cheungssh/save_crontab_to_server/$","mysite.cheungssh.cheungssh.save_crontab_to_server"),#####把计划任务保存到远程服务器
-	url(r"^cheungssh/upload_analysis_logfile/$","mysite.cheungssh.cheungssh.upload_log_file"),#####上传分析日志文件
-	url(r"^cheungssh/local_analysis_log/$","mysite.cheungssh.cheungssh.local_analysis_log"),#####分析日志
-	url(r"^cheungssh/get_date_analysis_log/$","mysite.cheungssh.cheungssh.get_date_analysis_log"),#####获取日志文件的日期
-	url(r"^cheungssh/add_remote_analysis_logfile/","mysite.cheungssh.cheungssh.add_remote_analysis_logfile"),#####创建访问远程日志分析路径
-	url(r"^cheungssh/get_remote_analysis_logfile_info/","mysite.cheungssh.cheungssh.get_remote_analysis_logfile_info"),#####加载远程日志分析路径
-	url(r"^cheungssh/delete_remote_analysis_logfile_info/","mysite.cheungssh.cheungssh.delete_remote_analysis_logfile_info"),#####删除远程日志分析路径
-	url(r"^cheungssh/get_to_web_middleware_info/$","mysite.cheungssh.cheungssh.get_to_web_middleware_info"),#####获取中间件信息
-	url(r"^cheungssh/get_os_type/$","mysite.cheungssh.cheungssh.get_os_type"),#####获取操作系统的固定类型
+	url(r"^cheungssh/batch_create_servers/$","mysite.cheungssh.cheungssh.batch_create_servers"),
+	url(r"^cheungssh/get_login_user_list/$","mysite.cheungssh.cheungssh.get_login_user_list"),
+	url(r"^cheungssh/page_access_history/$","mysite.cheungssh.cheungssh.page_access_history"),
+	url(r"^cheungssh/add_device/$","mysite.cheungssh.cheungssh.add_device"),
+	url(r"^cheungssh/get_device/$","mysite.cheungssh.cheungssh.get_device"),
+	url(r"^cheungssh/save_topology/$","mysite.cheungssh.cheungssh.save_topology"),
+	url(r"^cheungssh/my_topology/$","mysite.cheungssh.cheungssh.my_topology"),
+	url(r"^cheungssh/ssh/$","mysite.cheungssh.cheungssh.active_ssh"),
+	url(r"^cheungssh/get_active_ssh_result/$","mysite.cheungssh.cheungssh.get_active_ssh_result"),
+	url(r"^cheungssh/add_active_ssh_command/$","mysite.cheungssh.cheungssh.add_active_ssh_command"),
+	url(r"^cheungssh/get_crontab_list/$","mysite.cheungssh.cheungssh.get_crontab_list"),
+	url(r"^cheungssh/delete_crontab_list/$","mysite.cheungssh.cheungssh.delete_crontab_list"),
+	url(r"^cheungssh/save_crontab_to_server/$","mysite.cheungssh.cheungssh.save_crontab_to_server"),
+	url(r"^cheungssh/upload_analysis_logfile/$","mysite.cheungssh.cheungssh.upload_log_file"),
+	url(r"^cheungssh/local_analysis_log/$","mysite.cheungssh.cheungssh.local_analysis_log"),
+	url(r"^cheungssh/get_date_analysis_log/$","mysite.cheungssh.cheungssh.get_date_analysis_log"),
+	url(r"^cheungssh/add_remote_analysis_logfile/","mysite.cheungssh.cheungssh.add_remote_analysis_logfile"),
+	url(r"^cheungssh/get_remote_analysis_logfile_info/","mysite.cheungssh.cheungssh.get_remote_analysis_logfile_info"),
+	url(r"^cheungssh/delete_remote_analysis_logfile_info/","mysite.cheungssh.cheungssh.delete_remote_analysis_logfile_info"),
+	url(r"^cheungssh/get_to_web_middleware_info/$","mysite.cheungssh.cheungssh.get_to_web_middleware_info"),
+	url(r"^cheungssh/get_os_type/$","mysite.cheungssh.cheungssh.get_os_type"),
 	)
 

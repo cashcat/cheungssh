@@ -44,8 +44,8 @@ def ssh_check(conf):
 				info['content']="未知错误类型"
 			finally:
 				ssh.close()
-			cache.set("%s.SSH"%(ip),info,600)###########10分钟检查一次链接状态
-		else:########如果存在链接
+			cache.set("%s.SSH"%(ip),info,600)
+		else:
 			info=SSH
 	except Exception,e:
 		info["content"]=str(e)

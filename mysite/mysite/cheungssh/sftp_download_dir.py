@@ -3,7 +3,7 @@ import paramiko,os,sys
 import os,sys,functools,time
 from stat import S_ISDIR
 def cheungssh_sftp(fid,ip,username,remotepath,localpath,set_progres,port=22,loginmethod='KEY',password='',keyfile=''):
-	###########print '目录',remotepath,localpath
+	
 	t=paramiko.Transport((ip,int(port)))
 	if loginmethod=='KEY':
 		key=paramiko.RSAKey.from_private_key_file(keyfile)
@@ -18,7 +18,7 @@ def cheungssh_sftp(fid,ip,username,remotepath,localpath,set_progres,port=22,logi
 			remote_full_path_dir.append(os.path.join(a[0],sd))
 		for f in a[2]:
 			remote_full_path_file.append(os.path.join(a[0],f))
-	######创建本地目录
+	
 	if not remotepath.endswith('/'):remotepath+='/'
 	if not localpath.endswith('/'):localpath+='/'
 	for d in remote_full_path_dir:
@@ -27,17 +27,17 @@ def cheungssh_sftp(fid,ip,username,remotepath,localpath,set_progres,port=22,logi
 			os.makedirs(l_d)
 		except Exception,e:
 			pass
-	#########print '开始判断...'
+	
 	if not os.path.isdir(localpath):
-		#########print '创建本地'
+		
 		try:
 			os.mkdir(localpath)
-			##########print '已经创建'
+			
 		except Exception,e:
-			########print '创建发生错误。。。',e
+			
 			raise IOError(e)
-	##################print '本地目录存在，开始'
-	######下载文件
+	
+	
 	ifile=0
 	all_file_num=len(remote_full_path_file)
 	for f in remote_full_path_file:

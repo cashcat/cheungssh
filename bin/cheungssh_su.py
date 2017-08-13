@@ -110,5 +110,5 @@ def Excute_suroot(ip,username,password,port,loginmethod,keyfile,cmd,ie_key,group
 				hwinfo[ip]=ipinfo
 				hwinfo[ip][Data.hwtype]=ResultSum
 		cache.set('hwinfo',hwinfo,864000000)
-	#############把执行的结果写入redis数据库
+	
 	set_redis_data('cmd.%s.%s'%(tid,ip),json.dumps(ResultSum,encoding="utf-8",ensure_ascii=False))

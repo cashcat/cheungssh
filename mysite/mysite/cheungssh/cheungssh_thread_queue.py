@@ -11,7 +11,7 @@ from django.core.cache import cache
 
 
 class CheungSSHThreadAdmin(object):
-	#####不要继承，多线程里面似乎成了共享了
+	
 	def __init__(self):
 		self.REDIS=cache.master_client
 	def run(self,parameter={}):
@@ -19,7 +19,7 @@ class CheungSSHThreadAdmin(object):
 		try:
 			task_type=parameter["task_type"]
 			tid=parameter["tid"]
-			multi_thread=parameter["multi_thread"] #####线程类型
+			multi_thread=parameter["multi_thread"] 
 			if not type(multi_thread) ==type(False):raise CheungSSHError("CHB0000000010")
 			if task_type=="cmd":
 				cmd=parameter["cmd"]
@@ -32,7 +32,7 @@ class CheungSSHThreadAdmin(object):
 				#CheungSSHConnector.progress[total]=len(servers)
 				#CheungSSHConnector.progress[current]=0
 				if multi_thread:
-					#######多线程
+					
 					pool=CheungSSHPool()
 					for s in servers:
 						controler=CheungSSHControler()
@@ -40,7 +40,7 @@ class CheungSSHThreadAdmin(object):
 						pool.add_task(controler.command_controler,param)
 					
 				else:
-					#####单线程
+					
 					for s in servers:
 						controler=CheungSSHControler()
 						controler.command_controler(cmd=cmd,sid=s,tid=tid)
@@ -72,14 +72,14 @@ class CheungSSHThread(threading.Thread):
 				pass
 			self.queue.task_done()
 class CheungSSHPool(AutoGetThreadNum):
-	#####一定要all_complete，否则程序等待要报错de！
+	
 	def __init__(self):
 		AutoGetThreadNum.__init__(self)
-		self.thread_num=self.auto_thread() ######根据运算获取适合的线程数量
-		self.queue=Queue.Queue(self.thread_num)#####创建队列,括号里的参数是一个数字，你替换成你自己要的数字就可以了
+		self.thread_num=self.auto_thread() 
+		self.queue=Queue.Queue(self.thread_num)
 		for i in range(self.thread_num):#循环多少次，实际上是一个数字
 			CheungSSHThread(self.queue)
-	def add_task(self,func,dict):#####传递一个dict来，而不是**dict
+	def add_task(self,func,dict):
 		self.queue.put((func,dict))#把参数和函数，放到队列里面去，然后，有一个run会来这里取的
 	def all_complete(self):
 		self.queue.join()

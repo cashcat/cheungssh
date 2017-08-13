@@ -306,7 +306,7 @@ def Upload_file(ip,port,username,password):
 				t.connect(username = username,pkey=key)
 			except EOFError:
 				print "Try use RunMode=D"
-			##########################################
+			
 		else:
 			try:
 				t.connect(username = username,password = password)
@@ -1137,7 +1137,7 @@ def Excute_cmd():
 					else:
 						SSH_cmd(s,ServersUsername[s],ServersPassword[s],ServersPort[s],Newcmd,UseLocalScript,OPTime)
 							
-			############################################################################################
+			
 if  __name__=='__main__':
 	Read_config()
 	Main_p()

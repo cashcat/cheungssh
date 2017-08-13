@@ -14,8 +14,8 @@ from redis_to_redis import set_redis_data
 def ip_to_id(Data):
 	Data.FailID=[]
 	for ip in Data.FailIP:
-		for id in Data.conf.keys(): ######读取数据库的全部数据
-			if Data.conf[id]['ip']==ip:     ######如果传递的IP等于数据库里面的配置，这里就拿下ID
+		for id in Data.conf.keys(): 
+			if Data.conf[id]['ip']==ip:     
 				Data.FailID.append(id)
 			
 	
@@ -104,9 +104,9 @@ def SSH_cmd(ip,username,password,port,loginmethod,keyfile,cmd,ie_key,group,Data,
 			else:
 				crondlog_show[Data.fid]['status']="失败"
 			cache.set('crondlog',crondlog_show,8640000000)
-			#####把执行的结果写入redis
+			
 		else:
-			######如果在redis中没有找到到相关的计划任务记录， 则不写日志
+			
 			pass
 	else:
 		checktime=time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())
@@ -153,7 +153,7 @@ def main(cmd,ie_key,selectserver,Data,tid,excutetype='cmd',hwtype='CPU'):
 		b.start()
 	b.join()
 	ip_to_id(Data)
-	cache.set(ie_key,Data.FailID,864000)#######把浏览器执行命令失败的服务器ID写入redis
+	cache.set(ie_key,Data.FailID,864000)
 if __name__=='__main__':
 	from DataConf import DataConf
 	Data=DataConf()

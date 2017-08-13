@@ -3,7 +3,7 @@
 
 class AutoGetThreadNum:
 	def __init__(self):
-		#####从redis获取cpu值
+		
 		self.cpu=100
 		self.thread=5
 	def auto_thread(self):

@@ -16,7 +16,7 @@ class CheungSSHPageAudit(object):
 			data=REDIS.lrange("CHB-R0000000010A-A",0,-1)
 			tmp=[]
 			for _line in data:
-				line=json.loads(_line)######转换为json
+				line=json.loads(_line)
 				tmp.append(line)
 			cheungssh_info["content"]=tmp
 			cheungssh_info["status"]=True

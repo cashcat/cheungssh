@@ -12,7 +12,7 @@ from cheungssh_error import CheungSSHError
 from cheungssh_file_transfer import CheungSSHFileTransfer
 class CheungSSHLocalUpload(CheungSSHFileTransfer):
 	def __init__(self,stepid):
-		self.stepid=stepid#####需要新增stepid
+		self.stepid=stepid
 		CheungSSHFileTransfer.__init__(self)
 	def write_progress(self,data):
 		tid=data["tid"]

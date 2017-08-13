@@ -30,7 +30,7 @@ class CheungSSHFileTransfer(object):
 				ssh.connect(username=self.username,password=self.password)
 			else:
 
-				if  len(self.keyfile_password)>0 and not self.keyfile_password=="******":#######如果有密码
+				if  len(self.keyfile_password)>0 and not self.keyfile_password=="******":
 					key=paramiko.RSAKey.from_private_key_file(self.keyfile,password=self.keyfile_password)
 
 				else:
@@ -39,7 +39,7 @@ class CheungSSHFileTransfer(object):
 			sftp = paramiko.SFTPClient.from_transport(ssh)
 			self.ssh=ssh
 			self.sftp=sftp
-			self.get_username_to_uid() ###########获取用户名——uid字典
+			self.get_username_to_uid() 
 			self.get_groupname_to_gid() 
 			cheungssh_info["status"]=True
 		except socket.error:
@@ -61,49 +61,49 @@ class CheungSSHFileTransfer(object):
 			cheungssh_info["content"]=str(e)
 		return cheungssh_info
 	def upload(self,local_file='',remote_file='',tid=""):
-		local_file=local_file.encode('utf-8')#####前端传递过来的时候是unicode
-		#######默认全显示644
+		local_file=local_file.encode('utf-8')
+		
 		transfer_type="upload"
 		self.transfer_type="upload"
 		cheungssh_info={"status":False,"content":""}
 		try:
 			if os.path.isdir(local_file):
-				############目录传输
+				
 				raise CheungSSHError("CHB0000000018")
 			else:
-				#######普通文件上传
+				
 				if remote_file.endswith('/'):
-					#########如果指定的就是一个正确的目录，有/结尾，则进行判断
+					
 					self.sftp.listdir(remote_file)
-					#########当用户制定了/结尾的时候往往没有输入文件名，所以这里需要组装目录+文件名,如果没有修改，那么传输的时候回出现从错误:Failure
+					
 					remote_file=os.path.join(remote_file,os.path.basename(local_file))
 				else:
 					try:
-						self.sftp.listdir(remote_file)  #########如果是目录，但是没有/结尾
+						self.sftp.listdir(remote_file)  
 	
-						#########用户输入的是一个目录，但是没有/结尾，所以这里需要组装目录+文件名,如果没有修改，那么传输的时候回出现从错误:Failure
+						
 						remote_file=os.path.join(remote_file,os.path.basename(local_file))
 					except Exception,e:
 						e=str(e)
 						if re.search('Permission',e):
-							#####权限拒绝，直接 报错
+							
 							raise CheungSSHError(e)
 						else:
-							##########忽略，用户输入的可能是一个文件路径，不是文件夹
+							
 							pass
 				data={"tid":tid,"content":"","status":True}
 				callback= functools.partial(self.set_progress,data)
 				print "本地文件路径:",local_file,"远程路径:",remote_file
 				self.sftp.put(local_file,remote_file,callback=callback)
-				self.sftp.chmod(remote_file,0755)#####赋予执行权限
-				#########归属和数组可能修改失败
-				cheungssh_info["remote_file"]=remote_file ######为了方便部署，把源文件和目标文件都传递
+				self.sftp.chmod(remote_file,0755)
+				
+				cheungssh_info["remote_file"]=remote_file 
 				cheungssh_info["local_file"]=local_file
 				cheungssh_info["transfer_type"]=transfer_type
 				cheungssh_info["tid"]=tid
-				cheungssh_info["progress"]=0   #######初始化进度
+				cheungssh_info["progress"]=0   
 				cheungssh_info["status"]=True
-				###########可以考虑返回修改了归属和权限
+				
 		except Exception,e:
 			e=str(e)
 			if re.search('No such file',e):
@@ -122,32 +122,32 @@ class CheungSSHFileTransfer(object):
 		self.transfer_type="download"
 		cheungssh_info={"status":False,"content":""}
 		try:
-			_local_file=os.path.basename(local_file) ########处理用户输入的路径，只能上传downlod目录下的文件
+			_local_file=os.path.basename(local_file) 
 			local_file=os.path.join(cheungssh_settings.download_dir,_local_file)
-			###########本地已经存在文件了,需要重命名,重命名为IP后缀
+			
 			if os.path.isfile(local_file):local_file="%s_%s"%(local_file,self.ip)
 			try:
 				self.sftp.listdir(remote_file)
-				#######下载目录模块
+				
 			except Exception,e:
-				######单个文件下载
-				try: #########开始下载文件
+				
+				try: 
 					data={"tid":tid,"content":"","status":True}
 					callback= functools.partial(self.set_progress,data)
 					self.sftp.get(remote_file,local_file,callback=callback)
-					cheungssh_info["remote_file"]=remote_file ######为了方便部署，把源文件和目标文件都传递
+					cheungssh_info["remote_file"]=remote_file 
 					cheungssh_info["local_file"]=local_file
 					cheungssh_info["transfer_type"]=transfer_type
 					cheungssh_info["tid"]=tid
-					cheungssh_info["progress"]=0   #######初始化进度
+					cheungssh_info["progress"]=0   
 					cheungssh_info["status"]=True
 				except Exception,e:
-					if e==2:raise CheungSSHError("源文件[%s]不存在"%remote_file)######源文件不存在
+					if e==2:raise CheungSSHError("源文件[%s]不存在"%remote_file)
 					else:raise IOError(str(e))
 				
 		except Exception,e:
 			if hasattr(e,"errno"):
-				if e.errno is None:#####这里是None，不是2
+				if e.errno is None:
 					cheungssh_info["content"]="指定的源文件路径不存在"
 			else:
 				cheungssh_info["content"]=str(e)
@@ -157,21 +157,21 @@ class CheungSSHFileTransfer(object):
 	
 		return cheungssh_info
 	def get_username_to_uid(self):
-		#########把用户名转化为uid
-		passwd_file=self.sftp.open("/etc/passwd") ##########读取密码文件内容
+		
+		passwd_file=self.sftp.open("/etc/passwd") 
 		user_info=passwd_file.readlines()
 		passwd_file.close()
-		self.username_to_uid={} #######{"tomcat":0,}
+		self.username_to_uid={} 
 		for _line in user_info:
 			line=_line.strip().split(":")
-			username=line[0] ######第一列是用户名
-			uid=line[2]      ######用户id
+			username=line[0] 
+			uid=line[2]      
 			self.username_to_uid[username]=uid
 	def get_groupname_to_gid(self):
 		group_file=self.sftp.open("/etc/group")
 		group_info=group_file.readlines()
 		group_file.close()
-		self.groupname_to_gid={} #########{"tomcat":0,}
+		self.groupname_to_gid={} 
 		for _line in group_info:
 			line=_line.strip().split(":")
 			groupname=line[0]
@@ -180,10 +180,10 @@ class CheungSSHFileTransfer(object):
 			
 		
 	def chmod(self,file,permission_code):
-		##########下载函数，没必要用,跟linux的chmod权限模式一样
+		
 		cheungssh_info={"status":False,"content":""}
 		try:
-			self.sftp.chmod(file,permission_code) #######修改权限
+			self.sftp.chmod(file,permission_code) 
 			cheungssh_info["status"]=True
 		except Exception,e:
 			cheungssh_info["content"]=str(e)
@@ -191,7 +191,7 @@ class CheungSSHFileTransfer(object):
 	def chown(self,file,owner='',group=''):
 		cheungssh_info={"status":False,"content":""}
 		uid=self.username_to_uid[owner]
-		if len(group)==0:group=owner #######如果没有指定组，那么则默认是当前的用户所在组
+		if len(group)==0:group=owner 
 		gid=self.groupname_to_gid[group]
 		try:
 			self.sftp.chown(file,uid,gid)
@@ -204,19 +204,19 @@ class CheungSSHFileTransfer(object):
 				cheungssh_info["content"]=str(e)
 		return cheungssh_info
 	def set_progress(self,data,current_size,all_size):
-		######data={"id":"","progress":"","status":True,"content":""}
+		
 		tid=data["tid"]
 		progress="%0.2f" % ( float(current_size) / float(all_size)    *100    )
 		data["progress"]=progress
-		self.write_progress(data) #########把进度写入REDIS
+		self.write_progress(data) 
 		print '当前进度',progress,tid
 	def write_progress(self,data):
 		tid=data["tid"]
 		data=json.dumps(data,encoding="utf8",ensure_ascii=False)
-		REDIS.set("progress.%s"%tid,data) ########写入进度
+		REDIS.set("progress.%s"%tid,data) 
 	@staticmethod
 	def get_progress(tid):
-		cheungssh_info=REDIS.get("progress.%s" % tid) ########读取出进度
+		cheungssh_info=REDIS.get("progress.%s" % tid) 
 		if cheungssh_info is None:
 			cheungssh_info={}
 			cheungssh_info["status"]=False
@@ -272,7 +272,7 @@ class CheungSSHFileTransfer(object):
 					"perm":"",
 					"info":"",}
 					}
-				##### check permission
+				
 				try:
 					self.sftp.listdir(full_path)
 					info["perm"]=True
@@ -283,9 +283,9 @@ class CheungSSHFileTransfer(object):
 					else:
 						info["info"]=e
 					info["perm"]=False
-				##### check permission
 				
-				##### chekc type
+				
+				
 				if re.search("\.pdf$",full_path,flags=re.IGNORECASE):
 					info["type"]="pdf"
 				elif re.search('\.(rar|war|zip|tgz|gz|jar|egg|iso|tar|bz2|7-zip|)$',full_path,flags=re.IGNORECASE):

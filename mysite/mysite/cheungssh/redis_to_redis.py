@@ -3,8 +3,8 @@
 import os,sys,json
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
 from django.core.cache import cache
-REDIS=cache.master_client  #######等同于redis-cli
-def set_redis_data(keyid,keyvalue,datatype='list'):###########记得在写入之前json.dumps保存好中文字符
+REDIS=cache.master_client  
+def set_redis_data(keyid,keyvalue,datatype='list'):
 	info={"status":False}
 	try:
 		if datatype=='list':

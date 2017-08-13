@@ -94,7 +94,7 @@ def DownFile(dfile,sfile,username,password,ip,port,su,supassword,sudo,sudopasswo
 		cache_translog=cache.get("translog")
 		print "抓取到异常...",e
 		logline["result"]=msg
-	###############关闭sftp没有
+	
 	
 
 
@@ -118,7 +118,7 @@ def UploadFile(dfile,sfile,username,password,ip,port,su,supassword,sudo,sudopass
 		else:
 			print "密码登陆"
 			t.connect(username = username,password = password)
-		######################测试###################
+		
 		if os.path.isdir(sfile):
 			#(sdir,ddir,username,password,ip,loginmethod,keyfile,port=22,force=True,callback_info):
 			print " [%s]" % password
@@ -179,7 +179,7 @@ def UploadFile(dfile,sfile,username,password,ip,port,su,supassword,sudo,sudopass
 			cache_translog=translog
 		cache.set("translog",cache_translog,3600000000)
 		cache.set("info:%s"%(fid),info,600)
-		##########333return error_linenumber.get_linen_umber_function_name()[1]
+		
 		print 111111111111111111
 		return False,"未知错误"
 	else:
@@ -221,7 +221,7 @@ def resove_conf(conf,fid,user,action):
 		log(model,msg)
 		info["content"]=msg
 		cache.set("info:%s" % (fid),info,360000)
-		###########return error_linenumber.get_linen_umber_function_name()[1]
+		
 		return False
 	if action=="upload":
 		b=threading.Thread(target=UploadFile,args=(dfile,sfile,username,password,ip,port,su,supassword,sudo,sudopassword,loginmethod,keyfile,fid,user))
@@ -229,17 +229,17 @@ def resove_conf(conf,fid,user,action):
 		b=threading.Thread(target=DownFile,args=(dfile,sfile,username,password,ip,port,su,supassword,sudo,sudopassword,loginmethod,keyfile,fid,user))
 		
 	b.start()
-	b.join()##############前端是逐个访问， 没有启用多线程， 这里启用检测， 是因为文件管理的GET需要
+	b.join()
 def getconf(host,fid,user,action):
-	########host 格式是一个字典
-	########fid 一个随机生成的数字
-	########请求的用户 ， action  download  upload 上传下载
+	
+	
+	
 	model="getconf"
 	try:
 		if not type({})==type(host):
 			host=eval(host)
 			if not type(host)==type({}):
-				log(model,"GXXCXXF0000000001") ######已经转码,请求的格式不是一个字典
+				log(model,"GXXCXXF0000000001") 
 				return False,"GXXCXXF0000000001"
 	except Exception,e:
 		log(model,str(e))
@@ -251,9 +251,9 @@ def getconf(host,fid,user,action):
 		except Exception,e:
 			log(model,str(e))
 		hostconf=hostconf['content'][host['id']]
-		#########print hostconf,"这是提取的配置"
+		
 	except KeyError:
-		return False,"SXX0000000000001019" ##############服务器不存在
+		return False,"SXX0000000000001019" 
 	except Exception,e:
 		log(model,str(e))
 		print e,111111111111111111

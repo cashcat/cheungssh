@@ -15,7 +15,7 @@ class Topology(object):
 	def add_device(data):
 		cheungssh_info={"content":"","status":False}
 		try:
-			#####创建之前先查询
+			
 			device_name=data["name"]
 			if REDIS.hget("CHB-TXWY008304534",device_name):raise CheungSSHError("设备名不可以重复！")
 			data["time"]=time.strftime("%Y-%m-%d",time.localtime())

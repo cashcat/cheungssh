@@ -29,19 +29,19 @@ class RemoteFileAdmin(object):
 		return cheungssh_info
 	@staticmethod
 	def get_remote_file_list(super,username):
-		#####super是否是超级管理，username是资源归属,如果不是超管，不能给
+		
 		cheungssh_info={"status":False,"content":""}
 		try:
 			data=REDIS.hgetall("CSSH-R00000000001")
-			info={}#####存放最终处理结果
-			for id in data.keys():#####所有的id
+			info={}
+			for id in data.keys():
 				tmp=json.loads(data[id])
 				if tmp["owner"] == username or super:
-					#####如果是当前归属，或者是超级管理
+					
 					info[id]=tmp
 				else:
 					pass
-					#####不匹配的跳过
+					
 			cheungssh_info["content"]=info
 			cheungssh_info["status"]=True
 		except Exception,e:
@@ -61,20 +61,20 @@ class RemoteFileAdmin(object):
 		return cheungssh_info
 	@staticmethod
 	def remote_file_content(super,username,id,action,file_content=""):
-		#####username是那个用户请求
+		
 		cheungssh_info={"status":False,"content":""}
 		try:
 			data=RemoteFileAdmin.get_remote_file_list(super,username)
 			if not data["status"]:raise CheungSSHError(data["content"])
 			content=data["content"]
 			try:
-				######检查权限
+				
 				if not content[id]["owner"] == username:CheungSSHError("您无权查看该资源！")
 			except KeyError:
 					raise CheungSSHError("您指定的资源不存在！")
 			path=content[id]["path"]
-			path=re.sub(" ","",path)#####空格问题
-			sid=content[id]["server"]######sid
+			path=re.sub(" ","",path)
+			sid=content[id]["server"]
 			host_info=CheungSSHControler.convert_id_to_ip(sid)
 			if not host_info["status"]:raise CheungSSHError(host_info["content"])
 			host=host_info["content"]

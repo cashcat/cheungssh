@@ -37,7 +37,7 @@ class CheungSSHMiddleware(object):
 			content=data["content"].split("\r\n")[:-1]
 			for line in content:
 				ora=re.search("^/.*oracle/.*tnslsnr$",line)
-				#####处理oracle信息
+				
 				if ora:
 					line=ora.group()
 					try:
@@ -49,19 +49,19 @@ class CheungSSHMiddleware(object):
 					data=ssh.execute(cmd="ps -fel|grep -v  $$")
 					#if not data["status"]:
 					#	raise CheungSSHError(data["content"])
-					#####不能对这个进行判断，因为有执行失败的情况存在
+					
 					content=data["content"]
 					run_time="未运行"
 					for ps in content.split("\r\n"):
-						#####查找符合进程的行
+						
 						if re.search(parrent_dir,ps):
 							run_time=re.search(month,ps)
 							if run_time:
-								#####如果找到了
+								
 								run_time=run_time.group()
 								break
 							else:
-								#####如果没有找到，则可能是当天启动的
+								
 								run_time=ps.split()[11]
 								break
 					info={"path":parrent_dir,
@@ -76,7 +76,7 @@ class CheungSSHMiddleware(object):
 					data_info["oracle"].append(info)
 					
 					
-			#####不符合就跳过
+			
 			#data=ssh.execute(cmd=self.collect_oracle_cmd)
 			#if not data["status"]:
 			#	raise CheungSSHError(data["content"])

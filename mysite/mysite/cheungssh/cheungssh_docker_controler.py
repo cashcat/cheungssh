@@ -11,7 +11,7 @@ from cheungssh_thread_queue import CheungSSHPool
 REDIS=cache.master_client
 class DockerControler(object):
 	def __init__(self,parameters={}):
-		######param 数据格式 {"task_type":"start/stop","servers":{"sid1":[1,2,3],"sid2":[5,6,7]}
+		
 		self.parameters=parameters
 		self.REDIS=REDIS
 		self.tid=self.parameters["tid"]
@@ -28,12 +28,12 @@ class DockerControler(object):
 			else:
 				raise CheungSSHError("CHB0000000013")
 			pool=CheungSSHPool()
-			#####获取总的命令个数， 服务器个数 * 每个服务器的docker数量
+			
 			total_docker=0
 			for sid in self.parameters["servers"].keys():
-				docker_count=len(self.parameters["servers"][sid]) #####服务器对应的docker数量
+				docker_count=len(self.parameters["servers"][sid]) 
 				total_docker+=docker_count
-			self.REDIS.set("log.%s.total" % self.tid,total_docker) #####总共的docker数量
+			self.REDIS.set("log.%s.total" % self.tid,total_docker) 
 			self.REDIS.set("log.%s.current" % self.tid,0)
 			for sid in self.parameters["servers"].keys():
 				cmd="docker  %s %s"
@@ -54,12 +54,12 @@ class DockerControler(object):
 		try:
 			cheungssh_info=shell.execute(cmd,ignore=True)
 			cheungssh_info["cid"]=cid
-			#####完成一个，写入一个 [{"status":False/True,"content":"err....","cid":cid}]
+			
 			try:
-				#####修改数据库收集的记录
+				
 				db_containers=self.REDIS.get("docker.containers");
 				db_containers=json.loads(db_containers)
-				for i in range(len(db_containers)): #####[{},{}]
+				for i in range(len(db_containers)): 
 					if str(db_containers[i]["container_id"]) ==str(cid):
 						db_containers[i]["date"]=self.date
 						db_containers[i]["status_time"]="5分钟左右"
@@ -69,14 +69,14 @@ class DockerControler(object):
 							else:
 								db_containers[i]["status"]=False
 						elif self.task_type=="rm -f":
-								del db_containers[i] #####删除记录
+								del db_containers[i] 
 						else:
 							if cheungssh_info["content"]:
-								db_containers[i]["status"]=False  #####停止是false
+								db_containers[i]["status"]=False  
 							else:
 								db_containers[i]["status"]=True
 							
-				#####写入数据库
+				
 				db_containers=json.dumps(db_containers,encoding="utf8",ensure_ascii=False)
 				self.REDIS.set("docker.containers",db_containers)
 						
@@ -105,19 +105,19 @@ class DockerControler(object):
 			data=ssh.login(**server_config["content"])
 			if not data["status"]:
 				print "登录失败"
-				#####一次性失败一个服务器的全部docker
+				
 				for cid in containers:
 					log={"status":False,"content":data["content"],"cid":cid}
 					log=json.dumps(log,encoding="utf8",ensure_ascii=False)
 					self.REDIS.incr("log.%s.current" % tid)
 					self.REDIS.rpush("log.docker.container.%s" %self.parameters["tid"],log)
 				raise CheungSSHError(data["content"])
-			#####这里不用多线程了，困难很多,设计到shell的复制
-			for c in containers: #####循环每一个容器，一个容器就是一个命令
+			
+			for c in containers: 
 				print "执行命里干活"
 				_cmd=cmd % (self.task_type,c)
 				self.message_process(**{"cmd":_cmd,"sid":sid,"tid":self.parameters["tid"],"shell":ssh,"cid":c})
-			#####每一个服务器执行完成了所有的任务后注销shell
+			
 			ssh.logout()
 			cheungssh_info["status"]=True
 		except Exception,e:
@@ -132,8 +132,8 @@ class DockerControler(object):
 		data=[]
 		try:
 			data_length=REDIS.llen("log.docker.container.%s" % tid) 
-			total=REDIS.get("log.%s.total" % tid) #####总共的docker数量
-			current=REDIS.get("log.%s.current" % tid) #####总共的docker数量
+			total=REDIS.get("log.%s.total" % tid) 
+			current=REDIS.get("log.%s.current" % tid) 
 			progress=   "%0.2f"  % ( float(current)/float(total) * 100 )
 			for i in range(data_length):
 				_data=REDIS.lpop("log.docker.container.%s" %tid)

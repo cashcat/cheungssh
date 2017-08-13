@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #coding:utf-8
-#####下面的系统名字必须与cheungssh_os中的一致
+
 assets_conf={
 				"disk_number":{
 							"name":"硬盘(个)",

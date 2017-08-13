@@ -14,7 +14,7 @@ class ServerConf(models.Model):
 	IP=models.CharField(max_length=200)
 	HostName=models.CharField(max_length=100,null=False,blank=False)
 	Port=models.IntegerField(max_length=5)
-	Group=models.CharField(max_length=200,null=False,verbose_name="主机组")   #######verbose_name 显示成中文
+	Group=models.CharField(max_length=200,null=False,verbose_name="主机组")   
 	Username=models.CharField(max_length=200,null=False)
 	Password=models.CharField(('password'),max_length=128)
 	KeyFile=models.CharField(max_length=100,default="N")
@@ -85,7 +85,7 @@ class ServerConf(models.Model):
 		return self.IP
 	
 class ServerInfo(models.Model):
-	IP=models.OneToOneField(ServerConf)  #######这里应该是一对一的关系，如果是多对多， 在web页面上的显示逻辑就是一个文本框包含了全部IP，而如果用OneToOne的关系就是一个对应一个，IP那里就变成了下拉选择IP了
+	IP=models.OneToOneField(ServerConf)  
 	Position=models.TextField(null=True,blank=True)
 	Description=models.TextField(null=True,blank=True,default="请在这里写一个对服务器的描述")
 	CPU=models.CharField(max_length=20,default="暂无",null=True,blank=True)
@@ -110,10 +110,10 @@ class ServerInfo(models.Model):
 
 
 
-########from django.contrib.auth.models import User   #这个是用外键关联django自带的User表
+
 """class BBS(models.Model):
 	title=models.CharField(max_length=64)
-	summary=models.CharField(max_length=256,null=True,null=True) ####### 表里为空是null=True
+	summary=models.CharField(max_length=256,null=True,null=True) 
 	content=models.TextField()
 	author=models.ForeignKey('BBS_user')
 	view_count=models.IntegerField()
@@ -122,15 +122,15 @@ class ServerInfo(models.Model):
 	choices_show=(  ("N","不显示"),("Y","显示")  )
 	show_is=models.CharField(max_length=2,choices=choices_show)
 	def  __unicode__(self):
-		return self.title  ########这里返回的字段多少咩有任何影响，在做前台显示的时候， 这个是没有影响的一样可以通过  [.字段名]的形式返回值
-		####### 这里的return只是一个默认的字段而已， 在django中，可以用这个这样的方式访问该表里面的其他字段，比如 title.content
+		return self.title  
+		
 	class Admin:
 		pass
 class Gategory(models.Model):
-	name=models.CharField(max_length=32,unique=True)  #######unique表示不重复
+	name=models.CharField(max_length=32,unique=True)  
 	administrator=models.ForeignKey('BBS_user')
 class BBS_user(models.Model):
-	#######user=models.CharField(max_length=20)
+	
 	user=models.OneToOneField(User)
 	singnature=models.CharField(max_length=128,default="太懒了，什么都没写")
 	photo=models.ImageField(upload_to="imgs",default="default.png")

@@ -171,16 +171,16 @@ class CheungSSHAnalyLog(object):
 		# 存放所有日期
 		date=[]
 		try:
-			#####判断是否是远程日志，如果是，则需要提前下载
 			
-			#####
+			
+			
 			try:
 				os.makedirs(os.path.dirname(realname))
 			except:
 				pass
 			if  _type=="remote":
 				tfile=realname
-				sid=msgpack.unpackb(REDIS.hget("CHB-0383740494845",tfile.split("/")[-1]))["sid"]#####获取服务器sid
+				sid=msgpack.unpackb(REDIS.hget("CHB-0383740494845",tfile.split("/")[-1]))["sid"]
 				conf=CheungSSHControler.convert_id_to_ip(sid)
 				if not conf["status"]:raise IOError(conf["content"])
 				conf=conf["content"]
