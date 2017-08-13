@@ -1,0 +1,53 @@
+
+
+
+
+
+<div class="panel panel-default" id="showDockerImage" style="display: block; overflow: auto;">
+    <p class="navbar-form" style="width:100%;height:100%;margin-bottom:10px;"><input type="text"
+                                                                                     class="form-control"
+                                                                                     placeholder="搜索Docker镜像"
+                                                                                     style="width:100%;"
+                                                                                     id="searchDockerImage">
+    </p>
+    <div class="panel-heading" style="z-index: 1;background: white;">
+        <button class="btn btn-success btn-xs" id="addServer" type="button"><span
+                class="glyphicon glyphicon-plus "></span></button>
+
+        <button class="btn btn-danger btn-xs" type="button" id="batchDeleteServers"><span
+                class="glyphicon glyphicon-trash"></span></button>
+        <button class="btn btn-primary btn-xs"  id="refreshDockerImage"><span
+                class="glyphicon glyphicon-refresh"></span></button>
+        <button class="btn btn-success btn-xs"  id="createContainer"><span
+                class="glyphicon  glyphicon-play-circle"></span></button>
+
+    </div>
+
+    <table class="table table-bordered table-hover table-striped  table-condensed "  >
+        <thead>
+        <tr>
+            <th style="color: black;cursor:pointer " id="">
+                <i class=" glyphicon glyphicon-unchecked "></i>
+            </th>
+            <th>服务器别名</th>
+            <th>镜像</th>
+            <th>标签</th>
+            <th>ID</th>
+            <th>创建时间</th>
+            <th>空间</th>
+            <th>发现时间</th>
+            <th>删除</th>
+            <th>启动</th>
+
+
+        </tr>
+        </thead>
+        <tbody id="dockerImageTbody">
+
+        </tbody>
+
+    </table>
+</div>
+
+
+<script src="../js/dockerImage.js"></script>

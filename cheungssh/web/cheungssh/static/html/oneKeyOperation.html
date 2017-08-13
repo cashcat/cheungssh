@@ -1,0 +1,78 @@
+<div id="APP">
+    <div id="addApp" style=";width: 80px;height: 105px;float: left;margin-left: 10px;">
+        <div style="width: 80px;height: 80px;border-radius: 15px;cursor: pointer;"></div>
+        <div style="color: white;text-align: center;margin-top: 0px;">创建APP</div>
+    </div>
+    <div id="removeApp" class="app" style=";width: 80px;height: 105px;float: left;margin-left: 10px">
+        <div style="width: 80px;height: 80px;border-radius: 15px;cursor: pointer"></div>
+        <div style="color: white;text-align: center;margin-top: 0px;">删除APP</div>
+    </div>
+
+
+</div>
+
+
+<div style="z-index: 1003;width:auto;height: 200px;position: fixed;left: 0px;right: 0px;top: 40%;bottom: 60%;margin: auto;display:none;"
+     id="addAppDiv">
+    <div class="modal  "
+         style="overflow:hidden;overflow-y:hidden;position:relative;left:0px;right:0px;bottom:0px;top:0px;margin:auto;display:block;">
+        <div class="modal-dialog" style="left: 0px; margin-top: 0px;padding:0px;padding-top: 0px;">
+            <div class="modal-content ">
+                <div class="modal-header" style="cursor: move;">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+
+                    <h4 class=" glyphicon glyphicon-pencil " style="color: green;">创建APP</h4>
+                </div>
+
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">名称</label>
+                            <div class="col-sm-10">
+                                <input id="createAppName" class="form-control" type="text"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">命令</label>
+                            <div class="col-sm-10">
+                                <input id="createAppCommand" class="form-control" type="text"/>
+                            </div>
+                        </div>
+
+
+                        <!---->
+
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label class="col-sm-2  control-label">归属用户</label>
+                            <div class="col-sm-10">
+                                <select id="appOwner" class="form-control" >
+                                </select>
+                            </div>
+
+
+
+
+
+                        <!---->
+
+
+                    </form>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal" id="createAppButton">创建</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="closeCreateApp">放弃</button>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="../js/oneKeyOperation.js"></script>

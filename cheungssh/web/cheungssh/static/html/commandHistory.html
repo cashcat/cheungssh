@@ -1,0 +1,118 @@
+<div class="panel panel-default" style="background: white;height:100%;display: block;position: relative"
+     id="uploadScriptDropz">
+
+
+    <p class="navbar-form" style="width:100%;margin-bottom:10px;">
+    <div class="input-group" style="padding:10px;z-index: 0">
+        <input type="text" class="form-control searchValue" placeholder="搜索任意关键字" style="width:100%;">
+        <span class="input-group-btn">
+                        <button class="btn btn-success">
+                                <span class="glyphicon glyphicon-search">搜索</span>
+                        </button>
+                </span>
+    </div>
+    </p>
+
+    <div class="panel-heading" style="z-index: 1;background: white;">
+
+        <button class="btn btn-defualt btn-xs" id="refreshCommandLog"><span class="glyphicon glyphicon-refresh"></span></button>
+
+    </div>
+
+    <table class="table table-hover table-bordered  table-striped  table-condensed  table-responsive"  >
+        <thead>
+        <tr>
+            <th>操作IP</th>
+            <th>操作地区</th>
+            <th>命令</th>
+            <th>状态</th>
+            <th>用户</th>
+            <th>时间</th>
+        </tr>
+        </thead>
+        <tbody id="showCommandLogTbody">
+
+        </tbody>
+
+    </table>
+</div>
+
+
+
+
+<div id="showCommanLogDetail"  style="overflow: auto; z-index: 1004; width: auto; height: 100%; position: fixed; left: 0px; right: 0px; top: 0px; bottom: 0px; display: none;" >
+      id="showCommandLogDetail">
+    <div class="modal "
+         style="overflow:hidden;overflow-y:hidden;position:relative;left:0px;right:0px;bottom:0px;top:0px;margin:auto;display:block;">
+        <div class="modal-dialog">
+            <div class="modal-content  ">
+                <div class="modal-header" style="cursor: move;">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+
+                    <h4 class=" glyphicon glyphicon-success  glyphicon glyphicon-info-sign " >命令日志记录</h4>
+                </div>
+
+
+                <div class="modal-body">
+
+                    <div     class="col-md-12  col-sm-12 col-xs-12 col-lg-12  input-group">
+
+                        <div class="col-md-12  col-sm-12 col-xs-12 col-lg-12 "  style="border-bottom: 1px solid #b0b0b0;margin-top:10px;">
+                            <label class="control-label col-md-2 col-lg-2 col-sm-4 col-xs-3">操作IP</label>
+                            <div  id="showCommandLogIP"  class="col-md-10 col-lg-10 col-xs-9 col-sm-10"></div>
+                        </div>
+                        <div class="col-md-12  col-sm-12 col-xs-12 col-lg-12 "  style="border-bottom: 1px solid #b0b0b0;margin-top:10px;">
+                            <label class="control-label col-md-2 col-lg-2 col-sm-4 col-xs-3">操作地区</label>
+                            <div  id="showCommandLogIPLocate"  class="col-md-10 col-lg-10 col-xs-9 col-sm-10"></div>
+                        </div>
+
+                        <div class="col-md-12  col-sm-12 col-xs-12 col-lg-12 "  style="border-bottom: 1px solid #b0b0b0;margin-top:10px;">
+                            <label class="control-label col-md-2 col-lg-2 col-sm-4 col-xs-3">状态</label>
+                            <div  id="showCommandLogStatus"  class="col-md-10 col-lg-10 col-xs-9 col-sm-10"></div>
+                        </div>
+
+                        <div class="col-md-12  col-sm-12 col-xs-12 col-lg-12 "  style="border-bottom: 1px solid #b0b0b0;margin-top:10px;">
+                            <label class="control-label col-md-2 col-lg-2 col-sm-4 col-xs-3">命令</label>
+                            <div  id="showCommandLogCommand"  class="col-md-10 col-lg-10 col-xs-9 col-sm-10"></div>
+                        </div>
+
+                        <div class="col-md-12  col-sm-12 col-xs-12 col-lg-12 "  style="border-bottom: 1px solid #b0b0b0;margin-top:10px;">
+                            <label class="control-label col-md-2 col-lg-2 col-sm-4 col-xs-3">用户</label>
+                            <div  id="showCommandLogOwner"  class="col-md-10 col-lg-10 col-xs-9 col-sm-10"></div>
+                        </div>
+
+                        <div class="col-md-12  col-sm-12 col-xs-12 col-lg-12 "  style="border-bottom: 1px solid #b0b0b0;margin-top:10px;">
+                            <label class="control-label col-md-2 col-lg-2 col-sm-4 col-xs-3">时间</label>
+                            <div  id="showCommandLogTime"  class="col-md-10 col-lg-10 col-xs-9 col-sm-10"></div>
+                        </div>
+
+
+                        <div class="col-md-12  col-sm-12 col-xs-12 col-lg-12 "  style="border-bottom: 1px solid #b0b0b0;margin-top:10px;">
+                            <label class="control-label col-md-2 col-lg-2 col-sm-4 col-xs-3">服务器</label>
+                            <div  id="showCommandLogServer" style="margin-bottom: 5px;word-wrap: break-word;word-break:break-all;"  class="col-md-10 col-lg-10 col-xs-9 col-sm-10"></div>
+
+                        </div>
+
+                        <div class="col-md-12  col-sm-12 col-xs-12 col-lg-12 "  style="margin-top:10px;">
+                            <label class="control-label col-md-2 col-lg-2 col-sm-4 col-xs-3">内容</label>
+                            <pre   id="showCommandLogContent" class="col-md-10 col-xs-10" style=";border: none;word-wrap:break-word;white-space: pre-wrap; "></pre>
+
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"  id="closeCommandLogDetail">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="../js/commandLog.js" ></script>

@@ -1,0 +1,13 @@
+/usr/lib64/python2.6/site-packages/Crypto/Util/randpool.py:40: RandomPool_DeprecationWarning: This application uses RandomPool, which is BROKEN in older releases.  See http://www.pycrypto.org/randpool-broken
+  RandomPool_DeprecationWarning)
+已经取得资产信息.
+已经注销
+已经注销
+采集报错:  登录错误: 无法连接端口
+已经注销
+已经注销
+采集报错:  登录错误: 无法连接端口
+已经注销
+已经注销
+已经存储资产信息
+{'status': True, 'content': '\xe6\x97\xa0\xe6\xb6\x88\xe6\x81\xaf'}

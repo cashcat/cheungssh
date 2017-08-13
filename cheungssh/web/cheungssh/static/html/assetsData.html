@@ -1,0 +1,118 @@
+
+<style>
+
+
+
+    #tmpTmp ::-webkit-scrollbar {
+        width: 3px;
+    }
+    #tmpTmp ::-webkit-scrollbar-thumb {
+        background: #09C;
+        border-radius: 4px;
+
+
+    }
+</style>
+<div id="tmpTmp">
+<!--历史画图-->
+<div id="showAssetParentDIV"
+     style="display:none;position: fixed;  top: 0px; bottom: 0px ;left: 0px; right: 0px; z-index: 1003;background: black; ">
+    <div id="showAssetCharBody">
+        <center style="color: white;font-size: 200%;font-family:楷体" id="showAssetCharTitle">这里显示画图标题</center>
+
+        <div style="float: right;">
+            <span id="closeShowAssetChar" class="glyphicon glyphicon-remove-sign"
+                  style="font-size: 300%;color: white;cursor:pointer;z-index: 1;"></span>
+        </div>
+
+
+        <canvas id="showAssetChar" style="float: left;"></canvas>
+
+
+    </div>
+
+
+</div>
+
+
+<!--历史记录表-->
+<div id="showHistoryAssetsData"
+     style="display:none;position: absolute;  top: 0px; bottom: 0px ;left: 0px; right: 0px; z-index: 1003;background: white; ">
+    <div>
+        <center style="color: black;font-size: 400%" id="showHistoryAssetTitle"></center>
+
+        <div style="float: right;">
+            <span id="closeShowHistoryAsset" class="glyphicon glyphicon-remove-sign"
+                  style="font-size: 300%;color: black;cursor:pointer;z-index: 1;"></span>
+        </div>
+        <div class="panel panel-default" id="showServers" style="display: block; overflow: auto;">
+            <table class="table table-hover table-bordered  table-striped  table-condensed  table-responsive"  >
+                <thead>
+                <tr id="showHistoryAssetsTr">
+
+                </tr>
+
+
+                </thead>
+                <tbody id="showHistoryAssetsTbody">
+
+
+                </tbody>
+
+            </table>
+
+
+        </div>
+    </div>
+
+
+</div>
+
+
+<div class="panel panel-default " id="showServers" style="display: block; overflow: auto;">
+
+        <p class="navbar-form" style="width:100%;margin-bottom:10px;">
+        <div class="input-group" style="padding:10px;">
+                <input type="text" class="form-control searchValue" placeholder="搜索任意关键字" style="width:100%;" >
+                <span class="input-group-btn" >
+                        <button class="btn btn-success">
+                                <span class="glyphicon glyphicon-search">搜索</span>
+                        </button>
+                </span>
+        </div>
+       </p>
+
+
+    <div class="panel-heading" style="z-index: 1;background: white;">
+        <button class="btn btn-default btn-xs" id="refreshAssets"><span
+                class="glyphicon glyphicon-refresh"></span></button>
+        <button class="btn btn-primary btn-xs" id="exportAssets"><span
+                class="glyphicon glyphicon-export"></span></button>
+
+    </div>
+
+    <table class="table  table-hover  table-condensed">
+        <thead>
+        <tr id="assetsDataThead">
+            <!--
+            <th style="color: black;cursor:pointer " id="selectAllServers">
+                <i class=" glyphicon glyphicon-unchecked "></i>
+            </th>
+            -->
+
+        </tr>
+        </thead>
+        <tbody id="assetsDataTbody">
+
+        </tbody>
+
+    </table>
+</div>
+
+
+</div>
+<!--用来显示画图的-->
+<script src="../js/Chart.js"></script>
+<script src="../js/assetsData.js"></script>
+
+

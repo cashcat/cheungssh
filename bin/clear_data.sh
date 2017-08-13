@@ -14,8 +14,8 @@ find  /issue/cheungssh/cheungssh         -name "*tgz" -exec  /bin/rm -r {} \;
 find  /issue/cheungssh/cheungssh -type d -name "*2016*" -exec  /bin/rm -r {} \;
 find  /issue/cheungssh/cheungssh -type f -name '*pyc'  -exec  /bin/rm -r {} \;
 find  /issue/cheungssh/cheungssh -type f -name '*zip' -exec  /bin/rm -r {} \;
-find  /issue/cheungssh/cheungssh -type f -name '*py'  -exec  sed -i  's/
-find  /issue/cheungssh/cheungssh -type f -name '*sh'  -exec  sed -i  's/
+find  /issue/cheungssh/cheungssh -type f -name '*py'  -exec  sed -i  's/####.*//g' {} \;
+find  /issue/cheungssh/cheungssh -type f -name '*sh'  -exec  sed -i  's/####.*//g' {} \;
 /bin/rm  -r /issue/cheungssh/cheungssh/logs/*
 /bin/rm -r /issue/cheungssh/cheungssh/data/*
 /bin/rm  -r /issue/cheungssh/cheungssh/pid/*

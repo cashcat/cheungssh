@@ -1,0 +1,120 @@
+#!/bin/bash
+# chkconfig: 2345 55 25
+# description: CheungSSH Automation system
+setenforce 0 
+chown cheungssh.cheungssh -R /home/cheungssh
+start(){
+	/bin/rm  /home/cheungssh/pid/cheungssh.status
+	chmod 755 -R  /var/lib/mysql/  2>/dev/null
+	chmod  777 /var/lib/mysql/mysql.sock 2>/dev/null
+	service iptables stop 2&>/dev/null
+	service firewalld stop 2&>/dev/null
+	service mysqld  start
+	if [ $? -ne 0 ]
+	then
+		echo  "启动mysqld服务失败，请联系CheungSSH作者解决"
+		exit 1
+	fi
+	/home/cheungssh/soft/redis-3.2.8/src/redis-server /home/cheungssh/conf/redis.conf
+	if [ $? -ne 0 ]
+	then
+		echo  "启动Redis服务失败，请联系CheungSSH作者解决"
+		exit 1
+	fi
+	
+	service httpd start 
+	if [ $? -ne 0 ]
+	then
+		echo  "启动以上服务失败，请检查原因"
+		exit 1
+	else
+		dest_mysql_sock='/var/lib/mysql/mysql.sock'
+		if [ ! -e  $dest_mysql_sock ]
+		then
+			mkdir  -p /var/lib/mysql/ 2>/dev/null;chown mysql.mysql /var/lib/mysql/
+			if [ -f /etc/my.cnf ]
+			then
+				cnf="/etc/my.cnf"
+			else
+				cnf="/etc/mysql/my.cnf"
+			fi
+			mysql_sock=`grep  -E '^ *socket.*mysql.*sock$' $cnf|awk  -F  '=' 'NR==1{print  $NF}'`
+			if [ ! -e $dest_mysql_sock ]
+			then
+				ln -s $mysql_sock  $dest_mysql_sock
+			fi
+			
+		fi
+		if [ $? -ne 0 ]
+		then
+			echo "Mysql相关信息错误"
+			exit 1
+		fi
+
+		service crond start
+		if  [ $? -ne 0 ]
+		then
+			echo "启动计划任务失败"
+			exit 1
+		else
+			echo  "已启动计划任务"
+		fi
+		echo "CheungSSH 启动成功！"
+		echo  "CheungSSH 运行中..." > /home/cheungssh/pid/cheungssh.status 2>/dev/null
+	fi
+	service rsyslog restart 2&>/dev/null
+	sh /home/cheungssh/bin/add_crond.sh
+}
+status(){
+	cat  /home/cheungssh/pid/cheungssh.status
+}
+stop(){
+	service crond stop
+	service httpd stop 
+	service mysqld stop
+	killall  -9 httpd 2>/dev/null
+	
+	#docker_pid=`cat /home/cheungssh/pid/docker_admin.pid 2>/dev/null`
+	#ps -fel|awk -v pid=$docker_pid '{if($4==pid){ PID=pid} } END{print PID}'|xargs kill -9 2>/dev/null
+
+	
+	#server_status_pid=`cat /home/cheungssh/pid/server_status.pid 2>/dev/null`
+	#ps -fel|awk -v pid=$server_status_pid '{if($4==pid){ PID=pid} } END{print PID}'|xargs kill -9 2>/dev/null
+	
+	
+	#crontab_pid=`cat /home/cheungssh/pid/crontab.pid 2>/dev/null`
+	#ps -fel|awk -v pid=$crontb_pid        '{if($4==pid){ PID=pid} } END{print PID}'|xargs kill -9 2>/dev/null
+	
+
+	
+	#asset_pid=`cat /home/cheungssh/pid/asset_admin.pid 2>/dev/null`
+	#ps -fel|awk -v pid=$asset_pid '{if($4==pid){ PID=pid} } END{print PID}'|xargs kill -9 2>/dev/null
+	echo  "正在关闭Redis..."
+	/home/cheungssh/soft/redis-3.2.8/src/redis-cli -a testpassword shutdown 2>/dev/null
+	echo  "Redis已关闭."
+	#ps -fel|awk  '/cheungssh_daemon/{print  $4}' |xargs kill -9  2&>/dev/null
+	echo  "CheungSSH 已停止" > /home/cheungssh/pid/cheungssh.status
+		
+
+
+}
+case $1 in
+	start)
+		stop
+		start
+	;;
+	stop)
+		stop
+	
+		;;
+status)
+	status
+	;;
+restart)
+	stop
+	start
+	;;
+	*)
+		echo "Useage: $0 {start|stop|restart}"""
+		exit 1
+esac

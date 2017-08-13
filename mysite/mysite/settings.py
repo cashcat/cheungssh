@@ -50,7 +50,7 @@ TIME_ZONE = 'Asia/Hong_Kong'
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'zh-cn'
-DEFAULT_CHARSET='utf-8' 
+DEFAULT_CHARSET='utf-8' ######中文字符界面
 
 SITE_ID = 1
 
@@ -90,7 +90,7 @@ STATICFILES_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 	'/home/cheungssh/web/cheungssh/static/',
 )
-
+################
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
@@ -118,8 +118,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',    
-    'django.middleware.common.CommonMiddleware',
+    'corsheaders.middleware.CorsMiddleware',    ###########
+    'django.middleware.common.CommonMiddleware',#############
 )
 
 ROOT_URLCONF = 'mysite.urls'
@@ -152,19 +152,19 @@ CORS_ALLOW_HEADERS = (
         'accept',
         'origin',
         'authorization',
-	'cache-control', 
+	'cache-control', #####跨域上传文件'
         'x-csrftoken'
     )
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-	'corsheaders', 
+	'corsheaders', ####
     #'django.contrib.sites',
     #'mysite.books',
     'mysite.cheungssh',
- 	
-	
+ 	##### 'django.contrib.comments',  #######Django自带的评论模板
+	######'django.contrib.sites',  ########Django自带
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:

@@ -1,0 +1,38 @@
+<div class="panel panel-default" id="" style="display: block; overflow: auto;">
+
+
+    <p>
+    <div class="input-group" style="padding:10px;">
+        <input type="text" class="form-control searchValue" placeholder="操作系统命令" style="width:100%;"
+               id="inputCommandBlack">
+        <span class="input-group-btn">
+                        <button class="btn btn-success" id="addCommand">添加</button>
+                </span>
+    </div>
+    </p>
+    <div class="panel-heading" style="z-index: 1;background: white;">
+        <button class="btn btn-default btn-xs" id="refreshCommandBlackList" type="button"><span
+                class="glyphicon glyphicon-refresh "></span></button>
+
+
+    </div>
+    <table class="table table-bordered table-hover table-striped  table-condensed " style="background: white">
+        <thead>
+        <tr>
+            <th>操作者IP</th>
+            <th>操作者归属地</th>
+            <th>命令</th>
+            <th>创建时间</th>
+            <th>归属用户</th>
+            <th>操作</th>
+
+        </tr>
+        </thead>
+        <tbody id="showCommandBlackListTbody">
+
+        </tbody>
+
+    </table>
+</div>
+
+<script src="../js/commandBlackList.js"></script>

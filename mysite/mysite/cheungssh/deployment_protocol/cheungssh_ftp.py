@@ -31,7 +31,7 @@ class CheungSSHFtp(object):
 			cheungssh_info["content"]=str(e)
 		return cheungssh_info
 	def download(self,filename):
-		
+		#####filename:要下载的文件名
 		cheungssh_info={"content":"","status":False}
 		try:
 			bufsize=1024
@@ -39,8 +39,8 @@ class CheungSSHFtp(object):
 			f=open(local_path,"wb")
 			total=self.ftp.size(filename)
 			callback=Callback(total,f)
-			#self.ftp.retrbinary('RETR %s' % filename,f.write,bufsize)
-			#self.ftp.retrbinary('RETR %s' % filename,f.write,bufsize)
+			#self.ftp.retrbinary('RETR %s' % filename,f.write,bufsize)#####写入文件
+			#self.ftp.retrbinary('RETR %s' % filename,f.write,bufsize)#####写入文件
 			self.ftp.retrbinary('RETR %s' % filename, callback, bufsize) 
 			f.close()
 			cheungssh_info["local_path"]=local_path
@@ -66,7 +66,7 @@ class Callback(object):
 		self.fp = fp 
 		self.received = 0 
 	def __call__(self, data): 
-		
+		#####默认调用这里?
 		self.fp.write(data) 
 		self.received += len(data) 
 		progress="%0.2f" % (100.0*self.received/self.totalsize)

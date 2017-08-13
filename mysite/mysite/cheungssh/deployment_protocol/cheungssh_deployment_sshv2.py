@@ -12,7 +12,7 @@ import cheungssh_settings
 from django.core.cache import cache
 REDIS=cache.master_client
 class CheungSSHDeploymentSSH(CheungSSH_SSH):
-	
+	#####部署任务专用
 	def __init__(self,taskid="",stepid=""):
 		self.taskid=taskid
 		self.stepid=stepid
@@ -24,7 +24,7 @@ class CheungSSHDeploymentSSH(CheungSSH_SSH):
 		while not re.search(self.prompt,buff.split('\n')[-1]):
 			_buff=self.shell.recv(10240)
 			buff+=_buff
-			
+			#####把实时的执行信息写入redis数据库
 			cheungssh["content"]=buff
 			cheungssh_deployment_admin.DeploymentAdmin.set_progress(self.taskid,stepid,buff)
 		return buff

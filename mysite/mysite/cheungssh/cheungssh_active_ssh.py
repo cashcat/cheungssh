@@ -31,8 +31,8 @@ class CheungSSHActiveSSH(CheungSSH_SSH):
 				cheungssh_info["content"]=a["content"]
 			a=threading.Thread(target=self.execute_command)
 			a.start()
-			
-			
+			#####登录成功
+			#####开始接受命令
 			cheungssh_info["tid"]=tid
 			cheungssh_info["log_key"]=log_key
 			cheungssh_info["cmd_key"]=cmd_key
@@ -41,11 +41,11 @@ class CheungSSHActiveSSH(CheungSSH_SSH):
 			cheungssh_info["content"]=str(e)
 		return cheungssh_info
 	def execute_command(self):
-		log_name=  "log.%s.%s"  %(self.tid,self.sid)   
+		log_name=  "log.%s.%s"  %(self.tid,self.sid)   ####### "log_tid_sid" 日志记录格式
 		log_content={
 			"content":"已注销",
 			"status":False,
-                }
+                }#####前端注销以后，需要终止信号
                 log_content=json.dumps(log_content,encoding="utf-8",ensure_ascii=False)
 		while True:
 			time.sleep(0.1)
@@ -61,7 +61,7 @@ class CheungSSHActiveSSH(CheungSSH_SSH):
 			self.execute(cmd,tid=self.tid,sid=self.sid,ignore=True)
 	@staticmethod
 	def get_result(key):
-		
+		#####临时日志由log_tid_sid组成
 		cheungssh_info={"status":False,"content":""}
 		try:
 			l=REDIS.llen(key)
@@ -72,7 +72,7 @@ class CheungSSHActiveSSH(CheungSSH_SSH):
 				if data["content"]=="已注销":
 					raise CheungSSHError(data["content"])
 			cheungssh_info["status"]=True
-			cheungssh_info["content"]=re.sub("""\x1B\[[0-9;]*[mK]""","",cheungssh_info["content"])
+			cheungssh_info["content"]=re.sub("""\x1B\[[0-9;]*[mK]""","",cheungssh_info["content"])#####删除因为终端彩色的特殊字符编码
 		except Exception,e:
 			cheungssh_info["content"]=str(e)
 		return cheungssh_info
@@ -80,7 +80,7 @@ class CheungSSHActiveSSH(CheungSSH_SSH):
 	def add_command(cmd,cmd_key):
 		cheungssh_info={"status":False,"content":""}
 		try:
-			REDIS.rpush(cmd_key,cmd)
+			REDIS.rpush(cmd_key,cmd)######每一个独立的命令队列
 			cheungssh_info["status"]=True
 		except Exception,e:
 			cheungssh_info["content"]=str(e)
