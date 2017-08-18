@@ -14,6 +14,7 @@ from cheungssh_modul_controler import CheungSSHControler
 class CheungSSHActiveSSH(CheungSSH_SSH):
 	def __init__(self):
 		CheungSSH_SSH.__init__(self)
+                self.base_prompt = r'[^\[#]([^#+])(>|#|\]|\$|\)|(\[y/N\]:|\?|(assword:?)|(？))) *$'
 	def run(self,sid):
 		tid=str(random.randint(999999999999,9999999999999))
 		cheungssh_info={"content":"","status":False}
@@ -85,3 +86,27 @@ class CheungSSHActiveSSH(CheungSSH_SSH):
 		except Exception,e:
 			cheungssh_info["content"]=str(e)
 		return cheungssh_info
+	
+	def execute(self,cmd='',sid="",tid="",ignore=False):
+		cheungssh_info={"status":False,"content":""}
+		log_content={
+			"content":"",
+			"stage":"done",
+			"status":False,
+		}
+		log_name=  "log.%s.%s"  %(tid,sid)
+		try:
+			#data=self.clean_buffer()
+			#if not data["status"]:raise CheungSSHError(data["content"]) 
+			#self.set_prompt()
+			self.shell.send("%s\n"%cmd)
+			cheungssh_info['content']=self.recv(sid=sid,tid=tid)
+			cheungssh_info["status"]=True
+			log_content["status"]=True
+			cheungssh_info["status"]=False
+			#REDIS.rpush("command.logs",cheungssh_info)
+		except Exception,e:
+			cheungssh_info["status"]=False
+			cheungssh_info["content"] =  str(e)
+		_log_content=json.dumps(log_content,encoding="utf-8",ensure_ascii=False)
+		REDIS.lpush(log_name,_log_content)

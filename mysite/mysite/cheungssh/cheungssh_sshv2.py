@@ -11,7 +11,7 @@ from django.core.cache import cache
 REDIS=cache.master_client
 class CheungSSH_SSH(object):
 	def __init__(self):
-		self.base_prompt = r'(>|#|\]|\$|\)) *$'
+                self.base_prompt = r'[^\[#]([^#+])(>|#|\]|\$|\)|(\[y/N\]:)) *$'
 		self.prompt=""
 	def login(self,**kws):
 		cheungssh_info={"status":False,"content":""}
@@ -33,6 +33,7 @@ class CheungSSH_SSH(object):
 			self.su_password=kws["su_password"]
 			self.port = int(self.port)
 			self.os_type=kws["os_type"]
+			self.sid=kws["id"]
 			ssh = paramiko.SSHClient()
 			if self.login_method=='PASSWORD':
 				ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())

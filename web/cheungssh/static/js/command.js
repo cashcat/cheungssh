@@ -446,9 +446,42 @@ function startCommand() {
 
 
 }
+function _checkRequestConnect(rid) {
+    return function () {
+        //访问真正的目标函数
+       checkRequestConnect(rid)
+	}
+}
 
+function checkRequestConnect(rid){
+	jQuery.ajax({
+		"url":checkRequestConnectURL,
+		"beforeSend":start_load_pic,
+		"complete":stop_load_pic,
+		"error":errorAjax,
+		"data":{"rid":rid},
+		"dataType":"jsonp",
+		"success":function(data){
+			responseCheck(data)
+			if(!data.status){
+				showErrorInfo(data.content);
+				return false;
+			}
+			else{
+				var content=data.content;
+				if (window.currentSelectedServers.length!==content.length){
+					setTimeout(_checkRequestConnect(rid), 1000);
+				}
+				else{
+					//所有链接已经完成
+					document.getElementById("inputCommand").removeAttribute("disabled")
+					
+				}
+			}
+		}
+	})
+}
 
-//初始化加载
 $(function () {
     //给点击计划任务绑定点击事件
 
@@ -535,7 +568,6 @@ $(function () {
     );
 
     //输入框焦点
-    document.getElementById("inputCommand").focus();
 
 
 })

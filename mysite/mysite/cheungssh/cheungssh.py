@@ -5,6 +5,7 @@ sys.path.append('/home/cheungssh/mysite/mysite/cheungssh')
 sys.path.append('/home/cheungssh/mysite/mysite/cheungssh/deployment_protocol')
 import csv
 import codecs
+from cheungssh_batch_command import CheungSSHBatchCommand
 from cheungssh_system_version import cheungssh_os
 from cheungssh_middleware.cheungssh_middleware import CheungSSHMiddleware
 from analysis_log.cheungssh_analysis_log import CheungSSHAnalyLog

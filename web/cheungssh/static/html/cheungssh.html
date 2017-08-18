@@ -36,7 +36,7 @@
     }
 
     ::-webkit-scrollbar {
-        width: 0px;
+        width: 0px;/*这里设置的是滚动条的纵向宽度， height在这里就是滚动条的横向高度*/
     }
 
 	/*
@@ -51,12 +51,13 @@
     }
 	*/
 	.loginNotify::-webkit-scrollbar-thumb{
+	/*这里设置滚动条除了高度和高度以外的样式*/
         border-radius: 5px;
 	        background: #09C;
 
     }
 	.loginNotify::-webkit-scrollbar {
-        width: 10px;
+        width: 5px;
     }
 	.cheungsshAreaContent,.ui-menu::-webkit-scrollbar-thumb{
 		border-radius: 5px;
@@ -69,7 +70,7 @@
 
     .ui-menu {
         height: auto;
-        max-height:80%;
+        max-height:20%;
     }
 	
 

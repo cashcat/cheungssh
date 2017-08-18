@@ -158,7 +158,6 @@ var getMiddleWareInfoURL=headURL+"cheungssh/get_to_web_middleware_info/";
 var getCurrentAssetsDataExportURL=headURL+"cheungssh/get_current_assets_data_export/";
 var getSystemVersionURL=headURL+"cheungssh/get_os_type/";
 
-
 /*
  iphone6s plus屏幕尺寸  高度   736px  414px
  document.body.offsetWidth //浏览器的的宽
