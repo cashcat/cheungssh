@@ -690,7 +690,22 @@ function getDeploymentTaskConf(){
 
                 else if(taskModul==="localUpload"){
                     //$(this).find(".localUploadModul").find(".localPath")[0].value=content.servers[i].steps[g].;
+                    //上传文件的远程路径
                     $(this).find(".localUploadModul").find(".remotePath")[0].value=content.servers[i].steps[g].remote_path;
+		   //上传文件的本地路径
+                    var local_path=content.servers[i].steps[g].local_path;//远程路径
+		        var localPathControl = $(this).find(".localUploadModul").find(".localPath")[0];//远程路径的控件
+                        //下面循环显示上传路径的本地参数，一个列表定位
+    			for(var _ti=0; _ti<localPathControl.options.length; _ti++){
+				if(localPathControl.options[_ti].textContent == local_path){
+					localPathControl.options[_ti].selected = true;
+					break;
+				}
+			}
+
+
+
+
 
 
                    // var localUploadSelect =$(this).find(".localUploadModul").find(".scriptName")[0];

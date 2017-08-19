@@ -167,7 +167,7 @@ var menu = [
         }
     },
     {
-        "软件部署": {
+        "代码发布": {
             "class": "glyphicon glyphicon-briefcase",
             "id": "appDeploy",
         }
