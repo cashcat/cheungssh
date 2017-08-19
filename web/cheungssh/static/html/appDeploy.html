@@ -213,25 +213,30 @@
                         </div>
                         <div>
                             <button style="margin-top:20px;"
-                                    class="removeServerStep btn btn-danger btn-sm  glyphicon glyphicon-trash">
+                                    class="removeServerStep btn btn-danger btn-sm">
+					<span class="glyphicon glyphicon-trash"></span><span style="margin-left:3px;" >删除步骤</span>
                             </button>
                         </div>
                     </div>
                 </div>
                 <!--一个服务器只有一个创建步骤的按钮-->
-                <button class="btn btn-success btn-sm  createServerStep glyphicon glyphicon-plus" style="margin-bottom: 20px;"></button>
+                <button class="btn btn-success btn-sm  createServerStep" style="margin-bottom: 20px;">
+		<span class="glyphicon glyphicon-plus"></span><span style="margin-left:3px;">添加步骤</span>
+		</button>
             </div>
 
             <!--删除步骤-->
             <div style="margin-top:10px">
-                <button class="btn btn-danger  btn-lg removeTaskServer glyphicon glyphicon-trash"></button>
+                <button class="btn btn-danger  btn-lg removeTaskServer">
+		<span class="glyphicon glyphicon-trash"></span><span style="margin-left:3px;">删除服务器</span>
+		</button>
             </div>
         </div>
     </div>
     <div  style="width: 100%;margin-top:30px;" class="clearfix">
         <label class="control-label col-md-2 col-xs-2 col-sm-2 col-lg-2">备注</label>
         <div class="col-md-10 col-xs-10 col-sm-10 col-lg-10">
-            <textarea  id="description"  class="form-control "></textarea>
+            <textarea  id="description"  class="form-control " placeholder="请写备注"></textarea>
 
         </div>
 
@@ -245,11 +250,14 @@
 
 
     <div style="margin-top:30px;margin-bottom:50px;" class="clearfix">
-        <button   class="btn btn-primary glyphicon glyphicon-floppy-save" id="saveDeploymentTask">
+        <button   class="btn btn-primary" id="saveDeploymentTask">
+	<span class="glyphicon glyphicon-floppy-save" ></span><span style="margin-left:3px;">保存设置</span>
         </button>
-        <button class=" btn btn-success glyphicon glyphicon-plus" id="createTaskServer">
+        <button class=" btn btn-success " id="createTaskServer">
+	<span class="glyphicon glyphicon-plus"></span>
+	<span>新增服务器</span>
         </button>
-        <button class="btn btn-default btn-info " id="closeEditDeployment" >
+        <button class="btn btn-default btn-info " id="closeEditDeployment" >返回
             <span class=" fa fa-reply "></span>
         </button>
 
