@@ -90,6 +90,7 @@ stop(){
 	#asset_pid=`cat /home/cheungssh/pid/asset_admin.pid 2>/dev/null`
 	#ps -fel|awk -v pid=$asset_pid '{if($4==pid){ PID=pid} } END{print PID}'|xargs kill -9 2>/dev/null
 	echo  "正在关闭Redis..."
+	/home/cheungssh//soft/redis-3.2.8/src/redis-cli  -a testpassword save
 	/home/cheungssh/soft/redis-3.2.8/src/redis-cli -a testpassword shutdown 2>/dev/null
 	echo  "Redis已关闭."
 	#ps -fel|awk  '/cheungssh_daemon/{print  $4}' |xargs kill -9  2&>/dev/null
