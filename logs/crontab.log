@@ -1,8 +1,0 @@
-/usr/lib64/python2.6/site-packages/Crypto/Util/randpool.py:40: RandomPool_DeprecationWarning: This application uses RandomPool, which is BROKEN in older releases.  See http://www.pycrypto.org/randpool-broken
-  RandomPool_DeprecationWarning)
-已经注销
-{1: {'dest': '*/30 * * * * sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log\r', 'cmd': 'sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log >>', 'collect_time': '2017-08-09 00:31:20', 'alias': u'A', 'time': '*/30 * * * *', 'sid': u'91134519171'}} A
-已经注销
-无法连接端口 dockerB
-已经注销
-无法连接端口 dockerA

@@ -1,8 +1,0 @@
-/usr/lib64/python2.6/site-packages/Crypto/Util/randpool.py:40: RandomPool_DeprecationWarning: This application uses RandomPool, which is BROKEN in older releases.  See http://www.pycrypto.org/randpool-broken
-  RandomPool_DeprecationWarning)
-Oracel Error 无法连接端口 <class 'cheungssh_error.CheungSSHError'>
-已经注销
-Oracel Error 无法连接端口 <class 'cheungssh_error.CheungSSHError'>
-已经注销
-已经注销
-采集完成
