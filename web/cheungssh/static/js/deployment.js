@@ -27,6 +27,50 @@ function createTaskServer(){
     return newDiv;
 }
 
+function copyTaskServer(copyButton){
+    //复制服务器步骤按钮的爷爷级元素
+
+    var allTask=document.getElementById("allTask");
+    var a=copyButton.parentNode.parentNode;
+    a.style.background="white";
+    var html=a.cloneNode(true);
+    //需要对应已经填写的模块
+    var t= $(a).find(".taskModulType")[0].value;
+                    var commandSelect =$(html).find(".taskModulType")[0];
+                    for(var h=0; h<commandSelect.options.length; h++){
+                        if(commandSelect.options[h].getAttribute("value") == t){
+                            commandSelect.options[h].selected = true;
+                            break;
+                        }
+                    }
+    //在文件上传和脚本两个有子下拉框
+    var areaName= $(a).find(".taskModulType")[0].value;//上传文件下拉框
+    if (areaName==="script"){
+                    var localUploadSelect =$(html).find(".scriptName")[0];
+                    var scriptFileName =$(a).find(".scriptName")[0].value;
+                    for(var h=0; h<localUploadSelect.options.length; h++){
+                        if(localUploadSelect.options[h].textContent == scriptFileName){
+                            localUploadSelect.options[h].selected = true;
+                            break;
+                        }
+                    }
+
+    }
+    if (areaName==="localUpload"){
+                    var localUploadSelect =$(html).find(".localPath")[0];
+                    var uploadFileName =$(a).find(".localPath")[0].value;
+                    for(var h=0; h<localUploadSelect.options.length; h++){
+                        if(localUploadSelect.options[h].textContent == uploadFileName){
+                            localUploadSelect.options[h].selected = true;
+                            break;
+                        }
+                    }
+
+    }
+    allTask.appendChild(html);
+
+}
+
 function removeTaskServer(deleteButton){
     //删除 删除服务器按钮的爷爷级元素
     var a=deleteButton.parentNode.parentNode;
@@ -47,6 +91,28 @@ $(document).on("mouseout",".removeTaskServer",function(){
     //删除服务器按钮，鼠标经过背景变黑
     this.parentNode.parentNode.style.background="none";
 })
+
+
+
+$(document).on("click",".copyTaskServer",function(){
+    //复制服务器步骤
+    copyTaskServer(this);
+})
+$(document).on("mouseover",".copyTaskServer",function(){
+    //复制服务器按钮，鼠标经过背景变黑
+    this.parentNode.parentNode.style.background="black";
+})
+
+$(document).on("mouseout",".copyTaskServer",function(){
+    //复制服务器按钮，鼠标经过背景变黑
+    this.parentNode.parentNode.style.background="none";
+})
+
+
+
+
+
+
 
 $(document).on("click",".createServerStep",function(){
     //新增每一个步骤
@@ -646,7 +712,6 @@ function getDeploymentTaskConf(){
                     var scriptFile=content.servers[i].steps[g].script_name;
                     //脚本文件
                    var scriptSelect =$(this).find(".scriptModul").find(".scriptName")[0];
-
                     //console.log("历史记录",scriptSelect,scriptSelect.options,scriptSelect.options.length);
                     for(var h=0; h<scriptSelect.options.length; h++){
                         if(scriptSelect.options[h].textContent == scriptFile){
