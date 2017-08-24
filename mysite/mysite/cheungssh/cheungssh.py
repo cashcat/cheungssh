@@ -462,11 +462,25 @@ def config_del(request):
 		for h in hosts:
 			for _s in servers_list:
 				s=json.loads(_s)
+				id=str(s["id"])
 				if str(h)==str(s["id"]):
 					if username==s["owner"] or is_super:
 						
 						
 						REDIS.lrem("servers.config.list",_s,0) 
+						
+						current_assets=REDIS.get("current.assets")
+						current_assets=json.loads(current_assets)
+						del current_assets[id]
+						current_assets=json.dumps(current_assets,encoding="utf8",ensure_ascii=False)
+						current_assets=REDIS.set("current.assets",current_assets)
+						
+						history_assets=REDIS.lrange('history.assets',0,-1)
+						for _a in history_assets:
+							a=json.loads(_a)
+							if a["sid"] == id:
+								REDIS.lrem("history.assets",_a,0) 
+						del a
 					else:
 						raise CheungSSHError("您无权删除该服务器!")
 					break
