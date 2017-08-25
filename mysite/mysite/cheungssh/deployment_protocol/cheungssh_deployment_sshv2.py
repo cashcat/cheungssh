@@ -21,7 +21,7 @@ class CheungSSHDeploymentSSH(CheungSSH_SSH):
 	def recv(self,sid="",tid="",ignore=False):
 		buff=''
 		cheungssh={"content":buff,"status":True}
-		while not re.search(self.prompt,buff.split('\n')[-1]):
+		while not re.search(self.base_prompt,buff.split('\n')[-1]):
 			_buff=self.shell.recv(10240)
 			buff+=_buff
 			

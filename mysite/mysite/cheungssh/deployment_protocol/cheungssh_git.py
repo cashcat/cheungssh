@@ -50,14 +50,14 @@ class CheungSSHGit(CheungSSHDeploymentSSH):
 		except Exception,e:
 			cheungssh_info["content"]=str(e)
 			cheungssh_info["status"]=False
-		#if not cheungssh_info["status"]:
-		#	cheungssh_deployment_admin.DeploymentAdmin.set_progress(self.tid,cheungssh_info)
-		#在admin调用处才执行
+		
+		
+		
 		return cheungssh_info
 	def recv(self,sid="",tid="",ignore=False):
 		
 		buff=''
-		while not re.search(self.prompt,buff.split('\n')[-1]):
+		while not re.search(self.base_prompt,buff.split('\n')[-1]):
 			_buff=self.shell.recv(1024)
 			buff+=_buff
 			if re.search('\(yes/no\)\?',buff.split('\n')[-1]):

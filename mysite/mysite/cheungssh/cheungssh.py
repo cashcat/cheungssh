@@ -274,7 +274,7 @@ def delete_script(request):
 		cheungssh_info["status"]=False
 	return cheungssh_info
 @login_check.login_check('查看脚本清单')
-@permission_check('cheungssh.scripts_list')
+@permission_check('cheungssh.show_script_list')
 @ajax_http
 def scripts_list(request):
 	username=request.user.username
