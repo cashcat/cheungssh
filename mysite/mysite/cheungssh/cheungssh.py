@@ -3,6 +3,7 @@ import sys,os,json,random,commands,queue_task,time,threading
 sys.path.append('/home/cheungssh/bin')
 sys.path.append('/home/cheungssh/mysite/mysite/cheungssh')
 sys.path.append('/home/cheungssh/mysite/mysite/cheungssh/deployment_protocol')
+from cheungssh_deployment_crontab import CheungSSHDeploymentCrontab
 import csv
 import codecs
 from cheungssh_batch_command import CheungSSHBatchCommand
@@ -1888,3 +1889,21 @@ def get_to_web_middleware_info(request):
 @ajax_http
 def get_os_type(request):
 	return {"content":cheungssh_os.CheungSSHOSVersion.os_type,"status":True}
+@ajax_http
+def save_deployment_crontab(request):
+	data=request.GET.get("data")
+	data=json.loads(data)
+	whoami=request.user.username
+	return CheungSSHDeploymentCrontab.save_deployment_crontab(data,whoami)
+@ajax_http
+def get_deployment_crontab(request):
+	whoami=request.user.username
+	is_super=request.user.is_superuser
+	return CheungSSHDeploymentCrontab.get_deployment_crontab(is_super,whoami)
+
+@ajax_http
+def delete_deployment_crontab(request):
+	owner=request.GET.get("owner")
+	is_super=request.user.is_superuser
+	tid=request.GET.get("tid")
+	return CheungSSHDeploymentCrontab.delete_deployment_crontab(is_super,owner,tid)

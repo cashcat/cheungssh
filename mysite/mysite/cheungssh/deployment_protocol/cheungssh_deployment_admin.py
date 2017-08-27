@@ -6,7 +6,9 @@ sys.path.append('/home/cheungssh/mysite')
 sys.path.append('/home/cheungssh/mysite/mysite/cheungssh')
 from cheungssh_error import CheungSSHError
 from django.core.cache import cache
-from cheungssh_deployment_controler import  CheungSSHDeploymentControler
+#from cheungssh_deployment_controler import  CheungSSHDeploymentControler
+import cheungssh_deployment_controler
+
 from cheungssh_localupload import CheungSSHLocalUpload
 import cheungssh_settings
 REDIS=cache.master_client
@@ -145,7 +147,7 @@ class DeploymentAdmin:
 					if task_modul=="git":
 						git_url=step["git_url"]
 						git_dir=step["git_dir"]
-						A=CheungSSHDeploymentControler(self.taskid)
+						A=cheungssh_deployment_controler.CheungSSHDeploymentControler(self.taskid)
 						info=A.init_server_conf(sid)
 						if not info["status"]:raise CheungSSHError(info["content"])
 						cheungssh_info=A.git(git_url,git_dir,stepid)
@@ -154,7 +156,7 @@ class DeploymentAdmin:
 					elif task_modul=="commandBak":
 						source_dir=step["source_dir"]
 						dest_dir=step["bak_dir"]
-						A=CheungSSHDeploymentControler(self.taskid)
+						A=cheungssh_deployment_controler.CheungSSHDeploymentControler(self.taskid)
 						info=A.init_server_conf(sid)
 						if not info["status"]:raise CheungSSHError(info["content"])
 						cheungssh_info=A.command_backup(source_dir,dest_dir,stepid)
@@ -162,7 +164,7 @@ class DeploymentAdmin:
 							raise CheungSSHError(cheungssh_info["content"])
 					elif task_modul=="command":
 						command=step["command"]
-						A=CheungSSHDeploymentControler(self.taskid)
+						A=cheungssh_deployment_controler.CheungSSHDeploymentControler(self.taskid)
 						info=A.init_server_conf(sid)
 						if not info["status"]:raise CheungSSHError(info["content"])
 						cheungssh_info=A.command(command,stepid)
@@ -172,7 +174,7 @@ class DeploymentAdmin:
 						owner=step["owner"]
 						script_name=step["script_name"]
 						script_parameter=step["script_parameter"]
-						A=CheungSSHDeploymentControler(self.taskid)
+						A=cheungssh_deployment_controler.CheungSSHDeploymentControler(self.taskid)
 						info=A.init_server_conf(sid)
 						if not info["status"]:raise CheungSSHError(info["content"])
 						cheungssh_info=A.script(sid=sid,sfile=script_name,parameter=script_parameter,owner=owner,stepid=stepid)
@@ -183,7 +185,7 @@ class DeploymentAdmin:
 						path=step["path"]
 						recursion=step["recursion"]
 						code=step['code']
-						A=CheungSSHDeploymentControler(self.taskid)
+						A=cheungssh_deployment_controler.CheungSSHDeploymentControler(self.taskid)
 						info=A.init_server_conf(sid)
 						if not info["status"]:raise CheungSSHError(info["content"])
 						cheungssh_info=A.command_permission(path=path,recursion=recursion,code=code,stepid=stepid)
@@ -194,7 +196,7 @@ class DeploymentAdmin:
 						path=step['path']
 						owner=step['owner']
 						recursion=step['recursion']
-						A=CheungSSHDeploymentControler(self.taskid)
+						A=cheungssh_deployment_controler.CheungSSHDeploymentControler(self.taskid)
 						info=A.init_server_conf(sid)
 						if not info["status"]:raise CheungSSHError(info["content"])
 						cheungssh_info=A.command_chown(path=path,recursion=recursion,owner=owner,stepid=stepid)
@@ -205,7 +207,7 @@ class DeploymentAdmin:
 						local_path=step["local_path"]
 						remote_path=step["remote_path"]
 						owner=step["owner"]
-						A=CheungSSHDeploymentControler(self.taskid)
+						A=cheungssh_deployment_controler.CheungSSHDeploymentControler(self.taskid)
 						info=A.init_server_conf(sid)
 						if not info["status"]:raise CheungSSHError(info["content"])
 						local_path=os.path.join(cheungssh_settings.upload_dir,owner,local_path)
@@ -217,7 +219,7 @@ class DeploymentAdmin:
 						username=step["svn_username"]
 						password=step["svn_password"]
 						dest_dir=step["svn_dir"]
-						A=CheungSSHDeploymentControler(self.taskid)
+						A=cheungssh_deployment_controler.CheungSSHDeploymentControler(self.taskid)
 						info=A.init_server_conf(sid)
 						if not info["status"]:raise CheungSSHError(info["content"])
 						cheungssh_info=A.svn(url=url,username=username,password=password,dest_dir=dest_dir,stepid=stepid)

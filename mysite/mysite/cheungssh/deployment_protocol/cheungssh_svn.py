@@ -6,7 +6,6 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
 sys.path.append("/home/cheungssh/mysite/mysite/cheungssh")
 sys.path.append("/home/cheungssh/mysite")
 from django.core.cache import cache
-import cheungssh_deployment_admin
 REDIS=cache.master_client
 from cheungssh_error import CheungSSHError
 from cheungssh_sshv2 import CheungSSH_SSH
@@ -40,7 +39,7 @@ class CheungSSHSVN(CheungSSH_SSH):
 	def recv(self,sid="",tid="",ignore=False):
 		
 		buff=''
-		while not re.search(self.prompt,buff.split('\n')[-1]):
+		while not re.search(self.base_prompt,buff.split('\n')[-1]):
 			_buff=self.shell.recv(1024)
 			buff+=_buff
 			if re.search('\(yes/no\)\?',buff.split('\n')[-1]):

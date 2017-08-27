@@ -6,7 +6,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
 sys.path.append("/home/cheungssh/mysite/mysite/cheungssh")
 sys.path.append("/home/cheungssh/mysite")
 from django.core.cache import cache
-import cheungssh_deployment_admin
+import deployment_protocol
 REDIS=cache.master_client
 from cheungssh_error import CheungSSHError
 from cheungssh_deployment_sshv2 import  CheungSSHDeploymentSSH
@@ -75,4 +75,4 @@ class CheungSSHGit(CheungSSHDeploymentSSH):
 			print "Git下载进度:",progress
 			cheungssh_info["progress"]=progress
 			cheungssh_info["content"]=all_buff
-			cheungssh_deployment_admin.DeploymentAdmin.set_progress(self.taskid,self.stepid,cheungssh_info)
+			deployment_protocol.cheungssh_deployment_admin.DeploymentAdmin.set_progress(self.taskid,self.stepid,cheungssh_info)

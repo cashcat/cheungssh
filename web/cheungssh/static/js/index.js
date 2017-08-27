@@ -173,6 +173,12 @@ var menu = [
         }
     },
     {
+        "发布计划": {
+            "class": "glyphicon glyphicon-blackboard",
+            "id": "deploymentCrontab",
+        }
+    },
+    {
         "Docker": {
             "class": "glyphicon glyphicon-heart",
             "id": "dockerAdmin",
@@ -601,6 +607,10 @@ $(document).on("click","#oracle",function(){
 	loadOracle();
 })
 
+$(document).on("click","#deploymentCrontab",function(){
+    sectionColor(this)
+	loadDeploymentCrontabHTML();
+})
 function loadOracle(){
 	$("#showMainContent").load("../html/oracle.html");
 }
@@ -609,6 +619,9 @@ function loadLoginSuccessHTML() {
     $("#showMainContent").load("../html/loginSuccess.html");
 }
 
+function loadDeploymentCrontabHTML(){
+	$("#showMainContent").load("../html/deployment_crontab.html")
+}
 function loadCommand() {
     $("#showMainContent").load("../html/command.html");
 }

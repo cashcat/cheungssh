@@ -96,7 +96,6 @@ class CheungSSHCrontabControler(object):
 				raise CheungSSHError(_sed_t["content"])
 			else:
 				char=_sed_t["content"]
-				print char,555555555555555555555555555555555555555
 			ssh=CheungSSH_SSH()
 			conf=CheungSSHControler.convert_id_to_ip(data["sid"])
 			if not conf["status"]:

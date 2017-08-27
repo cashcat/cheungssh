@@ -16,7 +16,7 @@ class FileAdmin(object):
 			cheungssh_info["status"]=True
 			cheungssh_info["content"]=content
 		except IOError:
-			cheungssh_info["congtent"]="指定的文件不存在！"
+			cheungssh_info["content"]="指定的文件不存在！"
 		except Exception,e:
 			cheungssh_info["status"]=False
 			cheungssh_info["content"]=str(e)

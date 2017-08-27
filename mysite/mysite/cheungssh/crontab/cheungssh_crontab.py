@@ -49,14 +49,20 @@ class CheungSSHCrontab(object):
 							continue
 						try:
 							crontab_time=" ".join(line.split()[:5])
-							crontab_cmd=" ".join(line.split()[5:][:-1])
+							if re.search("#",line):
+								crontab_cmd=" ".join(line.split()[5:][:-1])
+							else:
+								crontab_cmd=" ".join(line.split()[5:])
 							if len(crontab_cmd)==0:
 								if not len(line.split())==6:
 									continue
 								else:
 									crontab_cmd=" ".join(line.split()[5:])
 									
-							crontab_dest=line.split("#")[-1]
+							if re.search("#",line):
+								crontab_dest=line.split("#")[-1]
+							else:
+								crontab_dest=""
 							crontab_data[id]={"time":crontab_time,"cmd":crontab_cmd,"dest":crontab_dest,"collect_time":collect_time,"sid":server_info["id"],"alias":server_info["alias"]}
 						except Exception,e:
 							print "报错了",str(e)

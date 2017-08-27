@@ -101,5 +101,8 @@ urlpatterns = patterns('',
 	url(r"^cheungssh/delete_remote_analysis_logfile_info/","mysite.cheungssh.cheungssh.delete_remote_analysis_logfile_info"),
 	url(r"^cheungssh/get_to_web_middleware_info/$","mysite.cheungssh.cheungssh.get_to_web_middleware_info"),
 	url(r"^cheungssh/get_os_type/$","mysite.cheungssh.cheungssh.get_os_type"),
+	url(r"^cheungssh/save_deployment_crontab/$","mysite.cheungssh.cheungssh.save_deployment_crontab"),
+	url(r"^cheungssh/get_deployment_crontab_list/$","mysite.cheungssh.cheungssh.get_deployment_crontab"),
+	url(r"^cheungssh/delete_deployment_crontab/$","mysite.cheungssh.cheungssh.delete_deployment_crontab"),
 	)
 

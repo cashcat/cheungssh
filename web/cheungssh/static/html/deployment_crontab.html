@@ -1,0 +1,118 @@
+<div class="panel panel-default" id="" style="display: block; overflow: auto;">
+
+    <p class="navbar-form" style="width:100%;margin-bottom:10px;">
+    <div class="input-group" style="padding:10px;">
+        <input type="text" class="form-control searchValue" placeholder="搜索任意关键字" style="width:100%;" >
+        <span class="input-group-btn" >
+                        <button class="btn btn-success">搜索</button>
+                </span>
+    </div>
+    </p>
+
+
+    <div class="panel-heading" style="z-index: 1;background: white;">
+        <button  id="createDeploymentCrontab" class="btn btn-xs btn-success glyphicon glyphicon-plus "></button>
+        <button  id="refreshDeploymentCrontab" class="btn btn-xs btn-default  glyphicon glyphicon-refresh "></button>
+
+
+
+    </div>
+
+
+    <table class="table table-hover table-bordered  table-striped  table-condensed  table-responsive"  >
+        <thead>
+        <tr >
+            <th>任务名称</th>
+            <th>计划时间</th>
+            <th>所属用户</th>
+            <th>上次运行</th>
+            <th style="min-width: 60px;">操作</th>
+        </tr>
+        </thead>
+        <tbody id="showDeploymentCrontabTbody">
+
+
+        </tbody>
+
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div style="font-family: 微软雅黑;overflow: auto;z-index: 1004;width:auto;height: 100%;position: fixed;left: 0%;right: 0px;top: 0%;bottom: 0px;display:none;"
+     id="deploymentCrontabEditDiv">
+    <div class="modal "
+         style="height: 95%;overflow:hidden;overflow-y:hidden;position:relative;left:0px;right:0px;bottom:0px;top:0px;margin:auto;display:block;">
+        <div class="modal-dialog">
+            <div class="modal-content  ">
+                <div class="modal-header" style="cursor: move;">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+
+                    <h4 class=" glyphicon glyphicon-edit " style="color: green;">部署计划任务</h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+
+
+                            <div class="col-md-12">
+                                <label class="control-label col-md-2">任务名称</label>
+                                <div class="col-md-10">
+                                    <select id="deploymentCrontabSelect" class="col-md-12 form-control"></select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12" style="margin-top:10px">
+                                <label class="control-label col-md-2">计划时间</label>
+                                <div class="col-md-10">
+                                    <input id="deploymentCrontabTime" class="form-control" placeholder="Linux操作系统计划任务格式">
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button style="float:left" type="button" class="btn btn-default" data-dismiss="modal"
+                            id="closeDeploymentCrontabDiv">取消
+                    </button>
+                    <button type="button" style="float:right" class="btn btn-success" data-dismiss="modal"
+                            id="saveDeploymentCrontab">保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="../js/deployment_crontab.js"></script>

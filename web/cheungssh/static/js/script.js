@@ -29,13 +29,13 @@ function loadScriptList() {
     });
 }
 
-function showScriptContent(filename) {
+function showScriptContent(filename,owner) {
     //显示脚本内容
     //焦点
     jQuery.ajax({
         "url": getScriptContentURL,
         "dataType": "jsonp",
-        "data": {"filename": filename},
+        "data": {"filename": filename,"owner":owner},
         "error": errorAjax,
         "beforeSend": start_load_pic,
         "complete": stop_load_pic,
@@ -84,11 +84,13 @@ function createScriptTableLine(data) {
     var opTd = document.createElement("td");
     var editButton = document.createElement("button");
     editButton.className = " btn btn-xs btn-primary  glyphicon glyphicon-eye-open";
+    editButton.setAttribute("owner",data["owner"])
     editButton.setAttribute("filename", data["script"]);
     editButton.onclick = function () {
 	window.currentEditScriptContentButton=this;
         var filename = this.getAttribute("filename");
-        showScriptContent(filename);
+        var owner = this.getAttribute("owner");
+        showScriptContent(filename,owner);
         document.getElementById("scriptContent").focus();
         document.getElementById("writeScriptContent").setAttribute("filename", filename);//绑定提交按钮的属性
     }
