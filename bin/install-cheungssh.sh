@@ -16,6 +16,7 @@ mkdir -p $CHOME/upload
 mkdir -p $CHOME/analysis_logfile
 
 chown -R  cheungssh.cheungssh /var/spool/cron/
+chown     cheungssh.cheungssh /var/log/cron
 id=`id -u`
 if [ $id -ne 0 ]
 then
