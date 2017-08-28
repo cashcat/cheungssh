@@ -8,8 +8,16 @@ class CheungSSHDeploymentCrontab(object):
 		action=data["action"]
 		try:
 			line="{time} python /home/cheungssh/mysite/mysite/cheungssh/deployment_protocol/cheungssh_deployment_admin.py {taskid} {task_name} {owner}".format(time=data["crontab_time"],taskid=data["tid"],task_name=data["task_name"],owner=whoami)
-			with open(path,"r") as f:
-				t=f.read()
+			try:
+				with open(path,"r") as f:
+					t=f.read()
+			except Exception,e:
+				e=str(e)
+				if re.search("No such file or directory",err):
+					t=""
+				else:
+					raise IOError(e)
+				
 			if re.search("{tid}.*{owner}".format(tid=data["tid"],owner=data["owner"]),t) and action=="add":
 				raise IOError("该部署任务在计划任务表中存在，您不必再次创建计划任务，修改后保存即可.")
 			elif action=="edit":
@@ -96,9 +104,14 @@ class CheungSSHDeploymentCrontab(object):
 			err=str(e)
 			if re.search("Permission denied",err):
 				err="请在CheungSSH服务器上执行命令: chown -R cheungssh.cheungssh {path} 解决这个错误".format(path=os.path.dirname(path))
+				cheungssh_info["content"]=err
+				cheungssh_info["status"]=False
 			elif re.search("No such file or directory",err):
+				cheungssh_info["content"]=[]
 				cheungssh_info["status"]=True
 				
+			else:
+				cheungssh_info["content"]=err
+				cheungssh_info["status"]=False
 				
-			cheungssh_info["content"]=err
 		return cheungssh_info
