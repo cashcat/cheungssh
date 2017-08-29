@@ -13,7 +13,7 @@ class CheungSSHDeploymentCrontab(object):
 					t=f.read()
 			except Exception,e:
 				e=str(e)
-				if re.search("No such file or directory",err):
+				if re.search("No such file or directory",e):
 					t=""
 				else:
 					raise IOError(e)
