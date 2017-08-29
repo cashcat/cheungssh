@@ -86,9 +86,9 @@ class CheungSSH_SSH(object):
 			cheungssh_info['status'] = False
 			e=str(e)
 			if re.search(re.escape("Error reading SSH protocol banner[Errno 104] Connection reset by peer"),e):
-				cheungssh_info['content'] = "CKC-SSH-Error-1"
+				cheungssh_info['content'] = "CKC-SSH-Error-CONN-104"
 			elif re.search(re.escape("Incompatible ssh peer (no acceptable kex algorithm)"),e):
-				cheungssh_info['content'] = "CKC-SSH-Error-2"
+				cheungssh_info['content'] = "CKC-SSH-Error-kEX"
 			else:
 				cheungssh_info['content'] = e
 		if re.search("Not a valid RSA private key file \(bad ber encoding\)",cheungssh_info["content"]):

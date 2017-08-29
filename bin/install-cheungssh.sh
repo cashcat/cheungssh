@@ -563,7 +563,7 @@ else
 	exit 1
 fi
 
-create_swap
+#create_swap
 install_setuptools
 make_install_software
 init_mysql_server

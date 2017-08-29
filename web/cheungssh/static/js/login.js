@@ -20,14 +20,14 @@ function errorAjax(XMLHttpRequest, textStatus, errorThrown) {
     status_code = XMLHttpRequest.status;
     var content = XMLHttpRequest.responseText || "";
     var mysqlSock = content.match("\/.*sock");
-    if (content.match("Can.*connect to local.*server through socket")) {
-        content = "CheungSSH内部系统错误，代码:CHB-R1000000027";
+    if (content.match("Can.*connect.*server through socket")) {
+        content = "CheungSSH连接不上后台数据库端口";
     }
     else if (content.match("Access.*denied")) {
-        content = "CheungSSH内部系统错误，代码:CHB-R1000000028";
+        content = "CheungSSH登录MySQL的账号密码失败，请您确认是否是MySQL登录限制或账号密码错误的问题.";
     }
     else if (/Error 111 connecting to.*Connection refused/.test(content)) {
-        content = "CheungSSH内部系统错误，代码:CHB-R1000000026";
+        content = "CheungSSH连接不上Redis服务，请您检查服务是否开启";
     }
     else {
         content = "CheungSSH已经响应,但是出现意外的错误，请联系您的管理员";
