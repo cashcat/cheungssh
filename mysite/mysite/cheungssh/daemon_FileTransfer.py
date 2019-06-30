@@ -7,7 +7,7 @@ sys.path.append('/home/cheungssh/mysite')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
 from mysite.cheungssh.FileTransfer import getconf
 if __name__  == '__main__':
-	
+	##############'{"sfile":"/tmp/abc","dfile":"/tmp/cbd","id":"1","user":"haha","runtype":"upload","fid":111111111111111111}' 
 	host = " ".join(sys.argv[1:])
 	try:
 		host=eval(host)

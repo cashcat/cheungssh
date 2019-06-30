@@ -28,7 +28,7 @@ class RemoteFileAdmin(object):
 				raise IOError(tmp["content"])
 			tid = str(random.randint(1000000000,9999999999))
 			back_path = os.path.join("/home/cheungssh/remote_files",tid)
-			
+			##### 备份一个版本
 			if not os.path.isdir("/home/cheungssh/remote_files/"):
 				os.mkdir("/home/cheungssh/remote_files")
 			try:
@@ -78,7 +78,7 @@ class RemoteFileAdmin(object):
 		try:
 			data = request.GET.get("data")
 			data = json.loads(data)
-			
+			##### 查询是否有创建过的记录
 			x= RemoteFile.objects.filter(path=data["path"],sid=data["sid"])
 			if x.__len__() == 0:
 				# 不存在则创建记录
@@ -104,7 +104,7 @@ class RemoteFileAdmin(object):
 			SSH = ssh.login(**info["content"])
 			if SSH["status"] is False:
 				raise IOError(SSH["content"])
-			
+			##### 如果存在，直接返回内容供修改
 			cheungssh_info = ssh.get_remote_file_content(data["path"])
 			cheungssh_info["remote_file_id"] = remote_file_id
 		except Exception,e:
@@ -156,14 +156,14 @@ class RemoteFileAdmin(object):
 			SSH = ssh.login(**info["content"])
 			if SSH["status"] is False:
 				raise IOError(SSH["content"])
-			
+			##### 恢复之前先备份
 			back_path_b = os.path.join("/home/cheungssh/remote_files/",str(random.randint(1000000000,9999999999)))
 			ssh.sftp.get(tmp[0].path,back_path_b)
 			
-			
+			##### 恢复
 			back_path_a = RemoteFileHistoryVersion.objects.get(id=tid).path
 			ssh.sftp.put(back_path_a,tmp[0].path)
-			
+			##### 新增一个历史记录
 			
 			x=RemoteFileHistoryVersion(
 				path=back_path_b,
@@ -173,7 +173,7 @@ class RemoteFileAdmin(object):
 				remote_file_id=id,
 			)
 			x.save()
-			tmp.update(tid=tid) 
+			tmp.update(tid=tid) ###### 指向老的版本时间，而不是最新的
 			cheungssh_info["status"] = True
 		except Exception,e:
 			cheungssh_info["content"] = str(e)

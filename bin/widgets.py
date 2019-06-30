@@ -564,10 +564,10 @@ class Select(Widget):
 	cheungssh_permision_show=re.sub("cheungssh \| server conf \| ","",conditional_escape(force_unicode(option_label)))
         return u'<option value="%s"%s>%s</option>' % (
             escape(option_value), selected_html,
-            cheungssh_permision_show    )  
+            cheungssh_permision_show    )  ############修改admin界面显示权限
         """return u'<option value="%s"%s>%s</option>' % (
             escape(option_value), selected_html,
-            conditional_escape(force_unicode(option_label)))"""  
+            conditional_escape(force_unicode(option_label)))"""  ##############修改显示
 
     def render_options(self, choices, selected_choices):
         # Normalize to strings.

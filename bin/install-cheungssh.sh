@@ -398,7 +398,7 @@ Alias /cheungssh/static /home/cheungssh/web/cheungssh/static/
 <Location "/cheungssh/static">
         SetHandler None
 </Location>
-Alias /home/cheungssh/download/file  "/home/cheungssh/download/"
+Alias /home/cheungssh/download/file  "/home/cheungssh/download/file"
 <Location "/home/cheungssh/download/file">
         SetHandler None
 </Location>

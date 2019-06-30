@@ -127,7 +127,7 @@ CREATE TABLE `auth_user` (
 
 LOCK TABLES `auth_user` WRITE;
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-INSERT INTO `auth_user` VALUES (1,'admin','','','admin@q.com','pbkdf2_sha256$10000$1TqR1fl3RgEJ$5avrZfCzq7CslEfoDXpp6PMHL6iqJwu5637qy3YMthc=',1,1,1,'2019-05-11 14:10:22','2019-05-11 14:10:22'),(2,'cheungssh','','','a@q.com','pbkdf2_sha256$10000$O6UZW8bi7aDN$yqiJ33LM8pdkV/LrCaJehPMCVQfeZc73jCDiVaVJz94=',1,1,1,'2019-06-30 13:58:43','2019-06-30 13:44:33');
+INSERT INTO `auth_user` VALUES (1,'admin','','','admin@q.com','pbkdf2_sha256$10000$1TqR1fl3RgEJ$5avrZfCzq7CslEfoDXpp6PMHL6iqJwu5637qy3YMthc=',1,1,1,'2019-05-11 14:10:22','2019-05-11 14:10:22'),(2,'cheungssh','','','a@q.com','pbkdf2_sha256$10000$386sprUxEiw1$kn5+DDG81oh+3Jqi4TYly8Vka0aRP+OkMoc05pjLYuI=',1,1,1,'2019-06-30 13:58:43','2019-06-30 13:44:33');
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -586,4 +586,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-06-30 22:38:07
+-- Dump completed on 2019-06-30 23:03:00

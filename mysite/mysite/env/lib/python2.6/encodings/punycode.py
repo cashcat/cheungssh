@@ -6,7 +6,7 @@ Written by Martin v. Löwis.
 
 import codecs
 
-
+##################### Encoding #####################################
 
 def segregate(str):
     """3.1 Basic code point segregation"""
@@ -125,7 +125,7 @@ def punycode_encode(text):
         return base + "-" + extended
     return extended
 
-
+##################### Decoding #####################################
 
 def decode_generalized_number(extended, extpos, bias, errors):
     """3.3 Generalized variable-length integers"""

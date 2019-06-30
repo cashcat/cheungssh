@@ -61,7 +61,7 @@ def crond_show(request):
 		for fid in crondlog_show_all.keys():
 			if request.user.username==crondlog_show_all[fid]['user']  or request.user.is_superuser:
 				fid_progres_info=cache.get('info:%s' % (fid))
-				if fid_progres_info: 
+				if fid_progres_info: ###########如果计划任务执行了， 需要格式化一下数据
 					crondlog_show_all[fid]['status']=fid_progres_info['status']
 					try:
 						crondlog_show_all[fid]['lasttime']=fid_progres_info['lasttime']
@@ -71,8 +71,8 @@ def crond_show(request):
 						crondlog_show_all[fid]['content']=fid_progres_info['content']
 					else:
 						crondlog_show_all[fid]['content']="正常"
-					
-				crond_back_list.append(crondlog_show_all[fid])
+					############将每一行数据装载
+				crond_back_list.append(crondlog_show_all[fid])##########不管计划任务是否执行，都需要装载
 		return True,crond_back_list
 	else:
 		return False,[]

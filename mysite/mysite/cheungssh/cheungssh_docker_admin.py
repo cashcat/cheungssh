@@ -19,7 +19,7 @@ class DockerAdmin(CheungSSHControler):
 		self.controler=CheungSSHControler()
 		self.get_docker_image_command="docker images"
 		self.get_docker_container_command="docker ps -a"
-		self.image_count=0 
+		self.image_count=0 #####默认的镜像数量为0
 		self.container_count=0
 		self.all_image=[]
 		self.all_container=[]
@@ -30,7 +30,7 @@ class DockerAdmin(CheungSSHControler):
 		if images is None:
 			images=[]
 		else:
-			images=json.loads(images) 
+			images=json.loads(images) #####转换为dict
 		
 		cheungssh_info["content"]=images
 		return cheungssh_info
@@ -41,7 +41,7 @@ class DockerAdmin(CheungSSHControler):
 		if containers is None:
 			containers=[]
 		else:
-			containers=json.loads(containers) 
+			containers=json.loads(containers) #####转换为dict
 		
 		cheungssh_info["content"]=containers
 		return cheungssh_info
@@ -72,12 +72,12 @@ class DockerAdmin(CheungSSHControler):
 		return cheungssh_info
 		
 	def docker_images_redis(self):
-		
+		#####images是一个ip的全部镜像
 		cheungssh_info={"content":"","status":False}
-		
+		###########用哈希存储
 		try:
-			self.REDIS.hset("docker.images.count",self.now_time,self.image_count) 
-			self.all_image=json.dumps(self.all_image,encoding="utf8",ensure_ascii=False) 
+			self.REDIS.hset("docker.images.count",self.now_time,self.image_count) ######存储每日的docker镜像数量记录
+			self.all_image=json.dumps(self.all_image,encoding="utf8",ensure_ascii=False) #####写入全部的docker镜像记录
 			self.REDIS.set("docker.images",self.all_image)
 			cheungssh_info["status"]=True
 		except Exception,e:
@@ -87,10 +87,10 @@ class DockerAdmin(CheungSSHControler):
 		return cheungssh_info
 	def docker_containers_redis(self):
 		cheungssh_info={"content":"","status":False}
-		
+		###########用哈希存储
 		try:
-			self.REDIS.hset("docker.containers.count",self.now_time,self.container_count) 
-			self.all_container=json.dumps(self.all_container,encoding="utf8",ensure_ascii=False) 
+			self.REDIS.hset("docker.containers.count",self.now_time,self.container_count) ######存储每日的docker镜像数量记录
+			self.all_container=json.dumps(self.all_container,encoding="utf8",ensure_ascii=False) #####写入全部的docker镜像记录
 			self.REDIS.set("docker.containers",self.all_container)
 			cheungssh_info["status"]=True
 		except Exception,e:
@@ -102,8 +102,8 @@ class DockerAdmin(CheungSSHControler):
 	def format_docker_image_list(self,content,alias,ip,sid):
 		cheungssh_info=content
 		content=cheungssh_info["content"]
-		images_list=[] 
-		is_responsetory=False 
+		images_list=[] #######存储本本主机所有的docker镜像
+		is_responsetory=False ######记录从responsetory开始处理docker
 		try:
 			if cheungssh_info["status"]:
 				content=content.split('\r\n')[1:-1]
@@ -112,18 +112,18 @@ class DockerAdmin(CheungSSHControler):
 					line=re.split(' {3,}',_line)
 					if re.search("REPOSITORY",line[0]):
 						is_responsetory=True
-						continue 
+						continue #####遇到了REPOSITORY开始处理
 					elif  not is_responsetory:
 						continue
-						
+						#####没有responsetory开始，返回循环
 					image_option["image"]=line[0]
 					image_option["tag"]=line[1]
 					image_option["image_id"]=line[2]
 					image_option["create_time"]=line[3]
 					image_option["size"]=line[4]
-					images_list.append(image_option) 
+					images_list.append(image_option) #####把每一个docker image存起来
 				self.cond.acquire()
-				self.image_count+=len(images_list)  
+				self.image_count+=len(images_list)  ##### 累加镜像数量
 				self.all_image+=images_list
 				self.cond.release()
 		except Exception,e:
@@ -134,8 +134,8 @@ class DockerAdmin(CheungSSHControler):
 	def format_docker_container_list(self,content,alias,ip,sid):
 		cheungssh_info=content
 		content=cheungssh_info["content"]
-		containers_list=[] 
-		is_container=False 
+		containers_list=[] #######存储本本主机所有的docker镜像
+		is_container=False ######记录从responsetory开始处理docker
 		try:
 			if cheungssh_info["status"]:
 				content=content.split('\r\n')[1:-1]
@@ -144,31 +144,31 @@ class DockerAdmin(CheungSSHControler):
 					line=re.split(' {3,}',_line)
 					if re.search("CONTAINER",line[0]):
 						is_container=True
-						continue 
+						continue #####遇到了REPOSITORY开始处理
 					elif  not is_container:
 						continue
-						
+						#####没有responsetory开始，返回循环
 					container_option["container_id"]=line[0]
 					container_option["image"]=line[1]
 					command=line[2]
-					
+					#####删除命令的引号
 					command=re.sub('"','',command)
 					container_option["command"]=command
 					container_option["create_time"]=line[3]
 					_status=line[4]
 					if re.search("^Up",_status):	
 						status=True
-						
+						#####运行
 					elif re.search("^Exited",_status):
 						status=False
-						
+						#####停止
 					else:
 						status=None
-						
+						#####未知
 					container_option["status"]=status
-					status_time=re.search("^(Up|Exited) (.*)",_status).group(2) 
+					status_time=re.search("^(Up|Exited) (.*)",_status).group(2) #####获取停止/启动的时间
 					container_option["status_time"]=status_time
-					
+					#####没有找到字段切割办法，无法解决
 					"""
 					container_option["port"]=line[5]
 					try:
@@ -176,9 +176,9 @@ class DockerAdmin(CheungSSHControler):
 					except:
 						pass
 					"""
-					containers_list.append(container_option) 
+					containers_list.append(container_option) #####把每一个docker image存起来
 				self.cond.acquire()
-				self.container_count+=len(containers_list)  
+				self.container_count+=len(containers_list)  ##### 累加镜像数量
 				self.all_container+=containers_list
 				self.cond.release()
 		except Exception,e:
@@ -217,14 +217,14 @@ class DockerAdmin(CheungSSHControler):
 	def run(self):
 		pool=CheungSSHPool()
 		self.servers=DockerAdmin.get_all_servers()
-		
+		#######运行完毕后，一定要等待结束！！！！！
 		for s in  self.servers:
 			server_conf=self.convert_id_to_ip(sid=s)
 			if not server_conf["status"]:
 				continue
 			pool.add_task(self.get_docker,server_conf["content"])
 		pool.all_complete()
-		
+		#####运行完毕后存储
 		self.docker_images_redis()
 		self.docker_containers_redis()
 	

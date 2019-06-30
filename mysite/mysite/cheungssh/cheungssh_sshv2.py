@@ -26,7 +26,7 @@ def set_progres(REDIS,tid, sid, transferred, toBeTransferred):
 class CheungSSH_SSH(object):
 	def __init__(self):
                 self.base_prompt = '(^(\[|\)|<)[^#].+(>|#|\]|\$|\))|([yY]/[nN](\]|\))[:：\?\？]+)|^mysql>|密码：|[pP]assword:) *$'
-		
+		#####yum安装的进度条和[y/N]:预测
 		self.prompt=""
 		self.more_flag = '(< *)?(\-)+( |\()?[Mm]ore.*(\)| )?(\-)+( *>)?|\(Q to quit\)'
 	def login(self,**kws):
@@ -145,7 +145,7 @@ class CheungSSH_SSH(object):
 				buff+=self.shell.recv(512)
 			cheungssh_info["status"]=True
 		except Exception,e:
-			
+			#####print "清除缓存失败",str(e)
 			cheungssh_info["status"]=False
 			cheungssh_info["content"]=str(e)
 		return cheungssh_info
@@ -170,12 +170,12 @@ class CheungSSH_SSH(object):
 			CMD=cmd.split()
 			_top = os.path.basename(CMD[0])
 			if _top == "top":
-				
+				###### 是top命令,补上-b参数
 				CMD[0] = CMD[0] + " -b"
 				cmd = " ".join(CMD)
 			if cmd == "BREAK-COMMAND":
 				self.shell.send(chr(3))
-				
+				###### 仅发送终止信号，不接收数据，由上一个进程接收
 			else:
 				try:
 					cmd_list = json.loads(cmd)
@@ -203,7 +203,7 @@ class CheungSSH_SSH(object):
 			cheungssh_info["status"]=False
 			cheungssh_info["content"] =  str(e)
 		_log_content=json.dumps(log_content,encoding="utf-8",ensure_ascii=False)
-		
+		##### 通知命令完成
 		REDIS.rpush(log_name,_log_content)
 		if not ignore:
 			log_content["content"]=cheungssh_info["content"]

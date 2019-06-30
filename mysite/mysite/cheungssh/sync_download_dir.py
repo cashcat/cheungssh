@@ -17,7 +17,7 @@ def cheungssh_sftp(ip,username,remotepath,localpath,port=22,loginmethod='KEY',pa
 			remote_full_path_dir.append(os.path.join(a[0],sd))
 		for f in a[2]:
 			remote_full_path_file.append(os.path.join(a[0],f))
-	
+	######创建本地目录
 	if not remotepath.endswith('/'):remotepath+='/'
 	if not localpath.endswith('/'):localpath+='/'
 	for d in remote_full_path_dir:
@@ -25,7 +25,7 @@ def cheungssh_sftp(ip,username,remotepath,localpath,port=22,loginmethod='KEY',pa
 			os.makedirs(d.replace(remotepath,localpath))
 		except Exception,e:
 			pass
-	
+	######下载文件
 	for f in remote_full_path_file:
 		local_full_path_file=f.replace(remotepath,localpath)
 		try:

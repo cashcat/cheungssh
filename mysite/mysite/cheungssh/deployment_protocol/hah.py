@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #coding:utf8
-
+######run是总的流程管理中心，用来调用各种类型的任务
 #Author:张其川
 import os,sys,json,re,random
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
@@ -12,7 +12,7 @@ from cheungssh_thread_queue  import CheungSSHPool
 import threading
 class DeploymentAdmin(object):
 	def __init__(self,taskid):
-		
+		#####taskid是要执行的任务id
 		self.taskid=taskid
 	@staticmethod
 	def get_task_conf(taskid):
@@ -23,7 +23,7 @@ class DeploymentAdmin(object):
 		try:
 			a=threading.Thread(target=self.run)
 			a.start()
-			cheungssh_info["content"]=tid
+			cheungssh_info["content"]=tid######返回tid进度给前端
 			cheungssh_info["status"]=True
 		except Exception,e:
 			cheungssh_info["content"]=str(e)
@@ -32,10 +32,10 @@ class DeploymentAdmin(object):
 		
 	def run(self):
 		for server in servers:
-			
-			
+			######每一个服务器循环
+			#####steps获取
 			for step in steps:
-				if not cheungssh_info["status"]:
+				if not cheungssh_info["status"]:#####如果又失败的，才重写日志记录
 					cheungssh_deployment_admin.DeploymentAdmin.set_progress(self.taskid,cheungssh_info)
 	@staticmethod
 	def create_task_conf(data):
@@ -44,15 +44,15 @@ class DeploymentAdmin(object):
 	@staticmethod
 	def set_progress(taskid,stepid,data):
 		data=json.dumps(data,encoding="utf8",ensure_ascii=False)
-		REDIS.hset("CHB-R000000000050.{taskid}".format(taskid=taskid),stepid,data)
+		REDIS.hset("CHB-R000000000050.{taskid}".format(taskid=taskid),stepid,data)#####hset taskid stepid data
 	@staticmethod
 	def get_progress(taskid):
-		REDIS.hgetall("CHB-R000000000050.{taskid}".format(taskid=taskid),stepid)
+		REDIS.hgetall("CHB-R000000000050.{taskid}".format(taskid=taskid),stepid)#####hset taskid stepid data
 		data=json.loads(data)
 		return data
 		
 if __name__=='__main__':
-	
+	#####命令用法 program taskid
 	taskid=sys.argv[1]
 	a=DeploymentAdmin(taskid)
 	b=a.demo()

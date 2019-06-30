@@ -11,7 +11,7 @@ from cheungssh_modul_controler import CheungSSHControler
 from cheungssh_error import CheungSSHError
 import threading
 class CheungSSHBatchCommand(object):
-	shell_list=[]
+	shell_list=[]#####存放登录成功的shell
 	complete_num=[]
 	servers=[]
 	@staticmethod
@@ -20,13 +20,13 @@ class CheungSSHBatchCommand(object):
 		CheungSSHBatchCommand.servers=servers
 		for sid in servers:
 			pool.add_task(CheungSSHBatchCommand.login,{"sid":sid,"rid":rid})
-		
+		#####启动命令监听
 		a=threading.Thread(target=CheungSSHBatchCommand.listen_command,args=(rid,))
 		a.start()
 		
 	@staticmethod
 	def login(sid="",rid=""):
-		
+		#####返回的数据格式{sid:{"content":"...","status":True/False}}
 		cheungssh_info={"content":"","status":False}
 		try:
 			config=CheungSSHControler.convert_id_to_ip(sid)
@@ -36,7 +36,7 @@ class CheungSSHBatchCommand(object):
 			ssh=CheungSSH_SSH()
 			connect=ssh.login(**_config)
 			if connect["status"]:
-				CheungSSHBatchCommand.shell_list.append(ssh)
+				CheungSSHBatchCommand.shell_list.append(ssh)#####没有的就不存，等要用的时候，找不到直接忽略不执行execute即可
 				cheungssh_info={"content":"已就绪","status":True}
 			else:
 			
@@ -46,8 +46,8 @@ class CheungSSHBatchCommand(object):
 		print cheungssh_info["content"]
 		data={sid:cheungssh_info}
 		data=json.dumps(data,encoding="utf8",ensure_ascii=False)
-		REDIS.rpush("rid.%s" % rid,data)
-		CheungSSHBatchCommand.complete_num.append(0)
+		REDIS.rpush("rid.%s" % rid,data)#####前端根据在这里取走的个数判断这个的lenth长度来确定是否完成
+		CheungSSHBatchCommand.complete_num.append(0)#####每完成一个追加一次
 		
 			
 	@staticmethod

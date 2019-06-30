@@ -59,7 +59,7 @@ class ScriptAdmin(object):
 		self.REDIS = REDIS
 	def rewrite_script_content(self):
 		cheungssh_info={"content":"","status":False}
-		
+		##### 修改脚本
 		parameter = self.r.POST.get("parameters")
 		try:
 			parameter = json.loads(parameter)
@@ -73,8 +73,8 @@ class ScriptAdmin(object):
 			b = ScriptsHistoricVersion.objects.get(id=a[0].active_version)
 			is_changed = False
 			if not parameter.has_key("parameters"):
-				
-				
+				##### 只修改内容
+				##### 判断内容是否有变化
 				with open(b.path) as f:
 					old_content = f.read()
 				if not self.md5sum(parameter["content"]) == self.md5sum(old_content):
@@ -85,12 +85,12 @@ class ScriptAdmin(object):
 				path = new_path
 				p = b.parameters
 			else:
-				
+				##### 检查脚本名是否已存在
 				if ScriptsList.objects.filter(~Q(id=a[0].id),script_name=parameter["script_name"]).__len__()>0:
 					raise IOError("脚本名已经存在，请重新指定。")
 				parameter["os_type"] = json.dumps(parameter["os_type"])
 				p= json.dumps(parameter["parameters"])
-				
+				##### 判断脚本参数是否发生变化
 				if not b.parameters == p:
 					is_changed = True
 					comment = "参数变动"
@@ -98,12 +98,12 @@ class ScriptAdmin(object):
 			if parameter.has_key("content"):del parameter["content"]
 			if parameter.has_key("parameters"):del parameter["parameters"]
 			if is_changed == True:
-				
+				##### 创建新版本
 				c = ScriptsHistoricVersion(sid=a[0].id,path=path,create_time=create_time,owner=self.r.user.username,active=True,version=version,parameters=p,comment=comment)
 				c.save()
-				
+				##### 把其他版本标记为不活跃
 				ScriptsHistoricVersion.objects.filter(~Q(id=c.id),sid=a[0].id   ).update(active=False)
-				
+				#####更新版本指向
 				parameter["active_version"] = c.id
 			if parameter.has_key("id"):del parameter["id"]
 			a.update(**parameter)
@@ -125,10 +125,10 @@ class ScriptAdmin(object):
 			with open(old_path) as f:
 				old_content = f.read()
 			if not self.md5sum(data["content"]) == self.md5sum(old_content):
-				
+				##### 内容不一致，需要更新版本
 				with open(path,"w") as f:
 					f.write(data["content"])
-				
+				##### 创建一条记录
 				create_time = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())
 				ScriptsHistoricVersion(sid=tmp[0].sid,path=new_path,create_time=create_time,owner=self.r.user.username,active=True,)
 			cheungssh_info["status"] = True
@@ -154,7 +154,7 @@ class ScriptAdmin(object):
 			parameter["os_type"] =    json.dumps(parameter["os_type"])
 			p = json.dumps(parameter["parameters"])
 			del parameter["parameters"]
-			
+			###### 这里的active表示引用版本表的第几条,下述还需修改
 			parameter["active_version"] = 0
 			with open(path.encode('utf8'),"wb") as f:
 				f.write(parameter["content"])
@@ -165,7 +165,7 @@ class ScriptAdmin(object):
 			parameter["create_time"] = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())
 			parameter["path"] = path
 			parameter["owner"] = self.r.user.username
-			
+			##### 这里的active表示是否活动
 			parameter["active"] = True
 			parameter["sid"] = a.id
 			parameter["version"] = version
@@ -178,7 +178,7 @@ class ScriptAdmin(object):
 			del parameter["type"]
 			b = ScriptsHistoricVersion(**parameter)
 			b.save()
-			
+			##### 更新关联版本记录
 			ScriptsList.objects.filter(id=a.id).update(active_version=b.id)
 			self.cheungssh_info["content"]=self.get_all_scripts(sid=a.id)["content"][0]
 			self.cheungssh_info["status"] = True
@@ -261,9 +261,9 @@ class ScriptAdmin(object):
 		cheungssh_info={"status":True,"content":""}
 		a=ScriptsHistoricVersion.objects.filter(id=int(self.r.GET.get("id")))
 		a.update(active=True)
-		
+		####### 更改其他记录为不活跃
 		ScriptsHistoricVersion.objects.filter(~Q(id=a[0].id),sid=a[0].sid).update(active=False)
-		
+		##### 更新关联记录
 		ScriptsList.objects.filter(id=a[0].sid).update(active_version=a[0].id)
 		return cheungssh_info
 	def get_script_historic_content(self):
@@ -331,24 +331,24 @@ class ScriptAdmin(object):
 			scripts = self.r.POST.get("scripts")
 			scripts = json.loads(scripts)
 			parameter = self.r.POST.get("parameter")
-			parameter = json.loads(parameter) 
+			parameter = json.loads(parameter) ##### [{},{}]
 			db= ServersInventory()
 			QQ = db.get_server_alias(servers)
 			if QQ["status"]  is False:raise IOError(QQ["content"])
 			tid = str(random.randint(100000000000000,999999999999999))
 			destination = "/tmp/." + tid
-			
+			##### 存放每一个服务器对应的命令
 			ALL_CMD = {}
 			for s in servers:
 				conf = db.get_server(sid=s)
 				if not conf["status"]:raise IOError(conf["content"])
-				
+				##### 为单个服务器寻找合适的脚本/批量命令
 				for script_id in scripts:
 					path = ScriptsHistoricVersion.objects.get(sid=script_id,active=True).path
 					info = ScriptsList.objects.get(id=script_id)
 					if not conf["content"]["os_type"] in json.loads(info.os_type):continue
 					source = path
-					
+					##### 打开文件用来检查是否有黑名单规则
 					f = open(source)
 					uid = User.objects.get(username=self.r.user.username).id
 					for cmd in f:
@@ -356,7 +356,7 @@ class ScriptAdmin(object):
 						black_list = MatchBlackList().match(cmd,uid)
 						if black_list["status"] is False:raise IOError(black_list["content"])
 					f.close()
-					
+					##### 打开文件用来检查是否有黑名单规则
 					_type = ScriptsList.objects.get(id=script_id).type
 					if _type == u"批量命令":
 						tmp = self.parse_shell_as_cmd(source,parameter,self.r.user.username)
@@ -371,11 +371,11 @@ class ScriptAdmin(object):
 					else:
 						cmd = destination + " "
 						for k_v in parameter:
-							
+							###### 为什么呢？因为当是脚本的时候，这里的参数可能是位置变量，所以不能直接用dict
 							value = k_v["value"]
 							cmd += str(value) + " "
 						ALL_CMD[s] = cmd
-						
+						##### 上传脚本队列
 						queue.put(conf["content"])
 			for i in range(10):
 				a=ScriptThreading(queue,tid,self.REDIS,source,destination)
@@ -394,7 +394,7 @@ class ScriptAdmin(object):
 			servers = json.loads(servers)
 			script_id = self.r.POST.get("script_id")
 			parameter = self.r.POST.get("parameter")
-			parameter = json.loads(parameter) 
+			parameter = json.loads(parameter) ##### [{},{}]
 			db= ServersInventory()
 			QQ = db.get_server_alias(servers)
 			for s in servers:
@@ -426,7 +426,7 @@ class ScriptAdmin(object):
 			self.REDIS.hset(tid,"servers",json.dumps(servers))
 			cmd = destination + " "
 			for k_v in parameter:
-				
+				###### 为什么呢？因为当是脚本的时候，这里的参数可能是位置变量，所以不能直接用dict
 				value = k_v["value"]
 				cmd += str(value) + " "
 			cheungssh_info={"status":True,"content":tid,"cmd":cmd,"type":_type,"servers":QQ["content"]}
@@ -439,7 +439,7 @@ class ScriptAdmin(object):
 			data = f.read()
 		parameters = {}
 		for k_v in parameter:
-			
+			###### 为什么呢？因为当是脚本的时候，这里的参数可能是位置变量，所以不能直接用dict
 			key = k_v["key"]
 			value = k_v["value"]
 			parameters[key] = value

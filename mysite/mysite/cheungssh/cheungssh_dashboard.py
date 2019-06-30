@@ -5,7 +5,7 @@ class CheungSSHDashboard:
 	def __init__(self):
 		pass
 	def collect(self):
-		
+		#####"""调用这里"""
 		self.home_dashboard=self.set_commands()
 		return self.home_dashboard
 	def set_commands(self):
@@ -15,7 +15,7 @@ class CheungSSHDashboard:
 				"load":"uptime|awk -F '[:,]' '{print $7}'",
 				"mem":{"used":"free -m|awk '$1~/Mem/{surplus=$4+$5+$6+$7;total=$2} END{print total-surplus}' ","surplus":"free -m|awk '$1~/Mem/{surplus=$4+$5+$6+$7;print surplus}'"},
 				"root_disk":{
-						"used":"""df  |awk  '$NF=="/"{printf  ("%0.2f"), $3/1048576}'""",  
+						"used":"""df  |awk  '$NF=="/"{printf  ("%0.2f"), $3/1048576}'""",  #######单位GB
 						"surplus":"""df  |awk  '$NF=="/"{printf  ("%0.2f"), $4/1048576}'"""
 						
 						}
@@ -32,8 +32,8 @@ class CheungSSHDashboard:
 		now_time=time.strftime("%Y-%m-%d %H:%M")
 		_io_value=self.results["io"]
 		_cpu_value=self.results["cpu"]
-		self.results["io"]={}	
-		self.results["cpu"]={}	
+		self.results["io"]={}	#####重写数据结构，新增时间key
+		self.results["cpu"]={}	#####重写数据结构，新增时间key
 		self.results["io"]["time"]=now_time
 		self.results["io"]["value"]=_io_value
 		self.results["cpu"]["time"]=now_time

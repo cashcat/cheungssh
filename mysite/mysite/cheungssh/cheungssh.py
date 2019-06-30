@@ -58,13 +58,13 @@ from black_command import black_command_check
 #from dashboard import dashboard
 #from localhost_dashboard_process  import process
 from assets.custom_assets_class import custom_assets
-
+###########################
 REDIS=cache.master_client
 from cheungssh_file_transfer import CheungSSHFileTransfer
 from cheungssh_thread_queue import CheungSSHThreadAdmin
 from cheungssh_docker_controler import DockerControler
 import cheungssh_docker_admin
-
+###########################
 def cheungssh_redirect(request):
 	return HttpResponseRedirect("/cheungssh/static/html/cheungssh.html")
 def cheungssh_index(request):
@@ -75,13 +75,13 @@ def cheungssh_login(request):
 	logintime=time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.time()))
 	client_ip=request.META['REMOTE_ADDR']
 	limit_ip='fail.limit.%s'%(client_ip)
-	ip_threshold_r=cache.get('ip.threshold')  
-	ip_threshold=lambda x:x if x is not None else 4 
-	ip_threshold=ip_threshold(ip_threshold_r)
+	ip_threshold_r=cache.get('ip.threshold')  ######从redis中读取设定的阈值
+	ip_threshold=lambda x:x if x is not None else 4 ########设定默认值
+	ip_threshold=ip_threshold(ip_threshold_r)######判断从redis中读取，如果没有设定这是None，需要设定为默认的4次
 	if cache.has_key(limit_ip):
-		if cache.get(limit_ip)>ip_threshold:  
+		if cache.get(limit_ip)>ip_threshold:  ########ip的登陆错误次数大于设定的阈值
 			info['content']="系统已经拒绝您登陆,请联系管理员!"
-			cache.incr(limit_ip)  
+			cache.incr(limit_ip)  ######如果发现已经是无效登陆了， 就不在增加其值了
 			cache.expire(limit_ip,86400)
 			return info
 	if request.method=="POST":
@@ -94,13 +94,13 @@ def cheungssh_login(request):
 				login(request,user)
 				request.session["username"]=username
 				info["status"]=True
-				request.session.set_expiry(0)    
+				request.session.set_expiry(0)    ##########关闭浏览器则删除session
 				if cache.has_key(limit_ip):cache.delete(limit_ip)
 				login_info=resolv_client(request)
 				login_info["sid"]=str(request.session.session_key)
-				CheungSSHLoginUserNotify.add_login_user(login_info)
+				CheungSSHLoginUserNotify.add_login_user(login_info)#####添加用户登录记录，用来通知
 				login_info=json.dumps(login_info,encoding="utf8",ensure_ascii=False)
-				REDIS.lpush("CHB-R00000000101",login_info)
+				REDIS.lpush("CHB-R00000000101",login_info)#####[]存储所有登录成功的记录
 			else:
 				
 				info["content"]="用户状态无效"
@@ -114,7 +114,7 @@ def cheungssh_login(request):
 		info["IP-Locate"]=IP.find(client_ip)
 		info["username"]=username
 		info["logintime"]=logintime
-		
+		################写入登录记录
 	else:
 		info["content"]="No Get"
         return info
@@ -122,7 +122,7 @@ def cheungssh_login(request):
 @permission_check('cheungssh.show_sign_record')
 @ajax_http
 def show_sign_record(request):
-	datainfo=redis_to_redis.get_redis_data('sign.record','list')  
+	datainfo=redis_to_redis.get_redis_data('sign.record','list')  ##############这里就是一个info字典
 	info=pagelist(request,datainfo["content"])
         return info
 def cheungssh_logout(request):
@@ -137,10 +137,10 @@ def cheungssh_logout(request):
 		info="%s(%s)"  % (callback,info)
 	return HttpResponse(info)
 
-@login_check.login_check('PC上传') 
-
-
-@ajax_http
+@login_check.login_check('PC上传') ####################临时注释
+######@permission_check('cheungssh.local_file_upload') #####权限拒绝，但是前段没有提示
+#####注意用户名没有
+@ajax_http#####
 def upload_file_test(request):
 	cheungssh_info={"status":True,"content":""}
 	fid=str(random.randint(90000000000000000000,99999999999999999999))
@@ -157,10 +157,10 @@ def upload_file_test(request):
 	return cheungssh_info
 
 
-@login_check.login_check('上传分析日志') 
-
-
-@ajax_http
+@login_check.login_check('上传分析日志') ####################临时注释
+######@permission_check('cheungssh.local_file_upload') #####权限拒绝，但是前段没有提示
+#####注意用户名没有
+@ajax_http#####
 def upload_log_file(request):
 	cheungssh_info={"status":True,"content":""}
 	fid=str(random.randint(90000000000000000000,99999999999999999999))
@@ -195,24 +195,24 @@ def scripts_list(request):
 @ajax_http
 def upload_script(request):
 	cheungssh_info={"status":False,"content":""}
-	username=request.user.username
+	username=request.user.username#####注意没有值，
 	if request.method=="POST":
 		try:
 			if len(REDIS.hgetall("scripts"))>=9:raise CheungSSHError("CHB-BUSINESS-LIMIT")
-			filename=str(request.FILES.get("file"))
+			filename=str(request.FILES.get("file"))#####上传之前要做检查，这个文件名是否属于自己，如果属于别人，则要抛出错误，不准上传
 			_data=REDIS.hget("scripts",filename)
 			if _data is None:
 				pass
 			else:
 				data=json.loads(_data)
-				if filename==data["script"]:
-					if username==data["owner"]:
+				if filename==data["script"]:#####如果文件已经存在
+					if username==data["owner"]:#####如果是自己的，则表示更新，允许,否则不允许
 						pass
 					else:
 						raise CheungSSHError("您的操作不被允许!其他账户下存在同名脚本!")
 			file_content=request.FILES.get('file').read()
 			parent_dir=os.path.join(cheungssh_settings.script_dir,username)
-			if not os.path.isdir(parent_dir):os.mkdir(parent_dir)
+			if not os.path.isdir(parent_dir):os.mkdir(parent_dir)#####如果没有则创建
 			script=os.path.join(parent_dir,filename)
 			with open(script.encode('utf8'),"wb") as f:
 				f.write(file_content)
@@ -221,7 +221,7 @@ def upload_script(request):
 				"owner":username,
 				"time":time.strftime('%Y-%m-%d %H:%M:%S',time.localtime()),
 			}
-			
+			#####用的散列scripts:{"script-A":{},"script-B":{}}
 			REDIS.hset("scripts",filename,json.dumps(cheungssh_info["content"],encoding="utf8",ensure_ascii=False))
 			cheungssh_info["status"]=True
 		except Exception,e:
@@ -265,12 +265,12 @@ def config_add(request):
 		cheungssh_info["status"]=False
 		cheungssh_info['content']=str(e)
 		return cheungssh_info
-	
+	######处理空格问题
 	host["alias"] = re.sub(" +","",host["alias"])
 	host["ip"] = re.sub(" +","",host["ip"])
 	return ServersInventory().add_server(**host)
 @login_check.login_check('查看服务器配置',False)
-
+#####@permission_check('cheungssh.show_server')#这个权限检查取消
 @ajax_http
 def load_servers_list(request):
 	print 1234
@@ -291,7 +291,7 @@ def config_del(request):
 	is_super=request.user.is_superuser
 	username=request.user.username
 	return ServersInventory().delete_server(is_super=is_super,owner=username,hosts=hosts)
-
+############
 @login_check.login_check('删除计划任务')
 @permission_check('cheungssh.crond_del')
 @ajax_http
@@ -321,8 +321,8 @@ def crontab(request):
 	runtime=request.GET.get('runtime')
 	runtype=request.GET.get('type')
 	info={"status":False,"content":""}
-	if platform.dist()[0]=='Ubuntu':    
-		crond_status=(0,'')
+	if platform.dist()[0]=='Ubuntu':    ######Ubuntu没有这个服务,直接使用
+		crond_status=(0,'')######如果是Ubuntu，人工控制为可用
 	else:
 		crond_status=commands.getstatusoutput('/etc/init.d/crond status')
 	if not crond_status[0]==0:
@@ -419,7 +419,7 @@ def get_command_result(request):
 #@permission_check('cheungssh.execute_command')
 @ajax_http
 def login_server_request(request):
-	
+	#####请求登录服务器
 	return CheungSSHCommandSystem(request,REDIS).login_server_request()
 		
 
@@ -435,8 +435,8 @@ def execute_command(request):
 @login_check.login_check('命令操作日志')
 @permission_check('cheungssh.command_history')
 @ajax_http
-def command_history(request):
-	#t["result"]=re.sub("""\\"|\\'""",'',"</br>".join(cmd_result))
+def command_history(request):#############传入request和一个数据list
+	#t["result"]=re.sub("""\\"|\\'""",'',"</br>".join(cmd_result))########生成新的数据条目,为了转义
 	cheungssh_info={"content":[],"status":True}
 	history=REDIS.lrange("command.history",0,-1)
 	for line in history:
@@ -495,10 +495,10 @@ def show_scriptlist(request):
 @permission_check('cheungssh.scriptfile_del')
 @ajax_http
 def del_script(request):
-	
+	#######记得删除日志
 	info={"status":False}
 	try:
-		filenames=request.GET.get('filename') 
+		filenames=request.GET.get('filename') ########不支持批量
 		scriptlogline=cache.get('scriptlogline')  
 		if scriptlogline:
 			for f in  scriptlogline.keys():
@@ -517,8 +517,8 @@ def del_script(request):
 	except Exception,e:
 		info['content']=str(e)
 	return info
-
-
+#############
+#######等待脚本执行功能好了以后， 这里需要分拣权限
 def onelinenotice(request):
 	info={'status':'False','content':[]}
 	login_check_info=login_check.login_check()(request)
@@ -530,7 +530,7 @@ def t1(request):
 @login_check.login_check('',False)
 @ajax_http
 def ssh_status(request):
-	
+	#####用来获取ssh检查过后的状态
 	sid=request.GET.get('sid')
 	status=REDIS.get("server.status.%s"%sid)
 	if status is None:
@@ -545,15 +545,15 @@ def redirect_admin(reqeust):
 @ajax_http
 def add_black_command(request):
 	cheungssh_info={"status":True,"content":""}
-	id=str(random.randint(90000000000000000000,99999999999999999999))  
+	id=str(random.randint(90000000000000000000,99999999999999999999))  #########产生一个命令id
 	cmd=request.GET.get('cmd')
-	
+	###########给命令增加属性
 	client_info=resolv_client(request)
 	client_info["id"]=id
 	client_info["cmd"]=cmd
-	client_info=json.dumps(client_info,encoding="utf8",ensure_ascii=False) 
+	client_info=json.dumps(client_info,encoding="utf8",ensure_ascii=False) ######写入redis [{},{}]
 	REDIS.rpush('black.command.list',client_info)
-	cheungssh_info["content"]=id 
+	cheungssh_info["content"]=id ########把ID返回给前端，前端直接创建
 	return cheungssh_info
 @login_check.login_check('查看命令黑名单清单')
 @permission_check('cheungssh.command_black_list')
@@ -575,7 +575,7 @@ def del_black_command(request):
 			line=json.loads(_line)
 			print str(line["id"]),str(id)
 			if str(line["id"])==str(id):
-				REDIS.lrem("black.command.list",_line)
+				REDIS.lrem("black.command.list",_line)#####删除
 				cheungssh_info["status"]=True
 				break
 	except Exception,e:
@@ -587,13 +587,13 @@ def del_black_command(request):
 @ajax_http
 def getalluser(request):
 	info={"status":False}
-	sysuser=[]    
+	sysuser=[]    ########准备一个空间存放系统用户
 	users=User.objects.all()
 	groups=Group.objects.all()
 	for a in users:
-		sysuser.append(a.username)
+		sysuser.append(a.username)###########将username列内容提取出来
 	for group in groups:
-		sysuser.append(group.name)
+		sysuser.append(group.name)###########将username列内容提取出来
 	info["status"]=True
 	info["content"]=sysuser
 	return info
@@ -619,15 +619,15 @@ def show_ip_limit(request):
 	callback=request.GET.get('callback')
 	R=cache.master_client
 	ip_limit_list=[]
-	for t in R.keys():
+	for t in R.keys():#######从redis数据库读取所有的key
 		if re.search(':1:fail\.limit.*',t):
 			ip=re.sub(':1:fail\.limit\.','',t)
 			ip_time=cache.get('fail.limit.%s' % (ip))
-			
-			ip_threshold_r=cache.get('ip.threshold')  
-			ip_threshold=lambda x:x if x is not None else 4 
-			ip_threshold=ip_threshold(ip_threshold_r)
-			
+			########
+			ip_threshold_r=cache.get('ip.threshold')  ######从redis中读取设定的阈值
+			ip_threshold=lambda x:x if x is not None else 4 ########设定默认值
+			ip_threshold=ip_threshold(ip_threshold_r)######判断从redis中读取，如果没有设定这是None，需要设定为默认的4次
+			##########
 			if ip_time> ip_threshold:
 				ip_status="已锁定"
 			else:
@@ -655,7 +655,7 @@ def modify_ip_limit(request):
 	info={"status":False}
 	limit=request.GET.get("limit")
 	limit=int(limit)
-	REDIS.set('ip.threshold',limit)  
+	REDIS.set('ip.threshold',limit)  ######从redis中读取设定的阈值
 	info["status"]=True
 	return info
 @login_check.login_check('查看登录安全阈值')
@@ -663,7 +663,7 @@ def modify_ip_limit(request):
 @ajax_http
 def show_ip_threshold(request):
 	info={"status":False}
-	ip_threshold=REDIS.get('ip.threshold')  
+	ip_threshold=REDIS.get('ip.threshold')  ######从redis中读取设定的阈值
 	if ip_threshold is None:
 		ip_threshold=4
 	else:
@@ -674,9 +674,9 @@ def show_ip_threshold(request):
 @login_check.login_check('查看远程服务器文件内容')
 @permission_check('cheungssh.get_remote_filecontent')
 @get_file_check.check
-@ajax_http 
+@ajax_http #####用来处理ajax的跨域请求头消息
 def get_file_content(request):
-	
+	##########################
 	fid=str(random.randint(90000000000000000000,99999999999999999999))
 	info={"status":False}
 	host=request.GET.get('host')
@@ -685,8 +685,8 @@ def get_file_content(request):
 	cache.set("info:%s" % (fid),redis_info,360)
 	username=request.user.username
 	filename=request.GET.get('filename')
-	filename=os.path.basename(filename)
-	T=FileTransfer.getconf(host,fid,username,"download") 
+	filename=os.path.basename(filename)############删除用户的路径，只能是文件名
+	T=FileTransfer.getconf(host,fid,username,"download") ###########这里没有采用多线程， 是单线程
 	RT=cache.get("info:%s"%(fid))
 	if RT['status']=='False':
 		info['content']="文件下载失败,%s"%RT['content']
@@ -703,19 +703,19 @@ def get_file_content(request):
 				else:
 					info["content"]=str(e)
 		else:
-			info['content']=T[1]    
-	return info 
+			info['content']=T[1]    #######如果返回值是假，那么现实信息，这是一个2单位元祖
+	return info ########交给装饰器， 统一处理ajax跨域请求格式，连函数调用都不需要了
 @login_check.login_check('更新远程文件内容')
 @permission_check('cheungssh.up_remote_filecontent')
-@ajax_http 
+@ajax_http #####用来处理ajax的跨域请求头消息
 def up_file_content(request):
 	info={"status":False}
-	content=request.POST.get('content')
-	filename=request.POST.get('filename')  
+	content=request.POST.get('content')###########POST方式
+	filename=request.POST.get('filename')  #####文件名.ip形式
 	filename=os.path.basename(filename)
-	filepath=os.path.join(upload_dir,filename)
+	filepath=os.path.join(upload_dir,filename)######一段是POST 更新， 一段是GET获取内容进度， 必须分开两个API访问，不是不能集成到一个API
 	try:
-		with open(filepath.encode('utf8'),'w')as f: 
+		with open(filepath.encode('utf8'),'w')as f: ########前端发起第二阶段的请求，需要写入绝对路径
 			f.write(content)
 		info["status"]=True
 	except Exception,e:
@@ -723,13 +723,13 @@ def up_file_content(request):
 	return info
 @login_check.login_check('查看可管理文件清单',False)
 @permission_check('cheungssh.catadminfilelist')
-@ajax_http 
+@ajax_http #####用来处理ajax的跨域请求头消息
 def catfilelist(request):
 	info=redis_to_redis.get_redis_data('adminfilelist','list')
 	return info
 @login_check.login_check('设置可管理文件清单',False)
 @permission_check('cheungssh.setadminfilelist')
-@ajax_http 
+@ajax_http #####用来处理ajax的跨域请求头消息
 def setfilelist(request):
 	filename=request.GET.get('filename').strip(' ')
 	info=redis_to_redis.set_redis_data('adminfilelist',filename)
@@ -738,15 +738,15 @@ def setfilelist(request):
 
 
 @login_check.login_check('查看命令执行状态',False)
-@ajax_http 
+@ajax_http #####用来处理ajax的跨域请求头消息
 def cmdstatus(request):
 	info={"status":True}
-	rid=request.GET.get('rid') 
-	FailID=cache.get(rid)
+	rid=request.GET.get('rid') #############需要传递浏览器链接websocket的rid查询
+	FailID=cache.get(rid)#######获取值是一个list
 	if FailID is None:
 		info["content"]=[]
 	else:
-		cache.delete(rid)
+		cache.delete(rid)#######读取完了就删除记录
 		info['content']=FailID
 	info["num"]=len(info['content'])
 	return info
@@ -765,7 +765,7 @@ def test(request):
 	return 
 
 @login_check.login_check('查看命令执行状态',False)
-@ajax_http 
+@ajax_http #####用来处理ajax的跨域请求头消息
 def whoami(request):
 	info={"status":True,"content":""}
 	username=request.user.username
@@ -776,7 +776,7 @@ def login_html(request):
 	return  render_to_response('login.html')
 	
 @login_check.login_check('查看命令执行状态',False)
-@ajax_http 
+@ajax_http #####用来处理ajax的跨域请求头消息
 def all_parameters(request):
 	info={"status":True,"content":""}
 	_parameters=parameters()
@@ -786,7 +786,7 @@ def all_parameters(request):
 	
 	return info
 #@login_check.login_check('服务器状态',False)
-@ajax_http 
+@ajax_http #####用来处理ajax的跨域请求头消息
 def get_dashboard(request):
 	info={"status":True,"content":""}
 	a=process()
@@ -795,7 +795,7 @@ def get_dashboard(request):
 #权限清理
 #@login_check.login_check('创建/修改App')
 #@permission_check('cheungssh.create_app')
-@ajax_http 
+@ajax_http #####用来处理ajax的跨域请求头消息
 def create_app(request):
 	cheungssh_info={"status":False,"content":""}
 	app_id=str(random.randint(90000000000000000000,99999999999999999999))
@@ -807,9 +807,9 @@ def create_app(request):
 			parameters=json.loads(parameters)
 		except:
 			raise CheungSSHError("CHB0000000026")
-		if parameters.has_key("id") and parameters["id"]:
+		if parameters.has_key("id") and parameters["id"]:#####是修改应用,否则是创建
 			app_id=parameters["id"]
-		if not parameters["owner"]==username and not request.user.is_superuser:
+		if not parameters["owner"]==username and not request.user.is_superuser:#####如果当前归属不是自己，而且自己也不是超级用户,就报错
 			raise CheungSSHError("您无权转移权限!")
 		data={
 			"id":app_id,
@@ -834,14 +834,14 @@ def create_app(request):
 
 @login_check.login_check('查看应用管理')
 @permission_check('cheungssh.view_app')
-@ajax_http 
+@ajax_http #####用来处理ajax的跨域请求头消息
 def get_app_list(request):
 	username=request.user.username
 	is_super=request.user.is_superuser
 	return CheungSSHAppAdmin.get_app_list(username,is_super)
 @login_check.login_check('执行App应用')
 @permission_check('cheungssh.execute_app')
-@ajax_http 
+@ajax_http #####用来处理ajax的跨域请求头消息
 def execute_app(request):
 	appid=request.GET.get("appid")
 	username=request.user.username
@@ -850,7 +850,7 @@ def execute_app(request):
 
 @login_check.login_check('删除App应用')
 @permission_check('cheungssh.delete_app')
-@ajax_http 
+@ajax_http #####用来处理ajax的跨域请求头消息
 def delete_app(request):
 	appid=request.GET.get("appid")
 	username=request.user.username
@@ -886,12 +886,12 @@ def increate_asset(request):
 			asset=json.loads(asset)
 			a=custom_assets()
 			if not asset.has_key("id"):
-				_asset={id:asset}		
-				info["content"]=id 
+				_asset={id:asset}		########创建一个ID,否则是更新 {"id111":{}}
+				info["content"]=id #####返回创建的ID
 			else:
-				
+				#########更新资产
 				_asset={asset["id"]:asset}
-				
+				#########更新动态资产的表头
 				dynamic_assets=REDIS.get("assets.conf")
 				dynamic_assets=json.loads(dynamic_assets)
 				try:
@@ -1134,11 +1134,11 @@ def filetrans_upload(request):
 			parameters=json.loads(parameters)
 		except Exception,e:
 			raise CheungSSHError("CHB0000000008")
-		
+		#####处理源地址只能为upload目录下
 		Q = Queue()
 		servers = []
 		for line in parameters:
-			sfile=os.path.join(cheungssh_settings.upload_dir,username,os.path.basename(line["sfile"]))  
+			sfile=os.path.join(cheungssh_settings.upload_dir,username,os.path.basename(line["sfile"]))  #####只能是upload下的目录
 			dfile=line["dfile"]
 			sid = line["sid"]
 			Q.put((tid,sid,sfile,dfile,"upload"))
@@ -1148,11 +1148,11 @@ def filetrans_upload(request):
 		for i in xrange(50):
 			a=FileUploadAndDownload(Q)
 			a.start()
-		
+		########sftp.logout() ##自动注销
 		cheungssh_info["status"]=True
 		cheungssh_info["content"]=tid
 	except Exception,e:
-		
+		#####初始化写入进度，因为第一次可能还没有产生进度
 		cheungssh_info["status"]=False
 		cheungssh_info["content"]=str(e)
 	return cheungssh_info
@@ -1175,7 +1175,7 @@ def remote_download(request):
 			parameters=json.loads(parameters)
 		except Exception,e:
 			raise CheungSSHError("CHB0000000008")
-		
+		#####处理源地址只能为upload目录下
 		Q = Queue()
 		servers = []
 		all_dfile = []
@@ -1197,18 +1197,18 @@ def remote_download(request):
 		for i in xrange(50):
 			a=FileUploadAndDownload(Q)
 			a.start()
-		
+		########sftp.logout() ##自动注销
 		cheungssh_info["status"]=True
 		cheungssh_info["content"]=tid
 		cheungssh_info["all_dfile"] = all_dfile
 	except Exception,e:
-		
+		#####初始化写入进度，因为第一次可能还没有产生进度
 		cheungssh_info["status"]=False
 		cheungssh_info["content"]=str(e)
 	return cheungssh_info
 @ajax_http
 def create_tgz_pack(request):
-	
+	#####打包，然后返回一个url
 	tid = time.strftime("%Y-%m-%d.%H.%M.%S",time.localtime())
 	cheungssh_info={"status":False,"content":""}
 	username = request.user.username
@@ -1219,7 +1219,7 @@ def create_tgz_pack(request):
 		except Exception,e:
 			raise CheungSSHError("CHB0000000020")
 		if not type(files)==type([]):raise CheungSSHError("CHB0000000020")
-		
+		#####切换到下载目录下
 		filename="%s.tar" %tid
 		url=os.path.join(cheungssh_settings.download_file_url,filename)
 		if not os.path.isdir(cheungssh_settings.download_file_url):os.makedirs(cheungssh_settings.download_file_url)
@@ -1231,7 +1231,7 @@ def create_tgz_pack(request):
 			if not  os.path.isfile(name):continue
 			f.add(name)
 		f.close()
-		
+		#####打包成功
 		server_head=request.META['HTTP_HOST']
 		full_url="http://{server_head}{url}".format(server_head=server_head,url=url)
 		cheungssh_info["content"]=full_url
@@ -1269,11 +1269,11 @@ def init_script(request):
 @ajax_http
 def get_my_file_list(request):
 	username=request.user.username
-	cheungssh_info={"content":[],"status":False}
+	cheungssh_info={"content":[],"status":False}#####默认是空列表
 	try:
 		_dir=os.path.join(cheungssh_settings.upload_dir,username)
 		try:
-			file_list=os.listdir(_dir)
+			file_list=os.listdir(_dir)#####当前账户可能还没有上传过文件,所以默认是空
 			cheungssh_info["content"]=file_list
 		except:
 			pass
@@ -1392,7 +1392,7 @@ def login_success_log(request):
 @permission_check('cheungssh.create_server')
 @ajax_http
 def batch_create_servers(request):
-	hosts=request.POST.get("hosts")
+	hosts=request.POST.get("hosts")#####用POST方式传递参数
 	cheungssh_info={"content":"","status":False}
 	try:
 		_hosts=hosts.split('\n')
@@ -1403,13 +1403,13 @@ def batch_create_servers(request):
 			i+=1
 			line=re.sub("^ *","",line)
 			if re.search("^ *$",line):
-				
+				#####跳过空行
 				continue
 			elif re.search("^#",line):
-				
+				#####跳过注释行
 				continue
 			else:
-				
+				#####真正的行
 				real_i+=1
 				segment=line.split()
 				if len(segment)<12:
@@ -1419,11 +1419,11 @@ def batch_create_servers(request):
 					_port=int(_port)
 				except ValueError:
 					raise CheungSSHError("在第【%d】行，第6个字段，端口必须是一个数字。"%i)
-				
+				#####检查sudo方式
 				_sudo=segment[6].upper()
 				if not _sudo=="N" and not _sudo=="Y":
 					raise CheungSSHError("在第【%d】行，第7个字段，sudo方式必须为'Y'或者'N'。"%(i))
-				
+				#####su方式
 				_su=segment[8].upper()
 				if not _su=="N" and  not _su=="Y":
 					raise CheungSSHError("在第【%d】行，第9个字段，su方式必须为'Y'或者'N'。"%(i))
@@ -1442,11 +1442,11 @@ def batch_create_servers(request):
 					"os_type":segment[10],
 					"description":segment[11],
 				}
-				
+				######创建前先检查是否存在相同别名
 				if ServersInventory().query_server(alias=config_line["alias"])["status"]:
 					raise CheungSSHError("在第【{line_number}】行，别名【{alias}】早已存在，请更换。".format(line_number=i,alias=config_line["alias"]))
 				else:
-					
+					#####存储起来,最后成功了统一入库
 					ServersList(**config_line).save()
 		if len(hosts)==0:
 			raise CheungSSHError("您尚未指定有效的服务器置行！")
@@ -1534,7 +1534,7 @@ def delete_crontab_list(request):
 @permission_check('cheungssh.create_or_modify_crontab')
 @ajax_http
 def modify_crontab_list(request):
-	action=request.POST.get("action")
+	action=request.POST.get("action")#####指定行为，modify/create
 	data=request.POST.get("data")
 	data=json.loads(data)
 	return Crontab().modify_crontab_list(action=action,data=data)

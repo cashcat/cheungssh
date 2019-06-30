@@ -26,8 +26,8 @@ mysqldump  -uroot -pzhang cheungssh >> /home/cheungssh/conf/cheungssh.sql
 /bin/rm -r /issue/cheungssh/cheungssh/upload 2>/dev/null
 find  /issue/cheungssh/  -name "*bak*" -exec  /bin/rm -r {} \;
 find  /issue/cheungssh/ -type f -name '*pyc'  -exec  /bin/rm -r {} \;
-find  /issue/cheungssh/ -type f -name '*py'  -exec  sed -i  's/
-find  /issue/cheungssh/ -type f -name '*sh'  -exec  sed -i  's/
+#find  /issue/cheungssh/ -type f -name '*py'  -exec  sed -i  's/#####.*//g' {} \;
+#find  /issue/cheungssh/ -type f -name '*sh'  -exec  sed -i  's/#####.*//g' {} \;
 /bin/rm  -r /issue/cheungssh/logs/*
 /bin/rm -r /issue/cheungssh/data/*
 /bin/rm  -r /issue/cheungssh/pid/*

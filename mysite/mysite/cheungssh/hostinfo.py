@@ -20,10 +20,10 @@ def hostinfo(request):
 			if a['group']==group:
 				try:
 					if a['owner']==username or request.user.is_superuser:
-						
+						########host_in_group.append({"ip": "%s@%s" % (a['username'],a['ip']),"id":a["id"]})
 						host_in_group.append({"ip": "%s" % (a['ip']),"id":a["id"]})
 				except KeyError:
-					
+					#####print '不存在所属用户'
 					pass
 		hostinfo['content']=host_in_group
 	info=json.dumps(hostinfo,encoding='utf-8',ensure_ascii=False)
@@ -87,11 +87,11 @@ def groupinfoall(request):
 			t_allconfinfo['content'][b]['supassword']  ="******"
 			t_allconfinfo['content'][b]['sudopassword']="******"
                 allconfinfo=t_allconfinfo	
-	
+	########allconfinfo_web=allconfinfo['content'].values()
 	allconfinfo_web=[]
 	for a in allconfinfo['content'].values():
 		try:
-			if a['owner'] == username or request.user.is_superuser: 
+			if a['owner'] == username or request.user.is_superuser: #####如果是超级管理员，则拥有所有用户的资源
 				allconfinfo_web.append(a)
 		except KeyError:
 			pass

@@ -27,7 +27,7 @@ class CheungSSHDeploymentCrontab(object):
 					owner=data["owner"],
 					crontab_time=data["crontab_time"],
 					path=path)
-				
+				#####修改完毕后，归属依然是原来的，仅仅修改的是时间而已,归属和任务名不许修改
 				status=commands.getstatusoutput(cmd)
 				if not status[0]==0:
 					raise IOError(status[1])
@@ -63,31 +63,31 @@ class CheungSSHDeploymentCrontab(object):
 				try:
 					t="python /home/cheungssh/mysite/mysite/cheungssh/deployment_protocol/cheungssh_deployment_admin.py"
 					if re.search(t,line):
-						
+						#####找到了任务行
 						run_time  = " ".join(_line[:5])
 						tid       = _line[7]
 						task_name = _line[8]    
 						owner     = _line[9]
 						last_run_time = "新建"
-						
+						#########查找最后一次运行的时间
 						isBreak=False
 						x=sorted(os.listdir("/var/log/"))[::-1]
 						x.insert(0,'cron')
-						for filename in x:
-							
+						for filename in x:#####反排序，并且优先搜索cron文件
+							########逐个扫描文件
 							if re.search("cron",filename):
 								try:
 									with open("/var/log/{filename}".format(filename=filename),"r") as m:
 										_info=m.readlines()
-									_info=_info[::-1] 
+									_info=_info[::-1] ######从文件末尾开始扫描,避免扫到之前的记录
 									for h in _info:
-										
+										#######扫描每一个文件的每一行
 										if re.search("\(cheungssh\) CMD \(python /home/cheungssh/mysite/mysite/cheungssh/deployment_protocol/cheungssh_deployment_admin.py {tid}.*{owner}".format(tid=tid,owner=owner),h):
-											
+											#####取消任务名匹配，因为有中文获取不到
 											last_run_time=" ".join(h.split()[:3])
 											isBreak=True
 											break
-									if isBreak:break
+									if isBreak:break########## 找到了配置，就不找了
 								except Exception,e:
 									pass
 							else:
@@ -109,7 +109,7 @@ class CheungSSHDeploymentCrontab(object):
 			elif re.search("No such file or directory",err):
 				cheungssh_info["content"]=[]
 				cheungssh_info["status"]=True
-				
+				#####默认没有计划任务，所以是True
 			else:
 				cheungssh_info["content"]=err
 				cheungssh_info["status"]=False

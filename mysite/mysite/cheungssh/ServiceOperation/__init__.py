@@ -39,7 +39,7 @@ class ServiceOperation(object):
 			for line in data:
 				_list = []
 				x = json.loads(line.list)
-				os = [] 
+				os = [] ##### 单独存放os
 				for script_id in x:
 					m = ScriptsList.objects.filter(id=script_id)
 					if len(m) == 0:continue
@@ -58,7 +58,7 @@ class ServiceOperation(object):
 					"create_time":line.create_time,
 					"description":line.description,
 					"list":_list,
-					"os":list(set(os)), 
+					"os":list(set(os)), ##### 前端只显示一个并集
 				})
 			cheungssh_info["status"] = True
 		except Exception,e:

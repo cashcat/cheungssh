@@ -20,7 +20,7 @@ class MatchBlackList(object):
 				bid = []
 			else:
 				bid = json.loads(data[0].black_list_group_id)
-			data = [] 
+			data = [] ##### 所有的名单ID
 			tmp = BlackListGroup.objects.filter( Q(id__in = bid) | Q(default = "是") )
 			group_info={}
 			for line in tmp:
@@ -31,7 +31,7 @@ class MatchBlackList(object):
 			x = BlackListList.objects.filter(id__in = data)
 			for line in x:
 				if re.search(line.expression,cmd):
-					
+					##### 取得组的名字
 					for k,v in group_info.items():
 						if str(line.id) in v or line.id in v:
 							group = k
@@ -76,7 +76,7 @@ class UserAndBlackList(object):
 			cheungssh_info["content"] = e
 		return cheungssh_info
 	def get_user_with_black_list_group(self,request):
-		
+		##### 取得绑定关系的列表
 		cheungssh_info={"status":False,"content":[]}
 		try:
 			data = UserWithBlackListGroup.objects.all()
@@ -91,7 +91,7 @@ class UserAndBlackList(object):
 						"gid":group_id,
 						"name":_f[0].name,
 					})
-				
+				##### 转换用户名
 				username = User.objects.filter(id=line.uid)
 				if username.__len__() == 0:continue
 				cheungssh_info["content"].append({
@@ -122,7 +122,7 @@ class UserAndBlackList(object):
 			for line in data:
 				_list = []
 				x = json.loads(line.list)
-				
+				##### 取得每一条黑名单
 				for t in x:
 					k = BlackListList.objects.filter(id=int(t))
 					if len(k) == 0:continue

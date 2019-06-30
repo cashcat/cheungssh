@@ -17,10 +17,10 @@ class ServersInventory(object):
 
 	def add_server(self, **kws):
 		try:
-			
+			######先查询
 			if self.query_server(alias=kws["alias"])["status"]:
 				raise CheungSSHError("别名【{alias}】早已存在，请更换。".format(alias=kws["alias"]))
-			
+			#######创建
 			configuration = ServersList(**kws)
 			configuration.save()
 			self.cheungssh_info= {"content":configuration.id,"status":True}
@@ -29,9 +29,9 @@ class ServersInventory(object):
 		return self.cheungssh_info
 
 	def modify_server(self, **kws):
-		
+		######先查询
 		if len(ServersList.objects.filter(~Q(id  = int(kws["id"]) )  ,alias=kws["alias"]))>0:
-			
+			##### ~Q取反
 			self.cheungssh_info={"content":("别名【{alias}】早已存在，请更换。".format(alias=kws["alias"])),"status":False}
 			return self.cheungssh_info
 		configuration = ServersList.objects.filter(id=kws["id"])
@@ -70,7 +70,7 @@ class ServersInventory(object):
 				"su_password":line.su_password,
 			})
 		for line in cheungssh_info["content"]:
-			
+			###### 查找单个IP
 			if sid is not None and str(sid) == str(line["id"]):
 				cheungssh_info["content"]=line
 				break
@@ -109,7 +109,7 @@ class ServersInventory(object):
 		data = ServersList.objects.all()
 		groups ={}
 		for line in data:
-			
+			##### 取得组
 			if groups.has_key(line.group):
 				continue
 			else:
@@ -137,7 +137,7 @@ class ServersInventory(object):
 				os_type = json.loads(all_os)
 			os_type = [x.lower() for x in os_type]
 		for line in data:
-			
+			##### 是否符合执行要求
 			if not line.os_type.lower() in os_type:
 				continue
 			groups[line.group]["children"].append({

@@ -19,7 +19,7 @@ class CheungSSHCommandSystem(object):
 		self.r=r
 		self.REDIS=redis
 	def get_login_progress(self):
-		
+		##### 获取登陆的进度
 		tid = self.r.GET.get("tid")
 		cheungssh_info={"content":"","status":True,"progress":0}
 		all ="{tid}.all.logined.server.amount".format(tid=tid)
@@ -62,7 +62,7 @@ class CheungSSHCommandSystem(object):
 			try:
 				if total is None or current is None: 
 					print "没有产生进度，默认为0"
-					progress=0 
+					progress=0 #####进度还没有产生的可能
 				else:
 					progress= "%0.2f"  % (float(current) / float(total) * 100)
 					print  "取得进度",progress,total,current
@@ -76,13 +76,13 @@ class CheungSSHCommandSystem(object):
 			else:
 				all_sid = json.loads(all_sid)
 			for sid in all_sid:
-				content="" 
+				content="" #####存储读取到的命令集合
 				log_name="log.%s.%s" % (tid,sid)
-				LLEN=self.REDIS.llen(log_name) 
+				LLEN=self.REDIS.llen(log_name) #####获取当前redeis队列的长度，一次读完
 				if not LLEN==0:
 					for i in xrange(LLEN):
 						_content=self.REDIS.lpop(log_name)
-						_content=json.loads(_content) 
+						_content=json.loads(_content) #####从redis读取后转换dict
 						content+=_content["content"]
 						key = sid
 						content=re.sub("""\x1B\[[0-9;]*[mK]""","",content)
@@ -91,7 +91,7 @@ class CheungSSHCommandSystem(object):
 				if progress == "100.00":
 					self.REDIS.delete(log_name) 
 			if progress == "100.00":
-				
+				##### 删除数据
 				self.REDIS.delete("{tid}.all_sid".format(tid=tid)) 
 				self.REDIS.delete("current.%s" % tid) 
 				self.REDIS.delete("total.%s" % tid) 
@@ -104,9 +104,9 @@ class CheungSSHCommandSystem(object):
 	def execute_command(self):
 		cheungssh_info={"status":False,'content':"","ask":False}
 		try:
-			
-			
-			parameter=self.r.POST.get("parameters") or self.r.GET.get("parameters") 
+			#####每次执行均产生一个新的ID，避免重复
+			#########优先考虑POST，也可以用GET，字符可能需要转义
+			parameter=self.r.POST.get("parameters") or self.r.GET.get("parameters") #####优先获取POST，如果没有则获取GET
 			try:
 				parameter=json.loads(parameter)
 			except Exception,e:
@@ -115,7 +115,7 @@ class CheungSSHCommandSystem(object):
 				cmd=parameter["cmd"]
 			except:
 				raise CheungSSHError("错误码:CHB0000000002")
-			
+			##### 检查是否命中黑名单
 			try:
 				_cmd = json.loads(cmd)
 			except Exception,e:
@@ -130,20 +130,20 @@ class CheungSSHCommandSystem(object):
 						return cheungssh_info
 				elif tmp["status"] is False:
 					raise IOError(tmp["content"])
-			
-			
+			#######获取指定的参数
+			#########用来记录历史命令
 			client_info=resolv_client(self.r)
 			client_info["cmd"]=cmd
 			#client_info["parameter"]=parameter
-			client_info=dict(client_info,**parameter)
-			
+			client_info=dict(client_info,**parameter)#####重装组合
+			#####记录命令操作的初始化状态
 			init_status={"content":"","status":False,"stage":"running"}#stage为running或者done,
-			client_info=dict(client_info,**init_status)
-			
+			client_info=dict(client_info,**init_status)#####重装组合
+			#########用来记录历史命令
 			client_info=json.dumps(client_info,encoding="utf8",ensure_ascii=False)
-			
+			#########写入历史记录
 			self.REDIS.rpush('command.history',client_info)
-			
+			###### 此处不需要tid，接收来自前端请求的tid
 			s = socket.socket(2,1)
 			s.connect(("127.0.0.1",9002))
 			parameter = json.dumps(parameter, encoding='utf8',ensure_ascii=False)
@@ -163,7 +163,7 @@ class CheungSSHCommandSystem(object):
 	def login_server_request(self):
 		cheungssh_info={"status":False,'content':""}
 		try:
-			
+			###### 需要产生一个tid
 			tid=str(random.randint(10000000000000000000,99999999999999999999))
 			parameter=self.r.GET.get("parameters")
 			parameter = json.loads(parameter)

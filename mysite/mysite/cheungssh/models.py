@@ -94,7 +94,7 @@ class ServersList(models.Model):
 	owner=models.CharField(max_length=100,null=True,blank="")
 	hostname=models.CharField(max_length=100,null=True,blank="")
 	port=models.IntegerField(max_length=5,default=22)
-	group=models.CharField(max_length=200,null=False,verbose_name="主机组")   
+	group=models.CharField(max_length=200,null=False,verbose_name="主机组")   #######verbose_name 显示成中文
 	username=models.CharField(max_length=20)
 	alias=models.CharField(max_length=20)
 	status=models.CharField(max_length=20)
@@ -169,10 +169,10 @@ class ServersList(models.Model):
 	
 
 
-
+########from django.contrib.auth.models import User   #这个是用外键关联django自带的User表
 """class BBS(models.Model):
 	title=models.CharField(max_length=64)
-	summary=models.CharField(max_length=256,null=True,null=True) 
+	summary=models.CharField(max_length=256,null=True,null=True) ####### 表里为空是null=True
 	content=models.TextField()
 	author=models.ForeignKey('BBS_user')
 	view_count=models.IntegerField()
@@ -181,15 +181,15 @@ class ServersList(models.Model):
 	choices_show=(  ("N","不显示"),("Y","显示")  )
 	show_is=models.CharField(max_length=2,choices=choices_show)
 	def  __unicode__(self):
-		return self.title  
-		
+		return self.title  ########这里返回的字段多少咩有任何影响，在做前台显示的时候， 这个是没有影响的一样可以通过  [.字段名]的形式返回值
+		####### 这里的return只是一个默认的字段而已， 在django中，可以用这个这样的方式访问该表里面的其他字段，比如 title.content
 	class Admin:
 		pass
 class Gategory(models.Model):
-	name=models.CharField(max_length=32,unique=True)  
+	name=models.CharField(max_length=32,unique=True)  #######unique表示不重复
 	administrator=models.ForeignKey('BBS_user')
 class BBS_user(models.Model):
-	
+	#######user=models.CharField(max_length=20)
 	user=models.OneToOneField(User)
 	singnature=models.CharField(max_length=128,default="太懒了，什么都没写")
 	photo=models.ImageField(upload_to="imgs",default="default.png")
