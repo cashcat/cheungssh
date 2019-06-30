@@ -1,0 +1,147 @@
+<div       class="panel panel-default"   style="background: white;height:100%;display: block;position: relative">
+
+	 <p class="navbar-form" style="width:100%;margin-bottom:10px;">
+        <div class="input-group" style="padding:10px;z-index: 0">
+                <input type="text" class="form-control searchValue" placeholder="" style="width:100%;" >
+                <span class="input-group-btn" >
+                        <button class="btn btn-success">
+                                <span class="glyphicon glyphicon-search">搜素</span>
+                        </button>
+                </span>
+        </div>
+       </p>
+
+    <div class="panel-heading" style="z-index: 1;background: white;">
+        <button class="btn btn-success btn-xs glyphicon glyphicon-plus"   id="createBatchShellName"></button>
+        <button class="btn btn-default btn-xs glyphicon glyphicon-refresh"   id="refreshBatchShellList"></button>
+    </div>
+
+    <table class="table  table-hover table-striped   table-responsive  table-bordered">
+        <thead style="word-break: keep-all;white-space:nowrap">
+        <tr>
+            <th>名称</th>
+            <th>组别</th>
+            <th>账户</th>
+            <th style="max-width:100px">适用系统</th>
+            <th class="hidden-xs" >时间</th>
+            <th style="max-width:150px;">备注</th>
+            <th style="min-width:130px;min-width:130px">操作</th>
+        </tr>
+        </thead>
+        <tbody id="showBatchShellTbody"></tbody>
+        <tr>
+        </tr>
+    </table>
+
+
+
+</div>
+
+
+
+<div  style="z-index: 1004;width:auto;height:100%;position: fixed;left: 0px;right: 0px;top: 0px;;bottom: 0%;margin: auto;display:none;" id="showBatchShellName">
+    <div class="modal "
+         style="height: 100%;;position:relative;left:0px;right:0px;bottom:0px;top:0px;margin:auto;display:block;">
+        <div class="modal-dialog">
+            <div class="modal-content  ">
+                <div class="modal-header" style="cursor: move;">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+
+                    <h4 class=" glyphicon glyphicon-edit " style="color: green;">批量命令</h4>
+                </div>
+
+                <div class="modal-body  ">
+                    <div class="form-horizontal clearfix">
+                        <div class="form-group clearfix">
+                            <label class="col-md-2 control-label">名称</label>
+                            <div   class="col-md-10">
+                                <input id="batchShellName"  class="form-control"  placeholder="" style="border:none;border-bottom:1px solid #b0b0b0;box-shadow:none;outline:none;border-radius:0px;">
+                            </div>
+                        </div>
+				
+                        <div class="form-group clearfix  has-feedback">
+                            <label class="col-md-2 control-label">组别</label>
+                            <div   class="col-md-10">
+                                <input id="batchShellGroup"  class="form-control"  placeholder="" style="border:none;border-bottom:1px solid #b0b0b0;box-shadow:none;outline:none;border-radius:0px;">
+				<span id="getScriptGroups" style ="color:red;font-size:150%;cursor:pointer;pointer-events:auto" class="glyphicon glyphicon-map-marker form-control-feedback"></span>
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label class="col-md-2 control-label">适用系统</label>
+                            <div   class="col-md-10" id="shell_os_type">
+                            </div>
+                        </div>
+                        <div   class="col-md-10 col-md-offset-2 clearfix" id="shellParameterBody">
+                            <div class="form-group has-feedback batchShellParameterTemplate" style="display:none">
+				    <span class="clearfix ">
+					<span   style="width:15%;float:left;margin-top:10px;cursor:pointer" class="empty">
+						<span class="glyphicon glyphicon-unchecked"></span>
+						<span>必填</span>
+					</span>
+                                    	<input class="form-control parameterName"  placeholder="参数名" style="float:left;width:35%;;border:none;border-bottom:1px solid red;box-shadow:none;outline:none;border-radius:0px;">
+                                	<input class="form-control parameterName"  placeholder="默认值" style="float:left;margin-left:5%;;width:45%;;border:none;border-bottom:1px solid #b0b0b0;box-shadow:none;outline:none;border-radius:0px;">
+					<span class="glyphicon glyphicon-remove form-control-feedback removeParameterTemplate" aria-hidden="true" style="color:red;cursor:pointer;pointer-events:auto;"></span>
+				    </span>
+                                    <input class="form-control parameterDescription"  placeholder="参数描述" style="border:none;border-bottom:1px solid ;box-shadow:none;outline:none;border-radius:0px;">
+                            </div>
+                        </div>
+
+
+                        <div   class="col-md-10 col-md-offset-2 clearfix">
+				<div style="color:blue;font-size;letter-spacing:2px;margin-top:5px;;margin-bottom:18px;cursor:pointer;" >
+					<span id="addShellParameterTemplate">新增参数</span>
+				</div>
+			</div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">备注</label>
+                            <div   class="col-md-10">
+                                <textarea id="batchShellDescription"  class="form-control"  placeholder="" style="border:1px dashed #b0b0b0;"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button  style="float: left;" type="button" class="btn btn-default cancelDiv" data-dismiss="modal">取消</button>
+                    <button  style="float:right" type="button" class="btn btn-danger" data-dismiss="modal" id="saveShellParameters">保存</button>
+                    <button  style="float:right;" type="button" class="btn btn-success" data-dismiss="modal" id="batchShellNext">下一步</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--编辑框-->
+
+<div  style="position: fixed;left: 0px;right: 0px;top: 0px;bottom: 10%;margin: auto;display:none ;z-index: 1004;" id="batchShellDiv">
+    <div class="modal "
+         style="height: 95%;overflow:hidden;overflow-y:hidden;position:relative;left:0px;right:0px;bottom:0px;top:0px;margin:auto;display:block;">
+        <div class="modal-dialog" style="width:80%">
+            <div class="modal-content  " style="height:600px">
+                <div class="modal-header" style="cursor: move;">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+
+                    <h4 class=" glyphicon glyphicon-success  glyphicon glyphicon-plus " >
+			<span>批量命令</span>
+		</h4>
+                </div>
+
+
+                <div class="modal-body">
+			<textarea id="batchShellArea" class="form-control" style="font-family:华文;color:white;background:#293038;letter-spacing:2px;height:400px;;"></textarea>
+                </div>
+                <div class="modal-footer clearfix">
+                    <button type="button"  style="float:right" class="btn btn-success" data-dismiss="modal" id="saveBatchCommand">保存</button>
+                    <button type="button" style="float:left" class="btn btn-default cancelDiv" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="../js/batch_shell.js"></script>

@@ -11,11 +11,19 @@ $(
         initIndependentDropZ();
         //绑定远程路径的快速按钮
         document.getElementById("remotePathFastNext").onclick=function(){
+		var path =document.getElementById("remotePath").value;
+		if(/^ *$/.test(path)){
+			return false;
+		}
             var model="fast"; //指定上传的模式， 快速和高级
             remotePathNextButton(model);
         };
         //绑定远程路径高级按钮
         document.getElementById("remotePathAdvance").onclick=function(){
+		var path =document.getElementById("remotePath").value;
+		if(/^ *$/.test(path)){
+			return false;
+		}
             var model="advance";
             remotePathNextButton(model);
             document.getElementById("startFileUploadButton").removeAttribute("disabled");
@@ -27,11 +35,6 @@ $(
             window.uploadFileModel="advance";//如果点击了跳过，那么说明是高级上传模式
             document.getElementById("startFileUploadButton").removeAttribute("disabled");
             createLocalServerAndRemoteServerDiv();
-        }
-        //绑定选择服务器按钮
-        document.getElementById("fileUploadSelectServerButton").onclick=function(){
-            document.getElementById("shadow").style.display="block";
-            fileUploadSelectServer();
         }
 
         //给选择全部服务器绑定点击事件
@@ -45,31 +48,6 @@ $(
 
             }
         );
-        //取消选择服务器
-        document.getElementById("cancelfileUploadSelect").onclick=function(){
-            $("#showFileUploadServerDIV").slideUp("fast");
-            $("#uploadFileSelectServerTbody").children().remove(); //删除当前服务器，避免下次重复加载
-            document.getElementById("shadow").style.display="none";
-        }
-        //获取选择服务器的下一步
-        document.getElementById("fileUploadSelectNext").onclick=function(){
-            //获取选中的主机
-            window.currentfileUploadSelectedServers=[];//重置选中的主机
-            $("#uploadFileSelectServerTbody").find("span").filter(".glyphicon-check").filter(".hostClass").each(function(){
-                //获取hostClass是为了读取主机，因为表里面有主机组的标签，用这个区分
-                window.currentfileUploadSelectedServers.push(this.getAttribute("value"));
-            })
-            if(window.currentfileUploadSelectedServers.length==0){
-                showErrorInfo("请选择服务器！");
-                return false;
-            }
-            fileUploadSelectNext();
-            $("#uploadFileSelectServerTbody").children().remove(); //删除当前服务器，避免下次重复加载
-            //删除界面布局的上传界面，避免重复
-            $("#showLocalServerAndRemoteServerDIV").children().remove();
-
-
-        }
         //绑定启动上传按钮
         document.getElementById("startFileUploadButton").onclick=function(){
             this.setAttribute("disabled",true)
@@ -100,19 +78,6 @@ function showIndependentUploadFileDIV(){
     document.getElementById("dumpIndependentDropz").style.display="block";
 
 }
-
-function fileUploadSelectNext(){
-    //        //获取选择服务器的下一步
-    document.getElementById("showFileUploadServerDIV").style.display="none"; //关闭选择服务器按钮
-    $("#remotePathDIV").slideDown("fast");
-    document.getElementById("remotePath").focus();
-
-
-
-
-}
-
-
 
 function remotePathNextButton(model){
     //获取输入的路径
@@ -155,15 +120,10 @@ function createLocalServerAndRemoteServerDiv(){
     //显示处理服务器对应的目录和进度
     var showLocalServerAndRemoteServerDIV=document.getElementById("showLocalServerAndRemoteServerDIV");
     window.uploadFileData=[];//存放全部的上传数据[{"sid":sid,"dfile":dfile,"element":progressElement},...]
-    for(var i=0;i<window.currentfileUploadSelectedServers.length;i++){
+    for(var i=0;i<window.currentfileUploadSelectedServers.alias.length;i++){
         //把sid转换为alias
-        var sid=window.currentfileUploadSelectedServers[i]
-        for(var si=0;si<window.allServersList.length;si++){
-            if(window.allServersList[si].id==sid){
-                var alias=window.allServersList[si].alias;
-                break;
-            }
-        }
+        var sid=window.currentfileUploadSelectedServers.id[i]
+        var alias=window.currentfileUploadSelectedServers.alias[i];
 
         var lineDiv=document.createElement("div");
         lineDiv.className="col-sm-12 fileTransLocalAndRemoteDiv";//每一行,jquery读取通过这个类
@@ -246,6 +206,8 @@ function createLocalServerAndRemoteServerDiv(){
         div3.style.height="35px";
         var divProgress=document.createElement("div");
         divProgress.className="progress-bar progress-bar-success progress-bar-striped active";
+	divProgress.style.cssText="padding:8px"
+	divProgress.setAttribute("progress-sid","progress."+sid)
         //divProgress.style.width="80%";
         divProgress.style.borderRadius="4px";
         var span=document.createElement("span");
@@ -265,6 +227,7 @@ function createLocalServerAndRemoteServerDiv(){
 function startLocalToRemoteUpload(){
     //禁用上传按钮
     document.getElementById('startFileUploadButton').setAttribute("disabled",true);
+	var data=[]
     $(".fileTransLocalAndRemoteDiv").each(function(){
         var div=this;
         var sid=div.getAttribute("sid");
@@ -272,33 +235,31 @@ function startLocalToRemoteUpload(){
         var localPath=inputs[0].value;//第一输入框是本地输入框
         var remotePath=inputs[1].value;//第二个输入框是远程输入框
         var progressSpan=$(this).find("span")[3];
-        data={"sfile":localPath,"dfile":remotePath,"sid":sid};
+        data.push({"sfile":localPath,"dfile":remotePath,"sid":sid});
+    })
         data=JSON.stringify(data);
         jQuery.ajax({
             "url":fileTransURL,
-            "dataType":"jsonp",
-            "data":{"parameters":data},
+            "data":{"data":data},
+		"type":"POST",
             "error":errorAjax,
             "success":function(data){
-                var progressBar=$(div).find(".progress-bar")[0];//这个上面有progress-bar类
+		data = JSON.parse(data)
+             //   var progressBar=$(div).find(".progress-bar")[0];//这个上面有progress-bar类
                 if(!data.status){
                     //后台启动上传失败
-                    $(progressBar).removeClass("progress-bar progress-bar-success progress-bar-striped activ");
-                    progressBar.textContent=data.content;
-                    progressBar.className="label label-danger";
+                    showErrorInfo(data.content)
                     return false;
                 }
                 else{
                     //后台启动文件上传成功，可以等待获取进度
                     var tid=data.content;
-                    getFileTransProgress(tid,progressBar,progressSpan);
-                    //getFileTransProgress(tid,progressBar,progressSpan)
+                    getFileTransProgress(tid);
 
                 }
             }
         });
 
-    })
 }
 function initIndependentDropZ(){
     //单个拖动上传
@@ -374,128 +335,54 @@ function initDropZ() {
 }
 
 
-//路径搜索
-$(function() {
-    var cache = {};  //缓存功能
-    $( "#remotePath" ).autocomplete({
-        minLength: 1, //最少多少开始搜索
-        source: function( request, response ) {
-            var path = request.term;  //自身携带的是term key
-            var requestData={"path":path};
-            if ( path in cache ) {
-                response( cache[ path ] );
-                return;
-            }
-
-            $.getJSON( headURL+pathSearchURL, requestData, function( data, status, xhr ) { //requestData是组成的数据
-                var content=data.content;
-                cache[ path ] = content;
-                response( content );
-            });
-        }
-    });
-});
-
-//上传文件选择服务器
-
-function fileUploadSelectServer(){
-    $("#showFileUploadServerDIV").slideDown("fast");
-    var hostGroups=[];
-    window.currentSelectedServers=[];//存储呗选中的主机
-    for(i in window.allServersList){
-        var group=window.allServersList[i].group;
-        if(hostGroups.indexOf(group)>-1){  //大于-1标识找到了，否则就是没有找到
-            continue;
-        }
-        else{
-            hostGroups.push(group);
-        }
-    }
-    var  selectServerTbody= document.getElementById("uploadFileSelectServerTbody");
-    for(var i=0;i<hostGroups.length;i++){
-        group=hostGroups[i];
-        //循环读取主机组，并且显示对应的主机
-        var tr=document.createElement("tr"); //每一行，包含的是主机组和对应的主机
-        var td=document.createElement("td"); //用于显示主机组，主机组|主机A，主机B
-        var groupSpan=document.createElement("span");//用于显示复选框
-        groupSpan.className="glyphicon glyphicon-check"//默认选中，这个是主机组
-        groupSpan.style.cursor="pointer";
-        groupSpan.innerHTML="&nbsp"+hostGroups[i];//显示值
-        groupSpan.setAttribute("value",hostGroups[i]);//把值设置给属性
-        //设置点击事件
-        groupSpan.onclick=function(){
-            if($(this).hasClass("glyphicon-check")){
-                var td=$(this).parent();//td级别
-                var tr=$(td).parent();//tr级别
-                $(tr).find("span").removeClass("glyphicon-check").addClass("glyphicon-unchecked")  //选中tr中所有span
-            }
-            else{
-                var td=$(this).parent();//td级别
-                var tr=$(td).parent();//tr级别
-                $(tr).find("span").removeClass("glyphicon-unchecked").addClass("glyphicon-check")
-
-            }
-        };
-        td.appendChild(groupSpan);//把第span加入td，第一个位置主机组
-        tr.appendChild(td);
-
-        td=document.createElement("td");
-        //需要循环处理N个主机
-        for (h in window.allServersList){//循环读取所有主机组对应的主机
-            if(group===window.allServersList[h].group){//匹配当前主机组的主机，显示
-                hostSpan=document.createElement("span");
-                hostSpan.className="glyphicon glyphicon-check hostClass"; //增加hostClass便于读取主机
-                hostSpan.onclick=function(){
-                    if($(this).hasClass("glyphicon-check")){
-                        $(this).removeClass("glyphicon-check").addClass("glyphicon-unchecked")
-                    }
-                    else{
-                        $(this).removeClass("glyphicon-unchecked").addClass("glyphicon-check")
-
-                    }
-                };
-                hostSpan.style.cssText="margin:10px;cursor:pointer;";
-                hostSpan.innerHTML="&nbsp;"+window.allServersList[h].alias;//显示主机别名，不显示主机IP
-                hostSpan.setAttribute("value",window.allServersList[h]["id"]); //显示主机别名，不显示主机IP
-                td.appendChild(hostSpan);
-                window.currentSelectedServers.push(window.allServersList[h]["id"]);
-            }
-        }
-        tr.appendChild(td);
-        selectServerTbody.appendChild(tr);
-    }
-}
-
-
 
 
 //用来给setTimeout传递参数的，默认的setTimeout是不可以携带参数的
-function _getFileTransProgress(tid,progressBar,progressSpan){
+function _getFileTransProgress(tid){
     return function(){
         //访问真正的目标函数
-        getFileTransProgress(tid,progressBar,progressSpan);
+        getFileTransProgress(tid);
     }
 }
 
 
 //获取文件传输进度
-function getFileTransProgress(tid,progressBar,progressSpan){
+function getFileTransProgress(tid){
     jQuery.ajax({
-        "url":getFileTransProgressURL,
+        "url":getScriptInitProgressURL,
         "error":errorAjax,
         "data":{"tid":tid},
         "dataType":"jsonp",
         "success":function(data){
             if(!data.status){
-                $(progressBar).removeClass("progress-bar progress-bar-success progress-bar-striped activ");
-                progressBar.textContent=data.content;
-                progressBar.className="label label-danger";
+		showErrorInfo(data.content)
                 return false;
             }
             else{
-                var progress=parseInt(data.progress);
-                progressBar.style.width=progress+"%";
-                progressSpan.innerText=progress+"%";
+                //progressBar.style.width=progress+"%";
+                //progressSpan.innerText=progress+"%";
+		
+		//
+			var progress=data.progress;
+			for(var key in progress){
+				var bar = $('div[progress-sid="' + key + '"')
+				if (progress[key].status === false){
+					$(bar).css({"width":"100%","background":"red"}).find("span").text(progress[key].content)
+					continue
+				}
+				if(parseInt(progress[key].content) === 100  ){
+					showSuccessNotice("操作完成！")
+					$(bar).css({"width":"100%"}).removeClass("active progress-bar-striped").find("span").text("已完成").css({"background":"#5cb85c"})
+				}
+				else{
+					$(bar).css({"width":progress[key].content + "%"}).find("span").text(progress[key].content.toFixed(1) + "%")
+				}
+			}
+			if(parseInt(data.whole_progress) < 100){
+                    		setTimeout(_getFileTransProgress(tid), 1000);
+			}
+		//
+		/*
                 if(progress<100){
                     //小于100的时候，继续获取进度
                     //setTimeout(getFileTransProgress(tid,progressBar,progressSpan),1000)     ;
@@ -514,8 +401,12 @@ function getFileTransProgress(tid,progressBar,progressSpan){
 
 
                 }
+		*/
             }
         }
     });
 
 }
+
+    $( ".modal-content" ).draggable();//窗口拖动
+window.open("server_groups.html","_blank","location=no,scrollbars=yes,resizable=1,modal=false,alwaysRaised=yes,width=2000px,height=10000px")

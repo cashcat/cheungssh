@@ -125,27 +125,3 @@ function deleteKeyFile(team){
     });
 }
 
-function showKeyFileTable(){
-    jQuery.ajax({
-        "url":keyAdminURL,
-        "dataType":"jsonp",
-        "error":errorAjax,
-        "beforeSend":start_load_pic,
-        "complete":stop_load_pic,
-        "success":function(data){
-            if(!data.status){
-                showErrorInfo(data.content);
-                return false;
-            }
-            else{
-                var content=data.content;//[]
-                for(var i=0;i<content.length;i++){
-                    line=content[i];
-                    createKeyFileTbody(line.owner,line.keyfile);
-                }
-
-            }
-
-        }
-    });
-}

@@ -4,17 +4,6 @@
 
 
 
-function  loadOwner(){
-    //加载用户归属
-    var select=document.getElementById("showRemoteFileOwner");
-    for(var i=0;i<window.userList.length;i++){
-        var owner=window.userList[i];
-        var option=document.createElement("option");
-        option.textContent=owner;
-        select.appendChild(option);
-
-    }
-}
 
 function closeEditDiv(){
     //关闭编辑框Div
@@ -31,37 +20,56 @@ function showEditDiv(){
 
 function createRemoteFileLine(data){
     var tbody=document.getElementById("remoteFileTbody");
-    var id=data.id;
-    var owner=data.owner;
-    var path=data.path;
-    var server=data.server;
-    var description=data.description;
-    var alias=data.alias;
     var tr=document.createElement("tr");
 
     //归属
     var td=document.createElement("td");
-    td.textContent=owner;
-    td.className="owner";
+    td.textContent=data.username;
     tr.appendChild(td);
 
     //路径
     var td=document.createElement("td");
-    td.textContent=path;
-    td.className="path";
+    td.textContent=data.path;
     tr.appendChild(td);
 
     //主机别名
     var td=document.createElement("td");
-    td.textContent=alias;
-    td.setAttribute("sid",server);
-    td.className="alias";
+    td.textContent=data.alias;
     tr.appendChild(td);
+
+    //时间
+    var td=document.createElement("td");
+    td.textContent=data.create_time;
+    tr.appendChild(td);
+
+    //IP
+    var td=document.createElement("td");
+    td.textContent=data.ip;
+    tr.appendChild(td);
+
+    //历史版本
+    var td=document.createElement("td");
+    td.style.cssText="text-align:center;cursor:pointer;color:blue;"
+    if(data.history_version === -1){
+    	td.textContent=0;
+    }
+    else{
+
+    	td.textContent=data.history_version;
+    }
+    if(data.history_version > 0){
+	td.setAttribute("tid",data.id)
+	td.onclick=function(){
+		var id = this.getAttribute("tid")
+		window.open("file_historic_list.html?id="+id,"_blank","location=no,scrollbars=yes,resizable=1,modal=false,alwaysRaised=yes,width=2000px,height=10000px")
+	}
+    }
+    tr.appendChild(td);
+
 
     //描述
     var td=document.createElement("td");
-    td.textContent=description;
-    td.className="description";
+    td.textContent=data.description;
     tr.appendChild(td);
 
 
@@ -71,33 +79,32 @@ function createRemoteFileLine(data){
     var td=document.createElement("td");
     var viewButton=document.createElement("button");
     viewButton.className="btn btn-primary  btn-xs glyphicon glyphicon-eye-open";
+    viewButton.setAttribute("data",JSON.stringify(data))
+    viewButton.setAttribute("remote_file_id",data.id)
     viewButton.onclick=function(){
-        window.currentRemoteFileViewButton=this;//文件更新时需要
-        var tid=this.getAttribute("id");
-        var action="GET";
-        loadRemoteFileContentToTextArea(tid,action);
+        var data=JSON.parse(this.getAttribute("data"));
+	document.getElementById("writeRemoteFileContentButton").setAttribute("tid",data.id)
+        loadRemoteFileContentToTextArea(data.id);
 
     }
-    viewButton.setAttribute("id",id);
     viewButton.style.marginLeft="3px";
     td.appendChild(viewButton);
     //编辑按钮
     var editButton=document.createElement("button");
     editButton.className="btn btn-success btn-xs  glyphicon glyphicon-edit";
-    editButton.setAttribute("tid",id);
+    editButton.setAttribute("data",JSON.stringify(data));
     editButton.style.marginLeft="3px";
     editButton.onclick=function(){
-        document.getElementById("saveRemoteFileManage").setAttribute("tid",this.getAttribute("tid"));
-        window.currentRemoteFileModel="edit";
-        window.currentRemoteFileButton=this;
-        loadRemoteFileToEdit(this);
-
+	var data=this.getAttribute("data")
+	document.getElementById("changePermission").setAttribute("data",data)
+	startShadow()
+	$("#KKK").show("fast")
     }
     td.appendChild(editButton);
     //删除按钮
     var deleteButton=document.createElement("button");
     deleteButton.className="btn btn-danger btn-xs  glyphicon glyphicon-trash";
-    deleteButton.setAttribute("id",id);
+    deleteButton.setAttribute("tid",data.id);
     deleteButton.style.marginLeft="3px";
     deleteButton.onclick=function(){
         deleteRemoteFile(this);
@@ -108,12 +115,12 @@ function createRemoteFileLine(data){
     tbody.appendChild(tr);
 }
 
-function loadRemoteFileContentToTextArea(tid,action){
+function loadRemoteFileContentToTextArea(id){
     //加载脚本文件内容到编辑框中
     jQuery.ajax({
         "url":getRemoteFileContentURL,
         "dataType":"jsonp",
-        "data":{"tid":tid,"action":action},
+        "data":{"id":id},
         "error":errorAjax,
         "beforeSend":start_load_pic,
         "complete":stop_load_pic,
@@ -123,6 +130,11 @@ function loadRemoteFileContentToTextArea(tid,action){
 		showErrorInfo(data.content);
                 return false;
             }
+	    else if (data.ask === true){
+		startShadow();
+		document.getElementById("showFileAskContent").textContent = data.content;
+		$("#showFileAskDiv").show("fast")
+		}
             else{
 		document.getElementById("remoteFileArea").style.display="block";//显示文本框
                 $("#remoteFileArea").animate({
@@ -205,7 +217,7 @@ function loadRemoteFileToEdit(editButton){
 
 function deleteRemoteFile(deleteButton){
     //根据ID删除记录
-    var id=deleteButton.getAttribute("id");
+    var id=deleteButton.getAttribute("tid");
     jQuery.ajax({
         "url":deleteRemoteFileListURL,
         "data":{"id":id},
@@ -229,61 +241,7 @@ function deleteRemoteFile(deleteButton){
     });
 }
 
-function getRemoteFileSetValue(){
 
-    //获取填写的表单值
-    var path=document.getElementById("remoteFilePath").value;
-    var select=document.getElementById("remoteFileServer");//下拉框
-    var server=select.value;//value属性的值
-    var options=select.options;//全部的options
-    var index=select.selectedIndex;//option被选中的缩影
-    var alias=options[index].text;//获取option的文本
-    var owner=document.getElementById("showRemoteFileOwner").value;
-    var description=document.getElementById("remoteFileDescription").value;
-    var tid=document.getElementById("saveRemoteFileManage").getAttribute("tid");
-    if(/^ *$/.test(path)  || /^ *$/.test(server) || /^ *$/.test(owner)  ){
-        //不可以为为空
-        $("#remoteFileEditDiv").effect("shake");
-        return false;
-    }
-    else{
-        var _data={"owner":owner,"path":path,"server":server,"description":description,"alias":alias};
-        //根据保存按钮上是否有id，如果有id则说明是更新，否则是创建
-        if(tid){
-            _data["id"]=tid;
-        }
-
-        jQuery.ajax({
-            "url":addRemoteFileURL,
-            "data":_data,
-            "dataType":"jsonp",
-            "beofreSend":start_load_pic,
-            "complete":stop_load_pic,
-            "error":errorAjax,
-            "success":function(data){
-                if(!data.status){
-                    showErrorInfo(data.content);
-                    return false;
-                }
-                else{
-                    _data["id"]=data.tid;
-                    if(window.currentRemoteFileModel=="create"){
-                        createRemoteFileLine(_data);
-                    }
-                    else{
-                        updateRemoteFileList()
-                    }
-                    closeEditDiv();
-                    showSuccessNotic();
-                }
-
-            }
-
-        });
-
-    }
-
-}
 function loadServers(){
     var select=document.getElementById("remoteFileServer");
     for(var i=0;i<window.allServersList.length;i++){
@@ -298,6 +256,7 @@ function loadServers(){
 
 
 function loadRemoteFileList(){
+    $("#remoteFileTbody").children().remove()
     //加载远程文件路径清单
     jQuery.ajax({
         "url":getRemoteFileListURL,
@@ -363,30 +322,77 @@ function closeAreaText(){
 function updateRemoteFileContent(){
     //写入远程文件内容
     var content=document.getElementById("showRemoteFileContent").value;
-    var tid=window.currentRemoteFileViewButton.getAttribute("id");
+    var tid=document.getElementById("writeRemoteFileContentButton").getAttribute("tid");
     jQuery.ajax({
         "url":writeRemoteFileContentURL,
         "type":"POST",
-        "data":{"tid":tid,"content":content},
+        "data":{"id":tid,"content":content},
         "beforeSend":start_load_pic,
         "complete":stop_load_pic,
         "error":errorAjax,
         "success":function(data){
-            if(!responseCheck(data)){
-                return false;
-            }
-            closeAreaText();
-            showSuccessNotic();
+		data = JSON.parse(data);
+		if (!data.status){
+			showErrorInfo(data.content);
+			return false;
+		}
+		else{
+			closeAreaText();
+			showSuccessNotic();
+    			loadRemoteFileList();
+		}
 
 
         }
     });
 
 }
-
+document.getElementById("sureCreateFile").onclick=function(){
+		stopShadow();
+		$("#showFileAskDiv").hide("fast")
+		document.getElementById("remoteFileArea").style.display="block";//显示文本框
+               $("#remoteFileArea").animate({
+                    "top":"0%",
+                });
+                var t=document.getElementById("showRemoteFileContent");
+                t.value="";
+                t.focus();
+	
+}
+document.getElementById("closeT").onclick=function(){
+	$("#KKK").hide("fast")
+	stopShadow();
+}
+document.getElementById("changePermission").onclick=function(){
+	var  data =document.getElementById("changePermission").getAttribute("data")
+	var permission = document.getElementById("filePermission").value;
+	if(permission.length!==4){
+		showErrorInfo("请填写正确的Linux权限代码，如0755")
+		return false;
+	}
+	data=JSON.parse(data)
+	jQuery.ajax({
+		"url":changeFilePermissionURL,
+		"data":{"id":id,"permission":permission},
+		"error":errorAjax,
+		"beforeSend":start_load_pic,
+		"complete":stop_load_pic,
+		"success":function(data){
+			data = JSON.parse(data)
+			if(!data.status){
+				showErrorInfo(data.content);
+				return false;
+			}
+			stopShadow()
+			$("#KKK").hide("fast")
+			showSuccessNotice();
+			
+		}
+	})
+			
+}
 $(function(){
     //加载用户列表
-    loadOwner();
     loadServers();//加载服务器列表
     //关闭Div
     document.getElementById("closeRemoteFileDiv").onclick=function(){
@@ -400,11 +406,19 @@ $(function(){
     }
     //绑定刷新
     document.getElementById("refreshRemoteFile").onclick=function(){
-        loadRemoteFileHTML();
+    	loadRemoteFileList();
     }
     //绑定保存按钮
     document.getElementById("saveRemoteFileManage").onclick=function(){
-        getRemoteFileSetValue();
+    	    //获取填写的表单值
+	    var path=document.getElementById("remoteFilePath").value;
+	    var select=document.getElementById("remoteFileServer");//下拉框
+	    var server=select.value;//value属性的值
+	    var options=select.options;//全部的options
+	    var index=select.selectedIndex;//option被选中的缩影
+	    var alias=options[index].text;//获取option的文本
+	    var description=document.getElementById("remoteFileDescription").value;
+	    getRemoteFileSetValue(path,server,alias,description);
 
     }
     //加载远程文件清单

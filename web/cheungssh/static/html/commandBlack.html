@@ -1,38 +1,264 @@
-<div class="panel panel-default" id="" style="display: block; overflow: auto;">
+    <!--脚本文件执行框-->
+    <div       id="scriptDIV" style="background:white;width:100%;margin:auto;position:absolute;top:0%;bottom:0%;right:0%;left:0%;display:block">
+	<h4>
+		绑定关系说明：黑名单 -> 黑名单组 -> 用户,默认黑名单组不管是否被选中，都是全部用户遵守的。
+	</h4>
+        <ul class="nav nav-tabs" role="tablist" id="myTab" style="margin-top:20px">
+            <li role="presentation" class="active"><a href="#blackUser" role="tab" data-toggle="tab">账户</a></li>
+            <li role="presentation"><a href="#blackGroup" role="tab" data-toggle="tab">黑名单组</a></li>
+            <li role="presentation"><a href="#blackList" role="tab" data-toggle="tab">黑名单</a></li>
+        </ul>
+
+        <div class="tab-content" style="margin-top:30px;">
+
+            <div role="tabpanel" class="tab-pane active" id="blackUser">
+                <button  id="bindUserWithBlackList" class="btn-xs btn-success btn" style="">
+			<span class="glyphicon glyphicon-plus"></span>
+		</button>
+                <button  id="refreshTTT" class="btn-xs btn-default btn" style="margin-left:10px">
+			<span class="glyphicon glyphicon-refresh"></span>
+		</button>
+                <!--用户列表-->
+		<table class="table table-striped table-bordered" style="margin-top:10px">
+			<thead>
+				<th>用户名</th>
+				<th>时间</th>
+				<th>黑名单组</th>
+				<th>操作</th>
+			</thead>
+			<tbody id="userTbody"></tbody>
+		</table>
 
 
-    <p>
-    <div class="input-group" style="padding:10px;">
-        <input type="text" class="form-control searchValue" placeholder="操作系统命令" style="width:100%;"
-               id="inputCommandBlack">
-        <span class="input-group-btn">
-                        <button class="btn btn-success" id="addCommand">添加</button>
-                </span>
+            </div>
+
+            <div role="tabpanel" class="tab-pane clearfix" id="blackList">
+                <button  id="createBlackList" class="btn-xs btn-success btn" style="">
+			<span class="glyphicon glyphicon-plus"></span>
+		</button>
+                <button  id="refreshBlackList" class="btn-xs btn-default btn" style="margin-left:10px">
+			<span class="glyphicon glyphicon-refresh"></span>
+		</button>
+		<table class="table table-striped table-bordered" style="margin-top:10px">
+			<thead>
+				<th>名称</th>
+				<th>时间</th>
+				<th>创建者</th>
+				<th>正则</th>
+				<th>描述</th>
+				<th style="min-width:100px">操作</th>
+			</thead>
+			<tbody id="showBlackListTbody"></tbody>
+		</table>
+
+
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="blackGroup" class="clearfix">
+                <button  id="createBlackListGroup" class="btn-xs btn-success btn" style="">
+			<span class="glyphicon glyphicon-plus"></span>
+		</button>
+                <button  id="refreshBlackListGroup" class="btn-xs btn-default btn" style="margin-left:10px">
+			<span class="glyphicon glyphicon-refresh"></span>
+		</button>
+		<table class="table table-striped table-bordered" style="margin-top:10px">
+			<thead>
+				<th>名称</th>
+				<th>时间</th>
+				<th>创建者</th>
+				<th>默认</th>
+				<th>引用名单</th>
+				<th>正则</th>
+				<th>描述</th>
+				<th style="min-width:100px">操作</th>
+			</thead>
+			<tbody id="showBlackListGroupTbody"></tbody>
+		</table>
+
+            </div>
+
+	</div>
+     </div>
+
+
+
     </div>
-    </p>
-    <div class="panel-heading" style="z-index: 1;background: white;">
-        <button class="btn btn-default btn-xs" id="refreshCommandBlackList" type="button"><span
-                class="glyphicon glyphicon-refresh "></span></button>
+
+<div style="font-family: 微软雅黑;overflow: auto;z-index: 1004;width:auto;height: 100%;position: fixed;left: 0%;right: 0px;top: 0%;bottom: 0px;display:none;"
+     id="editUser">
+    <div class="modal "
+         style="height: 95%;overflow:hidden;overflow-y:hidden;position:relative;left:0px;right:0px;bottom:0px;top:0px;margin:auto;display:block;">
+        <div class="modal-dialog">
+            <div class="modal-content  ">
+                <div class="modal-header" style="cursor: move;">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+
+                    <h4 class=" glyphicon glyphicon-user " style="color: green;">
+			<span>绑定用户与黑名单</span>
+		    </h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+
+                            <div class="col-md-12">
+                                <label class="control-label col-md-2">账号</label>
+                                <div class="col-md-10">
+					<select id="usernameBlackList" class="form-control"></select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12" style="margin-top:10px">
+                                <label class="control-label col-md-2">黑名单组</label>
+                                <div class="col-md-10">
+                                    <input id="userBlackListGroup" class="form-control" readonly>
+                                </div>
+                            </div>
 
 
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button style="float:left" type="button" class="btn btn-default cancelDiv" data-dismiss="modal">取消
+                    </button>
+                    <button type="button" style="float:right" class="btn btn-success" data-dismiss="modal"
+                            id="saveUserWithBlackList">保存
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-    <table class="table table-bordered table-hover table-striped  table-condensed " style="background: white">
-        <thead>
-        <tr>
-            <th>操作者IP</th>
-            <th>操作者归属地</th>
-            <th>命令</th>
-            <th>创建时间</th>
-            <th>归属用户</th>
-            <th>操作</th>
-
-        </tr>
-        </thead>
-        <tbody id="showCommandBlackListTbody">
-
-        </tbody>
-
-    </table>
 </div>
+<!---->
+<div style="font-family: 微软雅黑;overflow: auto;z-index: 1004;width:auto;height: 100%;position: fixed;left: 0%;right: 0px;top: 0%;bottom: 0px;display:none;"
+     id="editBlackList">
+    <div class="modal "
+         style="height: 95%;overflow:hidden;overflow-y:hidden;position:relative;left:0px;right:0px;bottom:0px;top:0px;margin:auto;display:block;">
+        <div class="modal-dialog">
+            <div class="modal-content  ">
+                <div class="modal-header" style="cursor: move;">
 
-<script src="../js/commandBlackList.js"></script>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+
+                    <h4 class=" glyphicon glyphicon-console " style="color: red;">
+			<span>黑名单</span>
+		    </h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+
+                            <div class="col-md-12">
+                                <label class="control-label col-md-2">名称</label>
+                                <div class="col-md-10">
+                                    <input id="blackListName" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-md-12" style="margin-top:10px">
+                                <label class="control-label col-md-2">正则</label>
+                                <div class="col-md-10">
+                                    <input id="expression" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-md-12" style="margin-top:10px">
+                                <label class="control-label col-md-2">描述</label>
+                                <div class="col-md-10">
+                                    <textarea id="description" class="form-control"></textarea>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button style="float:left" type="button" class="btn btn-default cancelDiv" data-dismiss="modal">取消
+                    </button>
+                    <button type="button" style="float:right" class="btn btn-success" data-dismiss="modal"
+                            id="saveBlackList">保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="font-family: 微软雅黑;overflow: auto;z-index: 1004;width:auto;height: 100%;position: fixed;left: 0%;right: 0px;top: 0%;bottom: 0px;display:none;"
+     id="editBlackListGroup">
+    <div class="modal "
+         style="height: 95%;overflow:hidden;overflow-y:hidden;position:relative;left:0px;right:0px;bottom:0px;top:0px;margin:auto;display:block;">
+        <div class="modal-dialog">
+            <div class="modal-content  ">
+                <div class="modal-header" style="cursor: move;">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+
+                    <h4 class=" glyphicon glyphicon-console " style="color: red;">
+			<span>黑名单组</span>
+		    </h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+
+                            <div class="col-md-12">
+                                <label class="control-label col-md-2">名称</label>
+                                <div class="col-md-10">
+                                    <input id="blackListGroupName" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-md-12" style="margin-top:10px">
+                                <label class="control-label col-md-2">默认</label>
+                                <div class="col-md-10">
+					<select class="form-control" id="defaultBlackListGroup">
+						<option value ="否">否</option>
+						<option value ="是">是</option>
+					</select>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-12" style="margin-top:10px">
+                                <label class="control-label col-md-2">引用名单</label>
+                                <div class="col-md-10">
+                                    <input id="blackListAmount" class="form-control" value = "0个" readonly>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12" style="margin-top:10px">
+                                <label class="control-label col-md-2">描述</label>
+                                <div class="col-md-10">
+                                    <textarea id="groupDescription" class="form-control"></textarea>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button style="float:left" type="button" class="btn btn-default cancelDiv" data-dismiss="modal">取消
+                    </button>
+                    <button type="button" style="float:right" class="btn btn-success" data-dismiss="modal"
+                            id="saveBlackListGroup">保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../js/blackList.js"></script>

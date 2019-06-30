@@ -24,7 +24,6 @@ def black_command_check(func):
 				force=parameters["force"]
 			except Exception,e:
 				force=False
-			servers=parameters["servers"]
 			_command=re.sub('^ *| *$','',command) 
 			for _cmd in black_command_list: 
 				

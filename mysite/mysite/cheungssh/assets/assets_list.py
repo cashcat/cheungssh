@@ -120,5 +120,18 @@ assets_conf={
 					"type":"string",
 					"show":True,
 				},
+				"CPU-Rate":{
+					"name":"CPU使用率",
+					"command":{
+						"CentOS/RedHat5":"""echo  "100" - `top  -d  1 -n 5 -b |grep -Po '(?<=%ni, )[0-9]+\.[0-9]+(?=%id)'|tail  -1` |bc""",
+						"CentOS/RedHat6":"""echo  "100" - `top  -d  1 -n 5 -b |grep -Po '(?<=%ni, )[0-9]+\.[0-9]+(?=%id)'|tail  -1` |bc""",
+						"CentOS/RedHat7":"""echo  "100" - `top  -d  1 -n 5 -b |grep -Po '(?<=%ni, )[0-9]+\.[0-9]+(?=%id)'|tail  -1` |bc""",
+						"Ubuntu":"""echo  "100" - `top  -d  1 -n 5 -b |grep -Po '(?<=%ni, )[0-9]+\.[0-9]+(?=%id)'|tail  -1` |bc""",
+						"Aix":"""echo  "100" - `top  -d  1 -n 5 -b |grep -Po '(?<=%ni, )[0-9]+\.[0-9]+(?=%id)'|tail  -1` |bc""",
+						"Solaris":""" """,
+					},
+					"type":"string",
+					"show":True,
+				},
 }
 	

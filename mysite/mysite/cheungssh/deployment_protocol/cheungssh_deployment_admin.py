@@ -16,6 +16,166 @@ class DeploymentAdmin:
 	def __init__(self,taskid):
 		
 		self.taskid=taskid
+		self.flag_error="成功" 
+	def step_run_batch(self,shell,steps,sid):
+		try:
+			for step in steps:
+				task_modul=step["task_modul"]
+				step_name=step["step_name"]
+				if task_modul=="command":
+					command=step["command"]
+					cheungssh_info=shell.command(command,"stepid-0000") 
+					if not cheungssh_info["status"]:raise CheungSSHError(cheungssh_info["content"])
+				if task_modul=="git":
+					git_url=step["git_url"]
+					git_dir=step["git_dir"]
+					A=cheungssh_deployment_controler.CheungSSHDeploymentControler(self.taskid)
+					info=A.init_server_conf(sid)
+					if not info["status"]:raise CheungSSHError(info["content"])
+					cheungssh_info=A.git(git_url,git_dir,"1")
+					if not cheungssh_info["status"]:
+						raise CheungSSHError(cheungssh_info["content"])
+				elif task_modul=="commandBak":
+					source_dir=step["source_dir"]
+					dest_dir=step["bak_dir"]
+					A=cheungssh_deployment_controler.CheungSSHDeploymentControler(self.taskid)
+					info=A.init_server_conf(sid)
+					if not info["status"]:raise CheungSSHError(info["content"])
+					cheungssh_info=A.command_backup(source_dir,dest_dir,"1")
+					if not cheungssh_info["status"]:
+						raise CheungSSHError(cheungssh_info["content"])
+				elif task_modul=="command":
+					command=step["command"]
+					A=cheungssh_deployment_controler.CheungSSHDeploymentControler(self.taskid)
+					info=A.init_server_conf(sid)
+					if not info["status"]:raise CheungSSHError(info["content"])
+					cheungssh_info=A.command(command,"1")
+					if not cheungssh_info["status"]:
+						raise CheungSSHError(cheungssh_info["content"])
+				elif task_modul=="script":
+					owner=step["owner"]
+					script_name=step["script_name"]
+					script_parameter=step["script_parameter"]
+					A=cheungssh_deployment_controler.CheungSSHDeploymentControler(self.taskid)
+					info=A.init_server_conf(sid)
+					if not info["status"]:raise CheungSSHError(info["content"])
+					cheungssh_info=A.script(sid=sid,sfile=script_name,parameter=script_parameter,owner=owner,stepid="1")
+					if not cheungssh_info["status"]:
+						raise CheungSSHError(cheungssh_info["content"])
+					print "脚本模块执行成功"
+				elif task_modul=="permission":
+					path=step["path"]
+					recursion=step["recursion"]
+					code=step['code']
+					A=cheungssh_deployment_controler.CheungSSHDeploymentControler(self.taskid)
+					info=A.init_server_conf(sid)
+					if not info["status"]:raise CheungSSHError(info["content"])
+					cheungssh_info=A.command_permission(path=path,recursion=recursion,code=code,stepid="1")
+					if not cheungssh_info["status"]:
+						raise CheungSSHError(cheungssh_info["content"])
+					print "权限执行成功"
+				elif task_modul=="owner":
+					path=step['path']
+					owner=step['owner']
+					recursion=step['recursion']
+					A=cheungssh_deployment_controler.CheungSSHDeploymentControler(self.taskid)
+					info=A.init_server_conf(sid)
+					if not info["status"]:raise CheungSSHError(info["content"])
+					cheungssh_info=A.command_chown(path=path,recursion=recursion,owner=owner,stepid="1")
+					if not cheungssh_info["status"]:
+						raise CheungSSHError(cheungssh_info["content"])
+					print "归属修改执行成功"
+				elif task_modul=="localUpload":
+					local_path=step["local_path"]
+					remote_path=step["remote_path"]
+					owner=step["owner"]
+					A=cheungssh_deployment_controler.CheungSSHDeploymentControler(self.taskid)
+					info=A.init_server_conf(sid)
+					if not info["status"]:raise CheungSSHError(info["content"])
+					local_path=os.path.join(cheungssh_settings.upload_dir,owner,local_path)
+					cheungssh_info=A.local_upload(sid=sid,sfile=local_path,dfile=remote_path,owner=owner,stepid="1")
+					if not cheungssh_info["status"]:
+						raise CheungSSHError(cheungssh_info["content"])
+				elif task_modul=="svn":
+					url=step["svn_url"]
+					username=step["svn_username"]
+					password=step["svn_password"]
+					dest_dir=step["svn_dir"]
+					A=cheungssh_deployment_controler.CheungSSHDeploymentControler(self.taskid)
+					info=A.init_server_conf(sid)
+					if not info["status"]:raise CheungSSHError(info["content"])
+					cheungssh_info=A.svn(url=url,username=username,password=password,dest_dir=dest_dir,stepid="1")
+					if not cheungssh_info["status"]:
+						raise CheungSSHError(cheungssh_info["content"])
+		
+							
+				cheungssh_info["status"]=True
+		except Exception,e:
+			self.flag_error="部分服务器执行失败"
+	def server_run_batch(self,conf,steps):
+		cheungssh_info={"status":False,"content":""}
+		try:
+			p=[]
+			for sid in conf["servers"]:
+				A=cheungssh_deployment_controler.CheungSSHDeploymentControler(self.taskid)
+				info=A.init_server_conf(sid)
+				if not info["status"]:raise CheungSSHError(info["content"])
+				a=threading.Thread(target=self.step_run_batch,args=(A,steps,sid))
+				a.start()
+				p.append(a)
+			for s in p:
+				s.join()
+			conf["status"]=self.flag_error
+			_conf=json.dumps(conf,encoding="utf8",ensure_ascii=False)
+			REDIS.hset("CHB-Dep-bat-002",self.taskid,_conf)
+			
+				
+		except Exception,e:
+			print 12222,e
+			cheungssh_info={"status":False,"content":str(e)}
+		return cheungssh_info
+			
+		
+	def run_batch_deployment(self):
+		cheungssh_info={"status":False,"content":""}
+		try:
+			conf=DeploymentAdmin.batch_task_info(self.taskid)
+			if not conf["status"]: raise CheungSSHError("请求得不到正确的响应，请联系CheungSSH作者解决。")
+			conf=conf["content"]
+			conf["status"]="运行中"
+			_conf=json.dumps(conf,encoding="utf8",ensure_ascii=False)
+			REDIS.hset("CHB-Dep-bat-002",self.taskid,_conf)
+
+			steps=conf["steps"]
+			run = threading.Thread(target=self.server_run_batch,args=(conf,steps))
+			run.start()
+			
+
+
+
+			#cheungssh_info["content"]=conf
+			cheungssh_info["status"]=True
+		except Exception,e:
+			print 55555555555
+			cheungssh_info={"status":False,"content":str(e)}
+		return cheungssh_info
+
+	@staticmethod
+	def delete_batch_task_conf(username,is_super,taskid):
+		cheungssh_info={"content":"","status":False}
+		try:
+			data=REDIS.hget("CHB-Dep-bat-002",taskid)
+			data=json.loads(data)
+			if data["owner"] == username or is_super:
+				REDIS.hdel("CHB-Dep-bat-002",taskid)
+			else:
+				raise CheungSSHError("您无权删除该资源!")
+			cheungssh_info["status"]=True
+		except Exception,e:
+			cheungssh_info["status"]=False
+			cheungssh_info["content"]=str(e)
+		return cheungssh_info
+
 	@staticmethod
 	def delete_task_conf(username,is_super,taskid):
 		cheungssh_info={"content":"","status":False}
@@ -30,6 +190,30 @@ class DeploymentAdmin:
 		except Exception,e:
 			cheungssh_info["status"]=False
 			cheungssh_info["content"]=str(e)
+		return cheungssh_info
+	@staticmethod
+	def batch_create_task_conf(data,username):
+		cheungssh_info={"content":"","status":False}
+		try:
+			try:
+				data=json.loads(data)
+			except Exception,e:
+				raise CheungSSHError("CHB00000000098X1")
+			if not isinstance(data,dict):raise CheungSSHError("CHB0000987XK5022")
+			if data.has_key("tid"):
+				taskid=data["tid"]
+			else:
+				taskid=str(random.randint(9000000000000000,9999999999999999))
+			data["taskid"]=taskid
+			data["owner"]=username
+			data["status"]="新建"
+			data["time"]=time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())
+			data["model"]="批量"
+			data=json.dumps(data,encoding="utf8",ensure_ascii=False)
+			REDIS.hset("CHB-Dep-bat-002",taskid,data)
+			cheungssh_info["status"]=True
+		except Exception,e:
+			cheungssh_info={"content":str(e),"status":False}
 		return cheungssh_info
 	@staticmethod
 	def create_task_conf(data,username):
@@ -68,6 +252,21 @@ class DeploymentAdmin:
 			cheungssh_info["content"]=str(e)
 		return cheungssh_info
 	@staticmethod
+	def batch_task_info(taskid):
+		cheungssh_info={"status":False,"content":""}
+		try:
+			conf=REDIS.hget("CHB-Dep-bat-002",taskid)
+			conf=json.loads(conf)
+			cheungssh_info["content"]=conf
+			cheungssh_info["status"]=True
+		except Exception,e:
+			cheungssh_info["status"]=False
+			cheungssh_info["content"]=str(e)
+		return cheungssh_info
+
+
+
+	@staticmethod
 	def task_info(taskid):
 		cheungssh_info={"status":False,"content":""}
 		try:
@@ -88,6 +287,23 @@ class DeploymentAdmin:
 		conf["status"]=status
 		conf=json.dumps(conf,encoding="utf8",ensure_ascii=False)
 		REDIS.hset("CSSH-R00000000002",taskid,conf)
+	@staticmethod
+	def get_batch_task_conf(username,is_super):
+		cheungssh_info={"content":"","status":False}
+		try:
+			data=REDIS.hgetall("CHB-Dep-bat-002")
+			_data={}
+			for taskid in data.keys():
+				_t=json.loads(data[taskid])
+				_data[taskid]=_t
+			cheungssh_info["content"]=_data
+			cheungssh_info["status"]=True
+		except Exception,e:
+			cheungssh_info={"content":str(e),"status":False}
+		return cheungssh_info
+				
+			
+			
 	@staticmethod
 	def get_task_conf(username,is_super):
 		cheungssh_info={"status":False,"content":""}

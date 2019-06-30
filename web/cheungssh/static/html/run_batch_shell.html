@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" href="../img/cheungssh.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"
+          charset="UTF-8">
+    <title>CheungSSH</title>
+    <link href="../css/bootstrap-3.3.5-dist/css/bootstrap.css" rel="stylesheet">
+	<script src="../js/jquery-2.2.3.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/jquery-ui.min.js"></script>
+<link href="../css/jquery-ui.min.css" rel="stylesheet">
+</head>
+<body >
+    <!--脚本文件执行框-->
+    <div       id="scriptDIV" style="background:white;width:100%;margin:auto;position:absolute;top:0%;bottom:0%;right:0%;left:0%;display:block">
+        <ul class="nav nav-tabs" role="tablist" id="myTab">
+            <li role="presentation" class="active"><a href="#scriptServers" role="tab" data-toggle="tab">服务器</a></li>
+            <li role="presentation"><a href="#scriptParameter" role="tab" data-toggle="tab">参数</a></li>
+            <li role="presentation"><a href="#scriptInit" role="tab" data-toggle="tab">初始化</a></li>
+        </ul>
+
+        <div class="tab-content" style="margin-top:30px;">
+            <div role="tabpanel" class="tab-pane active" id="scriptServers">
+                <button  id="goParameter" class="btn-sm btn-success btn" style="float: right;">下一步</button>
+                <!--服务器列表-->
+		<div id="serverGroup"></div>
+
+
+            </div>
+
+            <div role="tabpanel" class="tab-pane clearfix" id="scriptParameter" style="text-align:center">
+                <div  class="clearfix">
+                    <button   id="goInit" class="btn-sm btn-success btn" style="float:right">下一步</button>
+
+                </div>
+                <!--脚本的参数输入框-->
+
+		<div class="clearfix parameterLineTemplate" style="margin-top:10px;display:none">
+			<span class="col-md-2 parameterName" style="border-bottom:1px solid;margin-top:2px"></span>
+			<span class="col-md-5 parameterValue">
+				<input style="width:100%;border:none;border-bottom:1px dashed;outline:none;"></input>
+			</span>
+			<span class="col-md-5 parameterDescription" style="margin-top:2px;border-bottom:1px solid;"></span>
+		</div>
+
+
+
+            </div>
+            <div role="tabpanel" class="tab-pane" id="scriptInit" class="clearfix">
+                <div class="clearfix" style="margin-bottom:20px">
+                    <div class="progress progress-striped active" style="float:left;box-shadow:none;background:none;width:80%">
+                        <div class="progress-bar progress-bar-primary" style="width: 0%" id= "wholeProgress">0%</div>
+                    </div>
+                    <button   class="btn btn-success" style="float: right;"  disabled id="goRun">
+                        <span class=""  >执行</span>
+                    </button>
+                </div>
+                <!--初始化脚本-->
+                <div class="col-md-12  clearfix progressTemplate" style="display:none" >
+                    <label class="control-label  col-md-2 col-md-offset-1 server glyphicon glyphicon-play-circle">服务xxxxA</label>
+                    <div class="col-md-4 progress progress-striped" style="box-shadow:none;background:none;">
+                        <div class="progress-bar progress-bar-success progress" style="width: 0%;border-radius:0px">0%</div>
+                    </div>
+                    <div class="col-md-4 content" style="color:white;text-align:center;"></div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+
+    <div id="runScriptDiv" style="background:white;width:100%;margin:auto;position:absolute;top:0%;bottom:0%;right:0%;left:0%;display:none;">
+        </div>
+
+    </div>
+
+
+</div>
+
+<div id="uploadScriptProgressDiv" class="progress progress-striped"
+     style="font-weight: bold;font-size: 500%;z-index: 1004;width:40%;height:5%;margin:auto;
+     position:fixed;top:0%;bottom:0%;right:0px;left:120%;display: block;">
+
+    <div id="showScriptProgressText"  class="progress-bar  progress-bar-success active" >
+    </div>
+
+
+</div>
+
+    <div class="  glyphicon glyphicon-ok  alert alert-success" id="showSuccessNotic"
+         style="position:fixed;left: 40%;right: 40%;z-index: 1004;top: 10%;display: none;"> 操作成功!
+    </div>
+<div id="showSuccessNoticeIphone"
+     style="z-index: 1004;width:20%;height: 20%;margin:auto;position:fixed;top:0px;bottom:0px;right:0px;left:0px;display: none;"></div>
+
+<div id="showErrorInfoDIV"
+     style="z-index: 1005;display:none;position: absolute;  top: 0px; bottom: 0px ;left: 0px; right: 0px; ;">
+
+
+    <div style="width:auto;height: 200px;position: fixed;left: 0px;right: 0px;top: 40%;bottom: 60%;margin: auto;;"
+         id="">
+        <div class="modal "
+             style="overflow:hidden;overflow-y:hidden;position:relative;left:0px;right:0px;bottom:0px;top:0px;margin:auto;display:block;">
+            <div class="modal-dialog">
+                <div class="modal-content  ">
+                    <div class="modal-header" style="cursor: move;">
+
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+
+                        <h4 class=" glyphicon glyphicon-alert " style="color: red;">
+				<span>错误</span>
+			</h4>
+                    </div>
+
+                    <div class="modal-body  ">
+                        <p id="showWarnContent" style="text-align:center;;color:red; font-weight:bold;">请确认您的消息?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="closeButton">好的</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div id="loadPic"
+     style="text-align: center;padding: 10px;color: white;font-weight:bold   ;border-radius:8px;background: rgba(0,0,0,0.5);;z-index: 1004;width: 200px;height:40px;margin:auto;position:fixed;top:0px;bottom:0px;right:0px;left:0px;display: none;">
+<i class="fa fa-refresh fa-spin"></i>
+    <span style="letter-spacing: 4px;">请稍后...</span>
+</div>
+<div id="shadow"
+     style="display:none;position: absolute;  top: 0px; bottom: 0px ;left: 0px; right: 0px; z-index: 1003;background: rgba(0,0,0,0.4); "></div>
+</body>
+<script src="../js/CheungSSHGlobal.js"></script>
+<script src="../verTree/verTree.js"></script>
+<script src="../js/run_script.js"></script>
+</html>

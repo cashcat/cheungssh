@@ -167,9 +167,6 @@ $(document).on("click","#fileDownloadMenu",function(){
     loadFileDownHTML();
 
 })
-$(document).on("click","#SSHKey",function(){
-    loadKeyFileAdminHTML();
-})
 $(document).on("click","#scriptMenu",function(){
     //脚本
     loadScriptHTML();
@@ -193,9 +190,6 @@ function loadCrondLog(){
 
 
 
-function loadKeyFileAdminHTML(){
-    $("#showMainContent").load("static/html/uploadKeyFile.html");
-}
 
 function loadScriptHTML(){
     $("#showMainContent").load("static/html/script.html");
@@ -477,46 +471,6 @@ function loadUserList(){
 
 }
 
-
-//获取keyfile列表
-function getKeyFileList(){
-    jQuery.ajax({
-        "url":keyAdminURL,
-        "dataType":"jsonp",
-        "error":errorAjax,
-        "success":function(data){
-            if(!data.status){
-                showErrorInfo(data.content)
-                return false;
-            }
-            else{
-                    window.keyfileList=data.content;
-                }
-        }
-    })
-}
-
-
-function sshCheck(sid){
-    //用来ssh登录检查服务器状态的，新建和修改的服务器使用，在请求之前就修改状态图标
-    $("#"+sid).children().remove();//删除此前状态图标
-    var i=document.createElement("i");
-    i.className="fa-refresh   fa-spin  fa fa-lg  fa-li";
-    i.style.position="static";
-    document.getElementById(sid).appendChild(i);
-
-    jQuery.ajax({
-        "url":sshCheckURL,
-        "dataType":"jsonp",
-        "data":{"sid":sid},
-        "success":function (data) {
-            createServerStatusTd(sid,data);
-
-        }
-    });
-}
-
-
 function createServerStatusTd(sid,data){
     //清除td中的label标签
     $("#"+sid).children().remove();
@@ -614,7 +568,6 @@ window.onresize=function(){
 function initCheungSSH(){
     whoami();//获取当前账户名
     loadUserList();//加载当前用户列表
-    getKeyFileList();//加载keyfile清单
     initGetServersList();
     //绑定关闭错误弹窗的按钮事件
     document.getElementById("closeButton").onclick=function(){
@@ -632,3 +585,4 @@ function initCheungSSH(){
 
 
 }
+

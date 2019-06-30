@@ -817,6 +817,8 @@ function getDeploymentTaskConf(){
 
 
 $(function(){
+
+
     //绑定创建服务器按钮
     document.getElementById("createTaskServer").onclick=function(){
         createTaskServer();

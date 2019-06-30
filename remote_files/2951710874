@@ -1,0 +1,317 @@
+May 13 16:25:02 localhost run-parts(/etc/cron.daily)[12352]: finished logrotate
+May 13 16:25:02 localhost run-parts(/etc/cron.daily)[12315]: starting makewhatis.cron
+May 13 16:25:03 localhost run-parts(/etc/cron.daily)[12514]: finished makewhatis.cron
+May 13 16:25:03 localhost run-parts(/etc/cron.daily)[12315]: starting mlocate.cron
+May 13 16:25:08 localhost run-parts(/etc/cron.daily)[12527]: finished mlocate.cron
+May 13 16:25:08 localhost run-parts(/etc/cron.daily)[12315]: starting prelink
+May 13 16:25:08 localhost run-parts(/etc/cron.daily)[12539]: finished prelink
+May 13 16:25:08 localhost run-parts(/etc/cron.daily)[12315]: starting readahead.cron
+May 13 16:25:08 localhost run-parts(/etc/cron.daily)[12551]: finished readahead.cron
+May 13 16:25:08 localhost run-parts(/etc/cron.daily)[12315]: starting tmpwatch
+May 13 16:25:08 localhost run-parts(/etc/cron.daily)[12589]: finished tmpwatch
+May 13 16:25:08 localhost anacron[11051]: Job `cron.daily' terminated
+May 13 16:25:08 localhost anacron[11051]: Normal exit (1 job run)
+May 13 16:30:01 localhost CROND[12641]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 13 16:30:01 localhost CROND[12640]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 13 16:30:16 localhost /usr/bin/crontab[13860]: (root) LIST (root)
+May 13 16:40:01 localhost CROND[14249]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 13 16:50:01 localhost CROND[14361]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 13 17:00:01 localhost CROND[14474]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 13 17:00:01 localhost CROND[14475]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 13 17:00:18 localhost /usr/bin/crontab[15694]: (root) LIST (root)
+May 13 17:01:01 localhost CROND[15978]: (root) CMD (run-parts /etc/cron.hourly)
+May 13 17:01:01 localhost run-parts(/etc/cron.hourly)[15978]: starting 0anacron
+May 13 17:01:01 localhost run-parts(/etc/cron.hourly)[15987]: finished 0anacron
+May 13 17:10:01 localhost CROND[16055]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 13 17:20:01 localhost CROND[16166]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 13 17:24:58 localhost crond[2910]: (CRON) INFO (Shutting down)
+May 13 20:21:57 localhost crond[2944]: (CRON) STARTUP (1.4.4)
+May 13 20:21:57 localhost crond[2944]: (CRON) INFO (RANDOM_DELAY will be scaled with factor 23% if used.)
+May 13 20:22:02 localhost crond[2944]: (CRON) INFO (running with inotify support)
+May 13 20:30:01 localhost CROND[3644]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 13 20:30:01 localhost CROND[3645]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 13 20:30:22 localhost /usr/bin/crontab[4864]: (root) LIST (root)
+May 13 20:48:49 localhost crond[2944]: (CRON) INFO (Shutting down)
+May 14 14:29:34 localhost crond[2900]: (CRON) STARTUP (1.4.4)
+May 14 14:29:34 localhost crond[2900]: (CRON) INFO (RANDOM_DELAY will be scaled with factor 72% if used.)
+May 14 14:29:39 localhost crond[2900]: (CRON) INFO (running with inotify support)
+May 14 14:30:01 localhost CROND[3386]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 14 14:30:01 localhost CROND[3385]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 14 14:30:22 localhost /usr/bin/crontab[4656]: (root) LIST (root)
+May 14 14:40:02 localhost CROND[5186]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 14 14:50:01 localhost CROND[5341]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 14 15:00:01 localhost CROND[5460]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 14 15:00:01 localhost CROND[5459]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 14 15:01:01 localhost CROND[6532]: (root) CMD (run-parts /etc/cron.hourly)
+May 14 15:01:02 localhost run-parts(/etc/cron.hourly)[6532]: starting 0anacron
+May 14 15:01:02 localhost anacron[6544]: Anacron started on 2019-05-14
+May 14 15:01:02 localhost run-parts(/etc/cron.hourly)[6546]: finished 0anacron
+May 14 15:01:02 localhost anacron[6544]: Will run job `cron.daily' in 20 min.
+May 14 15:01:02 localhost anacron[6544]: Jobs will be executed sequentially
+May 14 15:10:01 localhost CROND[6603]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 14 15:20:01 localhost CROND[6718]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 14 15:21:02 localhost anacron[6544]: Job `cron.daily' started
+May 14 15:21:02 localhost run-parts(/etc/cron.daily)[6805]: starting cups
+May 14 15:21:02 localhost run-parts(/etc/cron.daily)[6813]: finished cups
+May 14 15:21:02 localhost run-parts(/etc/cron.daily)[6805]: starting logrotate
+May 14 15:21:02 localhost run-parts(/etc/cron.daily)[6836]: finished logrotate
+May 14 15:21:02 localhost run-parts(/etc/cron.daily)[6805]: starting makewhatis.cron
+May 14 15:21:03 localhost run-parts(/etc/cron.daily)[6998]: finished makewhatis.cron
+May 14 15:21:03 localhost run-parts(/etc/cron.daily)[6805]: starting mlocate.cron
+May 14 15:21:09 localhost run-parts(/etc/cron.daily)[7010]: finished mlocate.cron
+May 14 15:21:09 localhost run-parts(/etc/cron.daily)[6805]: starting prelink
+May 14 15:21:09 localhost run-parts(/etc/cron.daily)[7022]: finished prelink
+May 14 15:21:09 localhost run-parts(/etc/cron.daily)[6805]: starting readahead.cron
+May 14 15:21:09 localhost run-parts(/etc/cron.daily)[7034]: finished readahead.cron
+May 14 15:21:09 localhost run-parts(/etc/cron.daily)[6805]: starting tmpwatch
+May 14 15:21:09 localhost run-parts(/etc/cron.daily)[7072]: finished tmpwatch
+May 14 15:21:09 localhost anacron[6544]: Job `cron.daily' terminated
+May 14 15:21:09 localhost anacron[6544]: Normal exit (1 job run)
+May 14 15:30:01 localhost CROND[7276]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 14 15:30:01 localhost CROND[7275]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 14 15:40:01 localhost CROND[8740]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 14 15:50:01 localhost CROND[8878]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 14 16:00:01 localhost CROND[9031]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 14 16:00:01 localhost CROND[9032]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 14 16:00:18 localhost /usr/bin/crontab[10290]: (root) LIST (root)
+May 14 16:01:01 localhost CROND[10585]: (root) CMD (run-parts /etc/cron.hourly)
+May 14 16:01:01 localhost run-parts(/etc/cron.hourly)[10585]: starting 0anacron
+May 14 16:01:01 localhost run-parts(/etc/cron.hourly)[10594]: finished 0anacron
+May 14 16:10:01 localhost CROND[10670]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 14 16:20:01 localhost CROND[10848]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 14 16:30:01 localhost CROND[10921]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 14 16:30:01 localhost CROND[10920]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 14 16:40:01 localhost CROND[11096]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 14 16:50:01 localhost CROND[11156]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 14 17:00:01 localhost CROND[11278]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 14 17:00:01 localhost CROND[11280]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 14 17:01:02 localhost CROND[11362]: (root) CMD (run-parts /etc/cron.hourly)
+May 14 17:01:02 localhost run-parts(/etc/cron.hourly)[11362]: starting 0anacron
+May 14 17:01:02 localhost run-parts(/etc/cron.hourly)[11371]: finished 0anacron
+May 14 17:09:19 localhost crond[2900]: (CRON) INFO (Shutting down)
+May 15 09:53:52 localhost crond[2897]: (CRON) STARTUP (1.4.4)
+May 15 09:53:52 localhost crond[2897]: (CRON) INFO (RANDOM_DELAY will be scaled with factor 14% if used.)
+May 15 09:53:57 localhost crond[2897]: (CRON) INFO (running with inotify support)
+May 15 10:00:01 localhost CROND[3430]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 15 10:00:01 localhost CROND[3431]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 10:00:22 localhost /usr/bin/crontab[4690]: (root) LIST (root)
+May 15 10:01:01 localhost CROND[4985]: (root) CMD (run-parts /etc/cron.hourly)
+May 15 10:01:01 localhost run-parts(/etc/cron.hourly)[4985]: starting 0anacron
+May 15 10:01:01 localhost anacron[4997]: Anacron started on 2019-05-15
+May 15 10:01:01 localhost run-parts(/etc/cron.hourly)[4999]: finished 0anacron
+May 15 10:01:01 localhost anacron[4997]: Will run job `cron.daily' in 24 min.
+May 15 10:01:01 localhost anacron[4997]: Jobs will be executed sequentially
+May 15 10:10:02 localhost CROND[5137]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 10:20:01 localhost CROND[5459]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 10:25:01 localhost anacron[4997]: Job `cron.daily' started
+May 15 10:25:01 localhost run-parts(/etc/cron.daily)[5522]: starting cups
+May 15 10:25:01 localhost run-parts(/etc/cron.daily)[5530]: finished cups
+May 15 10:25:01 localhost run-parts(/etc/cron.daily)[5522]: starting logrotate
+May 15 10:25:02 localhost run-parts(/etc/cron.daily)[5537]: finished logrotate
+May 15 10:25:02 localhost run-parts(/etc/cron.daily)[5522]: starting makewhatis.cron
+May 15 10:25:03 localhost run-parts(/etc/cron.daily)[5699]: finished makewhatis.cron
+May 15 10:25:03 localhost run-parts(/etc/cron.daily)[5522]: starting mlocate.cron
+May 15 10:25:12 localhost run-parts(/etc/cron.daily)[5718]: finished mlocate.cron
+May 15 10:25:12 localhost run-parts(/etc/cron.daily)[5522]: starting prelink
+May 15 10:25:12 localhost run-parts(/etc/cron.daily)[5730]: finished prelink
+May 15 10:25:12 localhost run-parts(/etc/cron.daily)[5522]: starting readahead.cron
+May 15 10:25:12 localhost run-parts(/etc/cron.daily)[5742]: finished readahead.cron
+May 15 10:25:12 localhost run-parts(/etc/cron.daily)[5522]: starting tmpwatch
+May 15 10:25:12 localhost run-parts(/etc/cron.daily)[5780]: finished tmpwatch
+May 15 10:25:12 localhost anacron[4997]: Job `cron.daily' terminated
+May 15 10:25:12 localhost anacron[4997]: Normal exit (1 job run)
+May 15 10:30:01 localhost CROND[5832]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 10:30:01 localhost CROND[5831]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 15 10:30:19 localhost /usr/bin/crontab[7091]: (root) LIST (root)
+May 15 10:40:01 localhost CROND[7511]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 10:50:01 localhost CROND[7745]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 11:00:01 localhost CROND[8007]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 11:00:01 localhost CROND[8008]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 15 11:00:19 localhost /usr/bin/crontab[9267]: (root) LIST (root)
+May 15 11:01:01 localhost CROND[9561]: (root) CMD (run-parts /etc/cron.hourly)
+May 15 11:01:01 localhost run-parts(/etc/cron.hourly)[9561]: starting 0anacron
+May 15 11:01:01 localhost run-parts(/etc/cron.hourly)[9570]: finished 0anacron
+May 15 11:10:01 localhost CROND[9678]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 11:20:01 localhost CROND[9984]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 11:30:01 localhost CROND[10233]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 11:30:01 localhost CROND[10234]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 15 11:30:19 localhost /usr/bin/crontab[11493]: (root) LIST (root)
+May 15 11:40:01 localhost CROND[12204]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 11:50:02 localhost CROND[12440]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 12:00:01 localhost CROND[12695]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 12:00:01 localhost CROND[12696]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 15 12:00:19 localhost /usr/bin/crontab[13955]: (root) LIST (root)
+May 15 12:01:01 localhost CROND[14249]: (root) CMD (run-parts /etc/cron.hourly)
+May 15 12:01:01 localhost run-parts(/etc/cron.hourly)[14249]: starting 0anacron
+May 15 12:01:01 localhost run-parts(/etc/cron.hourly)[14258]: finished 0anacron
+May 15 12:20:01 localhost CROND[14946]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 12:30:01 localhost CROND[15354]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 12:30:01 localhost CROND[15355]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 15 12:31:11 localhost /usr/bin/crontab[16736]: (root) LIST (root)
+May 15 12:40:01 localhost CROND[17143]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 12:50:01 localhost CROND[17591]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 13:00:02 localhost CROND[18204]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 13:00:02 localhost CROND[18203]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 15 13:00:20 localhost /usr/bin/crontab[19462]: (root) LIST (root)
+May 15 13:01:01 localhost CROND[19757]: (root) CMD (run-parts /etc/cron.hourly)
+May 15 13:01:01 localhost run-parts(/etc/cron.hourly)[19757]: starting 0anacron
+May 15 13:01:01 localhost run-parts(/etc/cron.hourly)[19766]: finished 0anacron
+May 15 13:10:01 localhost CROND[19860]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 13:20:01 localhost CROND[20545]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 13:30:01 localhost CROND[21060]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 15 13:30:01 localhost CROND[21059]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 13:30:19 localhost /usr/bin/crontab[22318]: (root) LIST (root)
+May 15 13:40:01 localhost CROND[23095]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 13:50:01 localhost CROND[23155]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 14:00:01 localhost CROND[23218]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 14:00:01 localhost CROND[23219]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 15 14:00:18 localhost /usr/bin/crontab[24477]: (root) LIST (root)
+May 15 14:01:01 localhost CROND[24772]: (root) CMD (run-parts /etc/cron.hourly)
+May 15 14:01:01 localhost run-parts(/etc/cron.hourly)[24772]: starting 0anacron
+May 15 14:01:01 localhost run-parts(/etc/cron.hourly)[24781]: finished 0anacron
+May 15 14:10:54 localhost CROND[24999]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 14:20:01 localhost CROND[25407]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 14:30:01 localhost CROND[25576]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 15 14:30:01 localhost CROND[25575]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 14:30:17 localhost /usr/bin/crontab[26834]: (root) LIST (root)
+May 15 14:40:01 localhost CROND[27270]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 14:50:01 localhost CROND[27381]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 15:00:01 localhost CROND[27518]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 15:00:01 localhost CROND[27519]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 15 15:00:15 localhost /usr/bin/crontab[28777]: (root) LIST (root)
+May 15 15:01:01 localhost CROND[29072]: (root) CMD (run-parts /etc/cron.hourly)
+May 15 15:01:01 localhost run-parts(/etc/cron.hourly)[29072]: starting 0anacron
+May 15 15:01:01 localhost run-parts(/etc/cron.hourly)[29081]: finished 0anacron
+May 15 15:10:01 localhost CROND[29181]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 15:20:01 localhost CROND[29655]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 15:30:01 localhost CROND[29970]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 15 15:30:01 localhost CROND[29971]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 15:30:16 localhost /usr/bin/crontab[31237]: (root) LIST (root)
+May 15 15:40:01 localhost CROND[31792]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 15:50:01 localhost CROND[32652]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 16:00:01 localhost CROND[33146]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 15 16:00:01 localhost CROND[33145]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 16:00:15 localhost /usr/bin/crontab[34404]: (root) LIST (root)
+May 15 16:01:01 localhost CROND[34699]: (root) CMD (run-parts /etc/cron.hourly)
+May 15 16:01:01 localhost run-parts(/etc/cron.hourly)[34699]: starting 0anacron
+May 15 16:01:01 localhost run-parts(/etc/cron.hourly)[34708]: finished 0anacron
+May 15 16:10:01 localhost CROND[35041]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 16:20:01 localhost CROND[35525]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 16:30:01 localhost CROND[36438]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 16:30:01 localhost CROND[36437]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 15 16:30:19 localhost /usr/bin/crontab[37696]: (root) LIST (root)
+May 15 16:40:01 localhost CROND[38361]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 16:50:01 localhost CROND[38511]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 17:00:01 localhost CROND[38626]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 17:00:01 localhost CROND[38627]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 15 17:00:19 localhost /usr/bin/crontab[39885]: (root) LIST (root)
+May 15 17:01:01 localhost CROND[40180]: (root) CMD (run-parts /etc/cron.hourly)
+May 15 17:01:01 localhost run-parts(/etc/cron.hourly)[40180]: starting 0anacron
+May 15 17:01:01 localhost run-parts(/etc/cron.hourly)[40189]: finished 0anacron
+May 15 17:10:02 localhost CROND[40338]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 17:20:01 localhost CROND[40537]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 17:30:01 localhost CROND[41024]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 15 17:30:01 localhost CROND[41023]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 17:30:19 localhost /usr/bin/crontab[42338]: (root) LIST (root)
+May 15 17:40:01 localhost CROND[43079]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 15 17:47:10 localhost crond[2897]: (CRON) INFO (Shutting down)
+May 15 21:24:43 localhost crond[2898]: (CRON) STARTUP (1.4.4)
+May 15 21:24:43 localhost crond[2898]: (CRON) INFO (RANDOM_DELAY will be scaled with factor 80% if used.)
+May 15 21:24:50 localhost crond[2898]: (CRON) INFO (running with inotify support)
+May 15 21:29:49 localhost crond[2898]: (CRON) INFO (Shutting down)
+May 16 09:48:51 localhost crond[2899]: (CRON) STARTUP (1.4.4)
+May 16 09:48:51 localhost crond[2899]: (CRON) INFO (RANDOM_DELAY will be scaled with factor 89% if used.)
+May 16 09:49:00 localhost crond[2899]: (CRON) INFO (running with inotify support)
+May 16 09:50:01 localhost CROND[3504]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 10:00:01 localhost CROND[3584]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 10:00:01 localhost CROND[3585]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 16 10:00:21 localhost /usr/bin/crontab[4844]: (root) LIST (root)
+May 16 10:01:01 localhost CROND[5137]: (root) CMD (run-parts /etc/cron.hourly)
+May 16 10:01:01 localhost run-parts(/etc/cron.hourly)[5137]: starting 0anacron
+May 16 10:01:01 localhost anacron[5149]: Anacron started on 2019-05-16
+May 16 10:01:01 localhost run-parts(/etc/cron.hourly)[5151]: finished 0anacron
+May 16 10:01:01 localhost anacron[5149]: Will run job `cron.daily' in 40 min.
+May 16 10:01:01 localhost anacron[5149]: Jobs will be executed sequentially
+May 16 10:10:01 localhost CROND[5208]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 10:20:01 localhost CROND[5349]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 10:30:01 localhost CROND[5411]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 10:30:01 localhost CROND[5412]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 16 10:30:20 localhost /usr/bin/crontab[6671]: (root) LIST (root)
+May 16 10:40:02 localhost CROND[7057]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 10:41:01 localhost anacron[5149]: Job `cron.daily' started
+May 16 10:41:01 localhost run-parts(/etc/cron.daily)[7061]: starting cups
+May 16 10:41:01 localhost run-parts(/etc/cron.daily)[7069]: finished cups
+May 16 10:41:01 localhost run-parts(/etc/cron.daily)[7061]: starting logrotate
+May 16 10:41:02 localhost run-parts(/etc/cron.daily)[7076]: finished logrotate
+May 16 10:41:02 localhost run-parts(/etc/cron.daily)[7061]: starting makewhatis.cron
+May 16 10:41:03 localhost run-parts(/etc/cron.daily)[7238]: finished makewhatis.cron
+May 16 10:41:03 localhost run-parts(/etc/cron.daily)[7061]: starting mlocate.cron
+May 16 10:41:11 localhost run-parts(/etc/cron.daily)[7250]: finished mlocate.cron
+May 16 10:41:11 localhost run-parts(/etc/cron.daily)[7061]: starting prelink
+May 16 10:41:11 localhost run-parts(/etc/cron.daily)[7262]: finished prelink
+May 16 10:41:11 localhost run-parts(/etc/cron.daily)[7061]: starting readahead.cron
+May 16 10:41:11 localhost run-parts(/etc/cron.daily)[7274]: finished readahead.cron
+May 16 10:41:11 localhost run-parts(/etc/cron.daily)[7061]: starting tmpwatch
+May 16 10:41:11 localhost run-parts(/etc/cron.daily)[7312]: finished tmpwatch
+May 16 10:41:11 localhost anacron[5149]: Job `cron.daily' terminated
+May 16 10:41:11 localhost anacron[5149]: Normal exit (1 job run)
+May 16 10:50:01 localhost CROND[7927]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 11:00:01 localhost CROND[8040]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 16 11:00:01 localhost CROND[8041]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 11:00:17 localhost /usr/bin/crontab[9300]: (root) LIST (root)
+May 16 11:01:01 localhost CROND[9593]: (root) CMD (run-parts /etc/cron.hourly)
+May 16 11:01:01 localhost run-parts(/etc/cron.hourly)[9593]: starting 0anacron
+May 16 11:01:01 localhost run-parts(/etc/cron.hourly)[9602]: finished 0anacron
+May 16 11:10:01 localhost CROND[9659]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 11:20:01 localhost CROND[10148]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 11:30:01 localhost CROND[10687]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 11:30:01 localhost CROND[10688]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 16 11:30:16 localhost /usr/bin/crontab[11947]: (root) LIST (root)
+May 16 11:40:02 localhost CROND[12666]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 11:50:01 localhost CROND[12976]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 12:00:01 localhost CROND[13066]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 12:00:01 localhost CROND[13067]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 16 12:01:01 localhost CROND[14121]: (root) CMD (run-parts /etc/cron.hourly)
+May 16 12:01:01 localhost run-parts(/etc/cron.hourly)[14121]: starting 0anacron
+May 16 12:01:01 localhost run-parts(/etc/cron.hourly)[14130]: finished 0anacron
+May 16 12:01:11 localhost /usr/bin/crontab[14382]: (root) LIST (root)
+May 16 12:10:01 localhost CROND[14726]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 12:20:01 localhost CROND[14838]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 12:30:01 localhost CROND[14951]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 12:30:01 localhost CROND[14952]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 16 12:30:21 localhost /usr/bin/crontab[16211]: (root) LIST (root)
+May 16 12:40:01 localhost CROND[16558]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 12:50:01 localhost CROND[16669]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 13:00:01 localhost CROND[16782]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 13:00:01 localhost CROND[16783]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 16 13:00:19 localhost /usr/bin/crontab[18042]: (root) LIST (root)
+May 16 13:01:01 localhost CROND[18335]: (root) CMD (run-parts /etc/cron.hourly)
+May 16 13:01:02 localhost run-parts(/etc/cron.hourly)[18335]: starting 0anacron
+May 16 13:01:02 localhost run-parts(/etc/cron.hourly)[18344]: finished 0anacron
+May 16 13:10:01 localhost CROND[18453]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 13:20:01 localhost CROND[18514]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 13:30:01 localhost CROND[18627]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 13:30:01 localhost CROND[18628]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 16 13:30:20 localhost /usr/bin/crontab[19887]: (root) LIST (root)
+May 16 13:40:01 localhost CROND[20285]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 13:50:01 localhost CROND[20396]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 14:00:01 localhost CROND[20458]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 16 14:00:01 localhost CROND[20459]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 14:00:21 localhost /usr/bin/crontab[21718]: (root) LIST (root)
+May 16 14:01:01 localhost CROND[22062]: (root) CMD (run-parts /etc/cron.hourly)
+May 16 14:01:01 localhost run-parts(/etc/cron.hourly)[22062]: starting 0anacron
+May 16 14:01:01 localhost run-parts(/etc/cron.hourly)[22071]: finished 0anacron
+May 16 14:10:01 localhost CROND[22362]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 14:20:01 localhost CROND[22522]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 14:30:01 localhost CROND[22700]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 16 14:30:01 localhost CROND[22699]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 14:30:20 localhost /usr/bin/crontab[23959]: (root) LIST (root)
+May 16 14:40:01 localhost CROND[24324]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 14:50:02 localhost CROND[24785]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 15:00:01 localhost CROND[24963]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+May 16 15:00:01 localhost CROND[24964]: (root) CMD (sh /home/cheungssh/mysite/mysite/cheungssh/cheungssh_demo.sh 2>>/home/cheungssh/logs/demo.log  >> /home/cheungssh/logs/demo.log)
+May 16 15:00:18 localhost /usr/bin/crontab[26223]: (root) LIST (root)
+May 16 15:01:01 localhost CROND[26563]: (root) CMD (run-parts /etc/cron.hourly)
+May 16 15:01:01 localhost run-parts(/etc/cron.hourly)[26563]: starting 0anacron
+May 16 15:01:02 localhost run-parts(/etc/cron.hourly)[26572]: finished 0anacron
+May 16 15:10:01 localhost CROND[27002]: (root) CMD (/usr/lib64/sa/sa1 1 1)

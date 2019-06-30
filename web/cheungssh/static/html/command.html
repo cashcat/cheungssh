@@ -1,71 +1,84 @@
-<style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" href="../img/cheungssh.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"
+          charset="UTF-8">
+
+    <title>CheungSSH</title>
+
+    <link href="../css/bootstrap-3.3.5-dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <script src="../js/jquery-2.2.3.min.js"></script>
+	<script src="../js/jquery-1.8.3.min.js"></script>
+	<script>
+		var jQuery1_8 = jQuery.noConflict(true);
+	</script>
+    <script src="../js/jquery-ui.min.js"></script>
+                
+    <!--主页面的css-->
+</head>
+
+<body>
+<div id="shadow"
+     style="display:none;position: absolute;  top: 0px; bottom: 0px ;left: 0px; right: 0px; z-index: 1003;background: rgba(0,0,0,0.4); "></div>
+<div id="loadPic"
+     style="text-align: center;padding: 10px;color: white;font-weight:bold   ;border-radius:8px;background: rgba(0,0,0,0.5);;z-index: 1004;width: 200px;height:40px;margin:auto;position:fixed;top:0px;bottom:0px;right:0px;left:0px;display: none;">
+<i class="fa fa-refresh fa-spin"></i>
+    <span style="letter-spacing: 4px;">请稍后...</span>
+</div>
+
+<div class="  glyphicon glyphicon-ok  alert alert-success" id="showSuccessNotic"
+         style="position:fixed;left: 40%;right: 40%;z-index: 1004;top: 10%;display: none;"> 操作成功!
+</div>
 
 
-
-    #showCRTWindow pre::-webkit-scrollbar {
-        width: 10px;
-    }
-    #showCRTWindow pre::-webkit-scrollbar-thumb {
-        background: #09C;
-        border-radius: 4px;
+<div id="showErrorInfoDIV"
+     style="z-index: 1005;display:none;position: absolute;  top: 0px; bottom: 0px ;left: 0px; right: 0px; ;">
 
 
-    }
-</style>
+    <div style="width:auto;height: 200px;position: fixed;left: 0px;right: 0px;top: 40%;bottom: 60%;margin: auto;;"
+         id="">
+        <div class="modal "
+             style="overflow:hidden;overflow-y:hidden;position:relative;left:0px;right:0px;bottom:0px;top:0px;margin:auto;display:block;">
+            <div class="modal-dialog">
+                <div class="modal-content  ">
+                    <div class="modal-header" style="cursor: move;">
 
-<script src="../js/command.js"></script>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
 
+                        <h4 class=" glyphicon glyphicon-alert " style="color: red;">
+                                <span>错误</span>
+                        </h4>
+                    </div>
 
-<div id="mainCommand" style="width: 100%;height:100%;">
-
-    <div>
-        <div class="input-group">
-            <input class="form-control" id="inputCommand" style=""  />
-            <span class="input-group-btn" >
-		<span id="execute">
-		<button class=" btn btn-primary" style="border-radius:0px;">
-			<span class="" id="showExecuteRefresh">执行</span>
-		</button>
-		</span>
-	</span>
-            <span class="input-group-btn" id="selectServersFilter">
-		<button class=" btn btn-success" style="border-radius:0px;">
-			<span class="glyphicon glyphicon-filter">服务器</span>
-		</button>
-	</span>
-            <span class="input-group-btn" id="addCrond" style="display:none">
-		<button class=" btn btn-info" style="border-radius:0px;">
-			<span class="glyphicon glyphicon-time">定时</span>
-		</button>
-	</span>
+                    <div class="modal-body  ">
+                        <p id="showWarnContent" style="text-align:center;;color:red; font-weight:bold;">请确认您的消息?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="closeButton">好的</button>
+                    </div>
+                </div>
+            </div>
         </div>
-
-
     </div>
-    <div style="margin-top: 10px;">
-        <ul style="list-style: none; overflow: auto;max-height: 10%;" id="showCommandHistory" class="clearfix">
-        </ul>
-    </div>
+</div>
 
 
-    <!--进度条-->
-    <div class="progress" style="margin-bottom: 0px;">
-        <div id="commandProgress" class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
-             style="width: 0.1">
-            <span id="showCommandProgress" style="color: white;font-weight: bold;">0%</span>
-        </div>
-    </div>
+<div id="mainCommand" style="width: 100%;height:100%;position:absolute;top:110px">
 
 
-    <div style="min-height: 60%;display: block;width: 100%;height: 90%;padding-right:20px; padding-bottom:20px; padding-left:20px;;overflow: auto;" class="clearfix">
 
+    <div style="min-height: 60%;display: block;width: 100%;height: 90%;padding-right:20px; padding-bottom:20px; padding-left:20px;;" class="clearfix">
 
         <!--全屏按钮-->
         <!--各个CRT窗口 ,这里是样例，不用来显示，用来克隆-->
         <div id="CRTWindowExample"
-             style="width: 48%;height: 90%;display: none;margin-bottom:40px;float: left;margin-left: 2%;">
+             style="width: 48%;height: 45%;display: none;margin-bottom:40px;float: left;margin-left: 2%;min-height:500px">
             <div>
-                <h4 class=" glyphicon  glyphicon-play-circle" style="color: green;">服务器别名</h4>
+                <h4 class=" glyphicon  glyphicon-play-circle" style="color: green;">
+			<span class="title">服务器名称</span>
+		</h4>
             </div>
 
             <pre class="modal-body"
@@ -73,6 +86,7 @@
         </div>
         <!--下面的div用来显示全部CRT窗口-->
         <div id="showCRTWindow" style="height: 100%;">
+		<!--在这个div中显示-->
 
 
         </div>
@@ -81,64 +95,6 @@
     </div>
 </div>
 
-
-<div style="z-index: 1004;width:auto;height: 200px;position: absolute;left: 0px;right: 0px;top: 40%;bottom: 60%;margin: auto;display:none;"
-     id="CrondDiv">
-    <!--默认不能显示，这里的div z-index 太高了，会挡住界面的某些操作，所以是none，当开启了某些弹出层后，这里需要显示，最后需要关闭-->
-
-
-</div>
-
-
-<div id="showServersPannel"
-     style="z-index: 1004;position: absolute;left: 0px;right: 0px;top:0px;margin: auto;display:none;">
-    <div class="modal  "
-         style="overflow: visible;position:relative;left:0px;right:0px;bottom:0px;top:0px;margin:auto;display:block;">
-        <div class="modal-dialog" style="left: 0px; margin-top: 0px;padding:0px;padding-top: 0px;">
-            <div class="modal-content " id="iphoneBody">
-                <div class="modal-header" style="cursor: move;">
-
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-
-                    <h4 class=" glyphicon glyphicon-filter " style="color: green;cursor:pointer;">选择服务器</h4>
-                </div>
-
-                <div class="modal-body">
-                    <div style="height: 40px;">
-                        <span id="selectAllServers" class="glyphicon glyphicon-check"
-                              style="cursor: pointer;">&nbsp;全选</span>
-                    </div>
-                    <table class="table table-bordered table-hover table-striped  table-condensed">
-                        <thead>
-                        <tr>
-                            <th>主机组</th>
-                            <th>主机</th>
-                        </tr>
-                        </thead>
-                        <tbody id="selectServerTbody">
-
-                        <!--
-                        这里是tr，每一行
-
-                        -->
-                        </tbody>
-
-                    </table>
-
-
-                    <!---->
-
-
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success" id="selectedServers">确定
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 <div id="confirmCommandDiv"
@@ -157,15 +113,52 @@
                 <div class="modal-body">
                     <p id="showCommandWarn" style="color:red; font-weight:bold;">请确认您的消息?</p id="showWarnContent">
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="forceExecuteCommand">强制
-                    </button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal" id="closeConfirmCommandButton">
-                        放弃
-                    </button>
+                <div class="modal-footer clearfix">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="closeConfirmCommandButton" style="float:left">放弃</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="forceExecuteCommand" style="float:right">强制</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+</div>
+<!--命令输入区域-->
+<div style="position:fixed;top:0px;z-index:1;left:3%;width:97%;background:white;">
+        <div class="input-group">
+            <input class="form-control" id="inputCommand" style="height:50px;border-radius:0px;font-size:150%"  disabled/>
+            <span class="input-group-btn" id="execute">
+		<span>
+		<button class=" btn btn-success" style="border-radius:0px;height:50px">
+			<span class="" style="letter-spacing:12px;font-weight:bold">执行</span>
+		</button>
+		</span>
+	    </span>
+
+            <span class="input-group-btn" id="break">
+		<span>
+		<button class=" btn btn-danger" style="border-radius:0px;height:50px">
+			<span class="" id="showExecuteRefresh" style="letter-spacing:2px;font-weight:bold;">Ctrl+C</span>
+		</button>
+		</span>
+	     </span>
+        </div>
+
+	<div style="margin-top: 10px;">
+		<div>
+		<div style="list-style: none; overflow: auto;max-height: 10%;" id="showCommandHistory" class="clearfix"></div>
+    		</div>
+		<!--进度条-->
+		<div class="progress" style="margin-bottom: 10px;background:white;box-shadow:none;border-radius:0px;width:98%">
+			<div id="commandProgress" class="progress-bar progress-bar-success " role="progressbar" style="width: 0.1">
+				<span id="showCommandProgress" style="color: white;font-weight: bold;">0%</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script src="../js/command.js"></script>
+<script src="../js/CheungSSHGlobal.js"></script>
+</body>
+</html>

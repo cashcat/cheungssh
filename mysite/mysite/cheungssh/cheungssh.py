@@ -1,17 +1,29 @@
 #coding:utf-8
+from Queue import Queue
+import tarfile
 import sys,os,json,random,commands,queue_task,time,threading
 sys.path.append('/home/cheungssh/bin')
 sys.path.append('/home/cheungssh/mysite/mysite/cheungssh')
 sys.path.append('/home/cheungssh/mysite/mysite/cheungssh/deployment_protocol')
-from cheungssh_deployment_crontab import CheungSSHDeploymentCrontab
+from threading import Thread
+from crontab.crontab import Crontab
 import csv
 import codecs
+from BlackListAdmin import BlackListAdmin, BlackListGroupAdmin,UserAndBlackList
+from ServiceOperation import ServiceOperation
+from BatchShellAdmin import  BatchShellAdmin
+from models import ServersList
+from RemoteFileAdmin import RemoteFileAdmin
+from ScriptAdmin import ScriptAdmin
+from CheungSSHCommandSystem import CheungSSHCommandSystem
+from cheungssh_sshv2 import CheungSSH_SSH
+from ServersInventory  import ServersInventory
+from cheungssh_deployment_crontab import CheungSSHDeploymentCrontab
 from cheungssh_batch_command import CheungSSHBatchCommand
 from cheungssh_system_version import cheungssh_os
 from cheungssh_middleware.cheungssh_middleware import CheungSSHMiddleware
 from analysis_log.cheungssh_analysis_log import CheungSSHAnalyLog
 from analysis_log.cheungssh_web_analysis_view import CheungSSHAnalysisWebView
-from crontab.cheungssh_crontab_controler import CheungSSHCrontabControler
 from cheungssh_active_ssh import CheungSSHActiveSSH
 from network_topology import Topology
 import cheungssh_page_audit
@@ -19,7 +31,6 @@ from cheungssh_login import CheungSSHLoginUserNotify
 from cheungssh_app_admin import CheungSSHAppAdmin
 import get_file_check
 from deployment_protocol.cheungssh_deployment_admin import DeploymentAdmin
-from remote_file_admin import RemoteFileAdmin
 from cheungssh_ssh_check import CheungSSHCheck
 from cheungssh_error import CheungSSHError
 from client_info import resolv_client
@@ -27,17 +38,14 @@ from django.contrib.auth.models import User,Group
 from django.http import  HttpResponse,HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.contrib.auth import authenticate,login,logout
-from mysite.cheungssh.models import ServerConf
 import path_search,crond_record
 from permission_check import permission_check
 from Return_http import ajax_http
 from parameters import parameters
 from cheungssh_thread_queue import CheungSSHPool
 import cheungssh_modul_controler
-from crontab.cheungssh_crontab_controler import CheungSSHCrontabControler
 from cheungssh_script import CheungSSHScript
 import IP
-import cheungssh_web,login_check
 import re,platform
 from cheungssh_file_admin import FileAdmin
 import global_parameters,cheungssh_settings
@@ -129,84 +137,6 @@ def cheungssh_logout(request):
 		info="%s(%s)"  % (callback,info)
 	return HttpResponse(info)
 
-@login_check.login_check('删除SSHKey')
-@permission_check('cheungssh.delete_keyfile')
-@ajax_http
-def delete_keyfile(request):
-	username=request.user.username
-	cheungssh_info={"status":False,"content":""}
-	try:
-		parameters=request.GET.get("parameters")
-		try:
-			parameters=json.loads(parameters)
-		except Exception,e:
-			raise CheungSSHError("CHB0000000022")
-		if not type({})== type(parameters):raise CheungSSHError("CHB0000000022")
-		owner=parameters["username"]
-		filename=parameters["filename"]
-		if request.user.is_superuser:
-			
-			full_path=os.path.join(cheungssh_settings.keyfile_dir,username,filename)
-			
-		else:
-			
-			if not username==owner:
-				raise CheungSSHError("CHB0000000023")
-			else:
-				
-				pass
-		if not os.path.isfile(full_path):
-			
-			pass
-		else:
-			os.remove(full_path) 
-		line={"owner":username,"keyfile":filename}
-		line=json.dumps(line,encoding="utf8",ensure_ascii=False)
-		REDIS.lrem("keyfile.list",line,0) 
-		cheungssh_info["status"]=True
-	except Exception,e:
-		cheungssh_info["status"]=False
-		cheungssh_info["content"]=str(e)
-	return cheungssh_info
-@login_check.login_check('本地上传文件')
-@ajax_http
-def upload_keyfile(request):
-	username=request.user.username
-	cheungssh_info={"status":True,"content":""}
-	fid=str(random.randint(90000000000000000000,99999999999999999999))
-	info={"status":False,"content":"","path":""}
-	if request.method=="POST":
-		filename=str(request.FILES.get("file"))
-		file_content=request.FILES.get('file').read()
-		os.chdir(cheungssh_settings.keyfile_dir)
-		
-		full_dir=os.path.join(cheungssh_settings.keyfile_dir,username)
-		if not os.path.isdir(full_dir):
-			
-			os.mkdir(username)
-		os.chdir(username)
-		with open(filename.encode('utf8'),"wb") as f:
-			f.write(file_content)
-		line={"owner":username,"keyfile":filename}
-		line=json.dumps(line,encoding="utf8",ensure_ascii=False)
-		REDIS.rpush("keyfile.list",line)
-	return cheungssh_info
-@ajax_http
-def show_keyfile_list(request):
-	cheungssh_info={"status":False,"content":[]}
-	username=request.user.username
-	try:
-		data=REDIS.lrange("keyfile.list",0,-1)
-		for _line in data:
-			line=json.loads(_line)
-			if username==line["owner"] or request.user.is_superuser:
-				
-				cheungssh_info["content"].append(line)
-		cheungssh_info["status"]=True
-	except Exception,e:
-		cheungssh_info["status"]=False
-		cheungssh_info["content"]=str(e)
-	return cheungssh_info
 @login_check.login_check('PC上传') 
 
 
@@ -250,50 +180,16 @@ def upload_log_file(request):
 
 
 
+@login_check.login_check('删除脚本')
 @ajax_http
 def delete_script(request):
-	username=request.user.username
-	filename=request.GET.get("filename")
-	cheungssh_info={"status":False,"content":""}
-	full_path=os.path.join(cheungssh_settings.script_dir,username,filename)
-	try:
-		data=REDIS.hget("scripts",filename)
-		if data is None:
-			pass
-		else:
-			data=json.loads(data)
-			if filename==data["script"] and (request.user.is_superuser or username==data["owner"]):
-				REDIS.hdel("scripts",filename)
-				try:
-					os.remove(full_path)
-					print "delte.."
-				except:
-					pass
-		cheungssh_info["status"]=True
-	except Exception,e:
-		cheungssh_info["content"]=str(e)
-		cheungssh_info["status"]=False
-	return cheungssh_info
+	return ScriptAdmin(request,REDIS).delete_script(request.GET.get("script_name"))
+
 @login_check.login_check('查看脚本清单')
 @permission_check('cheungssh.show_script_list')
 @ajax_http
 def scripts_list(request):
-	username=request.user.username
-	cheungssh_info={"status":False,"content":""}
-	try:
-		
-		data=REDIS.hgetall("scripts")
-		info={}
-		for filename in data.keys():
-			_data=json.loads(data[filename])
-			if request.user.is_superuser or username==_data["owner"]:
-				info[filename]=_data
-		cheungssh_info["content"]=info
-		cheungssh_info["status"]=True
-	except Exception,e:
-		cheungssh_info["content"]=str(e)
-		cheungssh_info["status"]=False
-	return cheungssh_info
+	return ScriptAdmin(request,REDIS).get_all_scripts()
 
 @login_check.login_check('上传脚本')
 @ajax_http
@@ -341,47 +237,18 @@ def pathsearch(request):
 	info['content']=pathinfo
 	return info
 
+@ajax_http
+def mark_ssh_as_active(request):
+	return CheungSSHCommandSystem(request,REDIS).mark_ssh_as_active()
+
 @login_check.login_check('服务器信息修改')
 @permission_check('cheungssh.modify_server')
 @ajax_http
 def config_modify(request):
-	cheungssh_info={"content":"该服务器不存在 !","status":False}
 	host=request.GET.get('host')
-	username=request.user.username
+	host = json.loads(host)
 	is_super=request.user.is_superuser
-	try:
-		try:
-			host=json.loads(host)
-		except Exception,e:
-			raise CheungSSHError("CHB0000000008")
-		servers_list=REDIS.lrange("servers.config.list",0,-1)
-		if servers_list is None:raise CheungSSHError("当前系统没有服务器")
-		else:
-			id=host["id"]
-			for _s in servers_list:
-				
-				s=json.loads(_s)
-				if str(id)==s["id"]:
-					if username==host["owner"] or is_super:
-						
-						if host["password"]         == "******":
-							host["password"]=s["password"]
-						if host["sudo_password"]    == "******":
-							host["sudo_password"]=s["sudo_password"]
-						if host["su_password"]      == "******":
-							host["su_password"]=s["su_password"]
-						if host["keyfile_password"] == "******":
-							host["keyfile_password"]=s["keyfile_password"]
-						REDIS.lrem("servers.config.list",_s,0) 
-						host=json.dumps(host,encoding="utf8",ensure_ascii=False)
-						REDIS.rpush("servers.config.list",host) 
-						cheungssh_info["status"]=True
-						cheungssh_info["content"]=""
-						break
-	except Exception,e:
-		cheungssh_info['content']=str(e)
-		cheungssh_info["status"]=False
-	return cheungssh_info
+	return ServersInventory().modify_server(**host)
 
 
 
@@ -391,106 +258,39 @@ def config_modify(request):
 @ajax_http
 def config_add(request):
 	host =request.GET.get("host")
-        cheungssh_info={"content":"","status":False}
-	id=str(random.randint(90000000000,99999999999))
 	client_info=resolv_client(request)
 	try:
-		try:
-			host=json.loads(host)
-		except Exception,e:
-			print host
-			raise CheungSSHError("CHB0000000006")
-		host["id"]=id
-		cheungssh_info["content"]=id 
-		host["owner"]=client_info["owner"]
-		host=json.dumps(host,encoding="utf8",ensure_ascii=False) 
-		REDIS.rpush("servers.config.list",host)
-		cheungssh_info["status"]=True
+		host=json.loads(host)
 	except Exception,e:
 		cheungssh_info["status"]=False
 		cheungssh_info['content']=str(e)
-	return cheungssh_info
+		return cheungssh_info
+	
+	host["alias"] = re.sub(" +","",host["alias"])
+	host["ip"] = re.sub(" +","",host["ip"])
+	return ServersInventory().add_server(**host)
 @login_check.login_check('查看服务器配置',False)
 
 @ajax_http
 def load_servers_list(request):
-	cheungssh_info={"content":[],"status":True}
-	servers_list=REDIS.lrange("servers.config.list",0,-1)
+	print 1234
 	username=request.user.username
 	is_super=request.user.is_superuser
-	if servers_list is None:
-		cheungssh_info["content"]=[] 
+	if is_super:
+		return ServersInventory().get_server()
 	else:
-		
-		for _line in servers_list:
-			line=json.loads(_line)
-			if username==line["owner"]  or is_super :
-				
-				line["password"]        ="******"
-				line["su_password"]     ="******"
-				line["sudo_password"]   ="******"
-				line["keyfile_password"]="******"
-				
-				status=REDIS.get("server.status.%s" % line["id"])
-				
-				if status is None:
-					status={
-						"status":"checking",
-						"content":"检查中"
-					}
-				else:
-					status=json.loads(status)
-				line["status"]=status
-				cheungssh_info["content"].append(line)
-	return cheungssh_info
-				
+		return ServersInventory().get_server(username)
 		
 			
 @login_check.login_check('删除服务器')
 @permission_check('cheungssh.delete_server')
 @ajax_http
 def config_del(request):
-	cheungssh_info={"content":"","status":False}
-	hosts=request.GET.get("hosts") 
+	hosts= request.GET.get("hosts")
+	hosts = json.loads(hosts)
 	is_super=request.user.is_superuser
 	username=request.user.username
-	try:
-		try:
-			hosts=json.loads(hosts) 
-			if not type([])==type(hosts)  or len(hosts)==0:raise CheungSSHError("CHB0000000007-1")
-		except Exception,e:
-			raise CheungSSHError("CHB0000000007")
-		servers_list=REDIS.lrange("servers.config.list",0,-1)
-		for h in hosts:
-			for _s in servers_list:
-				s=json.loads(_s)
-				id=str(s["id"])
-				if str(h)==str(s["id"]):
-					if username==s["owner"] or is_super:
-						
-						
-						REDIS.lrem("servers.config.list",_s,0) 
-						
-						current_assets=REDIS.get("current.assets")
-						current_assets=json.loads(current_assets)
-						del current_assets[id]
-						current_assets=json.dumps(current_assets,encoding="utf8",ensure_ascii=False)
-						current_assets=REDIS.set("current.assets",current_assets)
-						
-						history_assets=REDIS.lrange('history.assets',0,-1)
-						for _a in history_assets:
-							a=json.loads(_a)
-							if a["sid"] == id:
-								REDIS.lrem("history.assets",_a,0) 
-						del a
-					else:
-						raise CheungSSHError("您无权删除该服务器!")
-					break
-		cheungssh_info["status"]=True
-	except Exception,e:
-		cheungssh_info["status"]=False
-		cheungssh_info['content']=str(e)
-	return cheungssh_info
+	return ServersInventory().delete_server(is_super=is_super,owner=username,hosts=hosts)
 
 @login_check.login_check('删除计划任务')
 @permission_check('cheungssh.crond_del')
@@ -613,93 +413,23 @@ def local_upload_show(request):
 @login_check.login_check('',False)
 @ajax_http
 def get_command_result(request):
-	cheungssh_info={"content":{"content":"","stage":"running","status":None}, "status":True,"progress":0}
-	tid=request.GET.get("tid")
-	sid=request.GET.get("sid")
-	content="" 
-	try:
-		total=REDIS.get("total.%s" % tid)
-		current=REDIS.get("current.%s" % tid)
-		try:
-			if total is None or current is None: progress=0 
-			else:progress= "%0.2f"  % (float(current) / float(total) * 100)
-		except Exception,e:
-			raise CheungSSHError("CHB0000000012")
-		cheungssh_info["progress"]=progress
-		log_name="log.%s.%s" % (tid,sid)
-		LLEN=REDIS.llen(log_name) 
-		if not LLEN==0:
-			for i in range(LLEN):
-				_content=REDIS.lpop(log_name)
-				_content=json.loads(_content) 
-				content+=_content["content"]
-				cheungssh_info["content"]={"content":content,"stage":_content["stage"],"status":_content["status"]}
-			cheungssh_info["content"]["content"]=re.sub("""\x1B\[[0-9;]*[mK]""","",cheungssh_info["content"]["content"])
-		cheungssh_info["status"]=True
-	except Exception,e:
-		cheungssh_info["status"]=False
-		cheungssh_info["content"]=str(e)
-	return cheungssh_info
+	return CheungSSHCommandSystem(request,REDIS).get_command_result()
 	
+@login_check.login_check('请求登录服务器')
+#@permission_check('cheungssh.execute_command')
+@ajax_http
+def login_server_request(request):
+	
+	return CheungSSHCommandSystem(request,REDIS).login_server_request()
+		
+
+
 @login_check.login_check('执行命令')
 @permission_check('cheungssh.execute_command')
 @black_command_check
 @ajax_http
 def execute_command(request):
-	cheungssh_info={"status":False,'content':""}
-	try:
-		
-		id=str(random.randint(90000000000000000000,99999999999999999999))
-		
-		parameter=request.POST.get("parameters") or request.GET.get("parameters") 
-		if not parameter:
-			raise CheungSSHError("错误码:CHB0000000000")
-		try:
-			parameter=json.loads(parameter)
-		except:
-			raise CheungSSHError("错误码:CHB0000000001")
-		try:
-			servers=parameter["servers"]
-			cmd=parameter["cmd"]
-		except:
-			raise CheungSSHError("错误码:CHB0000000002")
-		
-		
-		
-		parameter["tid"]=id 
-		CheungSSHThread=CheungSSHThreadAdmin()
-
-		CheungSSHThread.run(parameter)
-
-
-		client_info=resolv_client(request)
-		client_info["cmd"]=cmd
-		#client_info["parameter"]=parameter
-		client_info=dict(client_info,**parameter)
-		
-		init_status={"content":"","status":False,"stage":"running"}#stage为running或者done,
-		client_info=dict(client_info,**init_status)
-		
-		servers=client_info["servers"]
-		_alias=[]
-		for sid in servers:
-			try:
-				host_alias=cheungssh_modul_controler.CheungSSHControler.convert_id_to_ip(sid)["content"]["alias"]		
-				_alias.append(host_alias)
-			except Exception,e:
-				
-				pass
-		client_info["alias"]=_alias
-		
-		client_info=json.dumps(client_info,encoding="utf8",ensure_ascii=False)
-		
-		REDIS.rpush('command.history',client_info)
-		cheungssh_info["content"]=id
-		cheungssh_info["status"]=True
-	except Exception,e:
-		cheungssh_info["status"]=False
-		cheungssh_info["content"]=str(e)
-	return cheungssh_info
+	return CheungSSHCommandSystem(request,REDIS).execute_command()
 	
 
 @login_check.login_check('命令操作日志')
@@ -807,25 +537,6 @@ def ssh_status(request):
 		status={"status":"checking","content":"检查中"}
 	else:
 		status=json.loads(status)
-	return status
-@ajax_http
-def ssh_check(request):
-	
-	sid=request.GET.get('sid')
-	
-	ssh=CheungSSHCheck(sid=sid)
-	ssh.run()
-	
-	status=REDIS.get("server.status.%s"%sid)
-	if status is None:
-		status={
-			"status":"checking",
-			"content":"检查中",
-			"time":time.strftime("%Y-%m-%d %H:%M:%S",time.localtime()),
-		}
-	else:
-		status=json.loads(status)
-	status["alias"]=cheungssh_modul_controler.CheungSSHControler.convert_id_to_ip(sid)["content"]["alias"]
 	return status
 def redirect_admin(reqeust):
 	return HttpResponseRedirect('/cheungssh/admin/')
@@ -1382,6 +1093,34 @@ def get_assets_conf(request):
 		cheungssh_info["status"]=False
 		cheungssh_info["content"]=str(e)
 	return cheungssh_info
+class FileUploadAndDownload(Thread):
+	def __init__(self,Q):
+		Thread.__init__(self)
+		self.Q = Q
+	def run(self):
+		while True:
+			if self.Q.empty():
+				return True
+			tid,sid,sfile,dfile,action = self.Q.get()
+			sfile = sfile.encode("utf-8")
+			dfile = dfile.encode("utf-8")
+			try:
+				host=ServersInventory().get_server(sid=sid)
+				if not host["status"]:raise CheungSSHError(host['content'])
+				host=host['content']
+				ssh=CheungSSH_SSH()
+				login=ssh.login(**host)
+				if not login["status"]:raise CheungSSHError(login["content"])
+				if action == "upload":
+					ssh.sftp_upload(tid,sid,sfile,dfile)
+				else:
+					ssh.sftp_download(tid,sid,sfile,dfile)
+			except Exception,e:
+				e = {"status":False,"content":str(e)}
+				e = json.dumps(e,encoding="utf8",ensure_ascii=False)
+				REDIS.hset(tid,"progress."+sid,e)
+				
+		
 @login_check.login_check('远程文件上传')
 @permission_check('cheungssh.remote_file_upload')
 @ajax_http
@@ -1389,34 +1128,31 @@ def filetrans_upload(request):
 	tid=str(random.randint(90000000000000000000,99999999999999999999))
 	username=request.user.username
 	cheungssh_info={"status":False,"content":""}
-	data={"tid":tid,"progress":0,"content":"","status":True}
 	try:
-		parameters=request.GET.get('parameters')
+		parameters=request.POST.get('data')
 		try:
 			parameters=json.loads(parameters)
 		except Exception,e:
 			raise CheungSSHError("CHB0000000008")
 		
-		REDIS.set("progress.%s"%tid,json.dumps(data,encoding="utf8",ensure_ascii=False))
-		
-		if not parameters.has_key("sfile") or not parameters.has_key("dfile"):raise CheungSSH("CHB0000000014")
-		sfile=os.path.join(cheungssh_settings.upload_dir,username,os.path.basename(parameters["sfile"]))  
-		dfile=parameters["dfile"]
-		if not type(parameters)==type({}):raise CheungSSHError("CHB0000000007-1")
-		host=cheungssh_modul_controler.CheungSSHControler.convert_id_to_ip(parameters["sid"])
-		if not host["status"]:raise CheungSSHError(host['content'])
-		host=host['content']
-		sftp=CheungSSHFileTransfer()
-		login=sftp.login(**host)
-		if not login["status"]:raise CheungSSHError(login["content"])
-		t=threading.Thread(target=sftp.upload,args=(sfile,dfile,tid))
-		t.start()
+		Q = Queue()
+		servers = []
+		for line in parameters:
+			sfile=os.path.join(cheungssh_settings.upload_dir,username,os.path.basename(line["sfile"]))  
+			dfile=line["dfile"]
+			sid = line["sid"]
+			Q.put((tid,sid,sfile,dfile,"upload"))
+			servers.append(sid)
+		REDIS.hset(tid,"servers",json.dumps(servers))
+		REDIS.hset(tid,"all_server_num",len(servers))
+		for i in xrange(50):
+			a=FileUploadAndDownload(Q)
+			a.start()
 		
 		cheungssh_info["status"]=True
 		cheungssh_info["content"]=tid
 	except Exception,e:
 		
-		REDIS.set("progress.%s"%tid,json.dumps(data,encoding="utf8",ensure_ascii=False))
 		cheungssh_info["status"]=False
 		cheungssh_info["content"]=str(e)
 	return cheungssh_info
@@ -1431,189 +1167,105 @@ def get_filetrans_progress(request):
 @ajax_http
 def remote_download(request):
 	tid=str(random.randint(90000000000000000000,99999999999999999999))
+	username=request.user.username
 	cheungssh_info={"status":False,"content":""}
-	try:	
-		parameters=request.GET.get('parameters')
+	try:
+		parameters=request.POST.get('data')
 		try:
 			parameters=json.loads(parameters)
 		except Exception,e:
 			raise CheungSSHError("CHB0000000008")
-		if not type(parameters)==type({}):raise CheungSSHError("CHB0000000007-1")
 		
-		data={"tid":tid,"progress":0,"content":"","status":True}
-		REDIS.set("progress.%s"%tid,json.dumps(data,encoding="utf8",ensure_ascii=False))
-		
-		if not parameters.has_key("sfile"):raise CheungSSH("CHB0000000019")
-		sfile=parameters["sfile"]
-		host=cheungssh_modul_controler.CheungSSHControler.convert_id_to_ip(parameters["sid"])
-		if not host["status"]:raise CheungSSHError(host['content'])
-		host=host['content']
-		alias=host["alias"]
-		dfile_name="{alias}.{tid}.{filename}".format(alias=alias,tid=tid,filename=os.path.basename(parameters["sfile"]))  
-		dfile_full_path=os.path.join(cheungssh_settings.download_dir,dfile_name)  
-		sftp=CheungSSHFileTransfer()
-		login=sftp.login(**host)
-		if not login["status"]:raise CheungSSHError(login["content"])
-		t=threading.Thread(target=sftp.download,args=(sfile,dfile_full_path,tid))
-		t.start()
+		Q = Queue()
+		servers = []
+		all_dfile = []
+		for line in parameters:
+			sfile = line["sfile"]
+			alias = ServersInventory().get_server(sid=line["sid"])["content"]["alias"]
+			alias = alias.encode("utf-8")
+			filename = os.path.basename(line["sfile"])
+			dfile="{alias}.{tid}.{filename}".format(alias=alias,tid=tid,filename=filename)
+			d_dir = os.path.join(cheungssh_settings.download_dir,username)
+			if not os.path.isdir(d_dir):os.makedirs(d_dir)
+			all_dfile.append(dfile)
+			dfile = os.path.join(d_dir,dfile)
+			sid = line["sid"]
+			Q.put((tid,sid,sfile,dfile,"download"))
+			servers.append(sid)
+		REDIS.hset(tid,"servers",json.dumps(servers))
+		REDIS.hset(tid,"all_server_num",len(servers))
+		for i in xrange(50):
+			a=FileUploadAndDownload(Q)
+			a.start()
 		
 		cheungssh_info["status"]=True
-		cheungssh_info["tid"]=tid
-		cheungssh_info["filename"]=dfile_name
+		cheungssh_info["content"]=tid
+		cheungssh_info["all_dfile"] = all_dfile
 	except Exception,e:
+		
 		cheungssh_info["status"]=False
 		cheungssh_info["content"]=str(e)
 	return cheungssh_info
 @ajax_http
 def create_tgz_pack(request):
 	
-	tid=str(random.randint(90000000000000000000,99999999999999999999))
+	tid = time.strftime("%Y-%m-%d.%H.%M.%S",time.localtime())
 	cheungssh_info={"status":False,"content":""}
+	username = request.user.username
 	try:
-		files=request.GET.get("files")
+		files=request.POST.get("files")
 		try:
 			files=json.loads(files)
 		except Exception,e:
 			raise CheungSSHError("CHB0000000020")
 		if not type(files)==type([]):raise CheungSSHError("CHB0000000020")
 		
-		os.chdir(cheungssh_settings.download_dir)
-		filename="%s.tgz" %tid
-		cmd="tar zcvf {filename} {files}".format(filename=filename,files=" ".join(files))
-		data=commands.getstatusoutput(cmd)
-		if data[0]:
-			raise CheungSSHError("打包失败",data[1])
-		else:
-			
-			server_head=request.META['HTTP_HOST']
-			url=os.path.join(cheungssh_settings.download_file_url,filename)
-			full_url="http://{server_head}{url}".format(server_head=server_head,url=url)
-			cheungssh_info["content"]=full_url
+		filename="%s.tar" %tid
+		url=os.path.join(cheungssh_settings.download_file_url,filename)
+		if not os.path.isdir(cheungssh_settings.download_file_url):os.makedirs(cheungssh_settings.download_file_url)
+		path  = os.path.join(cheungssh_settings.download_dir,username)
+		os.chdir(path)
+		f = tarfile.open(url,"w")
+		for name in files:
+			name = name.encode("utf-8")
+			if not  os.path.isfile(name):continue
+			f.add(name)
+		f.close()
+		
+		server_head=request.META['HTTP_HOST']
+		full_url="http://{server_head}{url}".format(server_head=server_head,url=url)
+		cheungssh_info["content"]=full_url
 		cheungssh_info["status"]=True
 	except Exception,e:
+		print e
 		cheungssh_info["status"]=False
 		cheungssh_info["content"]=str(e)
 	return cheungssh_info
-@login_check.login_check('脚本内容查看')
+@login_check.login_check('读取脚本内容')
 @permission_check('cheungssh.show_script_content')
 @ajax_http
 def get_script_content(request):
-	filename=request.GET.get("filename")
-	owner=request.GET.get("owner")
-	full_path=os.path.join(cheungssh_settings.script_dir,owner,filename)
-	return FileAdmin.get_content(full_path)
-@login_check.login_check('修改/创建脚本')
+	return ScriptAdmin(request,REDIS).get_script_content(request.GET.get("script_name"))
+@login_check.login_check('修改脚本')
+@permission_check('cheungssh.create_script')
+@ajax_http
+def rewrite_script_content(request):
+	return ScriptAdmin(request,REDIS).rewrite_script_content()
+@login_check.login_check('创建脚本')
 @permission_check('cheungssh.create_script')
 @ajax_http
 def write_script_content(request):
-	cheungssh_info={"status":False,"content":""}
-	_filename=request.POST.get('filename')
-	filename=os.path.basename(_filename)
-	filecontent=request.POST.get("content")
-	username=request.user.username
-	try:
-		if len(REDIS.hgetall("scripts"))>=9:raise CheungSSHError("CHB-BUSINESS-LIMIT")
-		try:
-			os.makedirs(os.path.join(cheungssh_settings.script_dir,username))
-		except Exception,e:
-			
-			pass
-		full_path=os.path.join(cheungssh_settings.script_dir,username,filename)
-		if not filecontent.endswith("\n"):
-			filecontent="%s\n" %filecontent
-		with open(full_path.encode('utf8'),"wb") as f:
-			f.write(filecontent)
-		filename=str(request.FILES.get("file"))
-		_data=REDIS.hget("scripts",filename)
-		if _data is None:
-			pass
-		else:
-			data=json.loads(_data)
-			if filename==data["script"]:
-				if username==data["owner"]:
-					pass
-				else:
-					raise CheungSSHError("您的操作不被允许!其他账户下存在同名脚本!")
-		cheungssh_info["content"]={
-			"script":_filename,
-			"owner":username,
-			"time":time.strftime('%Y-%m-%d %H:%M:%S',time.localtime()),
-		}
-		REDIS.hset("scripts",_filename,json.dumps(cheungssh_info["content"],encoding="utf8",ensure_ascii=False))
-		cheungssh_info["status"]=True
-	except Exception,e:
-		cheungssh_info["status"]=False
-		cheungssh_info["content"]=str(e)
-	return cheungssh_info
+	action=request.POST.get("action")
+	if action=="update":
+		return ScriptAdmin(request,REDIS).rewrite_script_content()
+	else:
+		return ScriptAdmin(request,REDIS).create_script()
 @login_check.login_check('执行脚本')
 @permission_check('cheungssh.execute_script')
 @ajax_http
-def script_init(request):
-	username=request.user.username
-	sid=request.GET.get("sid")
-	sfile=request.GET.get("sfile")
-	return CheungSSHScript.script_init(sid,sfile,username)
-@login_check.login_check('远程文件管理创建')
-@permission_check('cheungssh.remote_file_admin_create')
-@ajax_http
-def add_remote_file(request):
-	cheungssh_info={"status":False,"content":""}
-	try:
-		username=request.user.username
-		_id=str(random.randint(90000000000000000000,99999999999999999999))
-		
-		id=request.GET.get("id",_id)
-		owner=request.GET.get("owner")
-		alias=request.GET.get('alias')
-		sid=request.GET.get("server")
-		path=request.GET.get("path")
-		description=request.GET.get("description")
-		if owner==username or request.user.is_superuser:
-			cheungssh_info=RemoteFileAdmin.add_remote_file(owner=owner,path=path,description=description,id=id,server=sid,alias=alias)
-		else:
-			raise CheungSSHError("您不能把该资源授权给其他用户或者组")
-	except Exception,e:
-		cheungssh_info["status"]=False
-		cheungssh_info["content"]=str(e)
-	return cheungssh_info
-@login_check.login_check('远程文件管理列表')
-@permission_check('cheungssh.remote_file_admin_list')
-@ajax_http
-def get_remote_file_list(request):
-	super=request.user.is_superuser
-	username=request.user.username
-	return RemoteFileAdmin.get_remote_file_list(super,username)
-@ajax_http
-def delete_remote_file_list(request):
-	id=request.GET.get("id")
-	super=request.user.is_superuser
-	username=request.user.username
-	return RemoteFileAdmin.delete_remote_file_list(super,username,id)
-@login_check.login_check('远程文件内容查看')
-@permission_check('cheungssh.remote_file_admin_content_show')
-@ajax_http
-def get_remote_file_opt(request):
-	id=request.GET.get("tid")
-	action=request.GET.get('action')
-	action="GET"
-	super=request.user.is_superuser
-	username=request.user.username
-	return RemoteFileAdmin.remote_file_content(super,username,id,action)
-@login_check.login_check('远程文件内容更新')
-@permission_check('cheungssh.write_remote_file_opt')
-
-@ajax_http
-def write_remote_file_opt(request):
+def init_script(request):
+	return ScriptAdmin(request,REDIS).init_script()
 	
-	action="WRITE"
-	id=request.POST.get("tid")
-	super=request.user.is_superuser
-	super=True
-	username=request.user.username
-	file_content=request.POST.get("content")
-	if not file_content.endswith('\n'):
-		file_content="%s\n" %file_content
-	return RemoteFileAdmin.remote_file_content(super,username,id,action,file_content)
 @ajax_http
 def get_my_file_list(request):
 	username=request.user.username
@@ -1630,6 +1282,28 @@ def get_my_file_list(request):
 		cheungssh_info["status"]=False
 		cheungssh_info["content"]=str(e)
 	return cheungssh_info
+@login_check.login_check("获取批量部署任务清单")
+@permission_check("cheungssh.get_deployment_batch_list")
+@ajax_http
+def get_batch_deployment_task(request):
+	username=request.user.username
+	is_super=request.user.is_superuser
+	return DeploymentAdmin.get_batch_task_conf(username,is_super)
+
+
+
+
+@login_check.login_check("创建批量部署任务")
+@permission_check("cheungssh.deployment_batch_create")
+@ajax_http
+def batch_create_deployment_task(request):
+	username=request.user.username
+	data=request.POST.get("data")
+	return DeploymentAdmin.batch_create_task_conf(data,username)
+
+
+
+
 @login_check.login_check('创建部署任务')
 @permission_check('cheungssh.deployment_create')
 @ajax_http
@@ -1644,6 +1318,19 @@ def get_deployment_task(request):
 	username=request.user.username
 	is_super=request.user.is_superuser
 	return DeploymentAdmin.get_task_conf(username,is_super)
+
+
+@login_check.login_check("批量删除部署任务")
+@permission_check("cheungssh.deployment_batch_delete")
+@ajax_http
+def delete_batch_deployment_task(request):
+	username=request.user.username
+	is_super=request.user.is_superuser
+	taskid=request.GET.get("taskid")
+	return DeploymentAdmin.delete_batch_task_conf(username,is_super,taskid)
+
+
+
 @login_check.login_check('删除部署任务')
 @permission_check('cheungssh.deployment_delete')
 @ajax_http
@@ -1652,7 +1339,24 @@ def delete_deployment_task(request):
 	is_super=request.user.is_superuser
 	taskid=request.GET.get("taskid")
 	return DeploymentAdmin.delete_task_conf(username,is_super,taskid)
-@login_check.login_check('执行部署任务')
+
+
+@login_check.login_check("执行批量部署任务")
+@permission_check("cheungssh.batch_deployment_execute")
+@ajax_http
+def start_batch_deployment_task(request):
+	cheungssh_info={"content":"","status":False}
+	taskid=request.GET.get("taskid")
+	try:
+		if taskid is None:raise CheungSSHError("非法请求!")
+		a=DeploymentAdmin(taskid)
+		cheungssh_info=a.run_batch_deployment()
+	except Exception,e:
+		cheungssh_info={"content":str(e),"status":False}
+	return cheungssh_info
+
+
+@login_check.login_check('执行灰度部署任务')
 @permission_check('cheungssh.deployment_execute')
 @ajax_http
 def start_deployment_task(request):
@@ -1706,56 +1410,47 @@ def batch_create_servers(request):
 				continue
 			else:
 				
-				
 				real_i+=1
 				segment=line.split()
-				if len(segment)<14:
-					raise CheungSSHError("在第【%d行】,您指定的配置字段小于14个，请您填写完整的配置信息，如果不填写的，请使用#代替!" %i)
-				_login_method=segment[4].upper()
-				_port=segment[8]
-				if not _login_method=="PASSWORD" and  not _login_method=="KEY":
-					
-					raise CheungSSHError("在第【%d】行，第5个配置字段【%s】的值应该为PASSWORD或者KEY !"%(i,_login_method))
+				if len(segment)<12:
+					raise CheungSSHError("在第【%d行】,您指定的配置字段少于12个，请您填写完整的配置信息。如果字段为空的，请使用#代替。" %i)
+				_port=segment[5]
 				try:
-					
-					int(_port)
+					_port=int(_port)
 				except ValueError:
-					raise CheungSSHError("在第【%d】行，第9个字段，端口必须是一个数字!"%i)
+					raise CheungSSHError("在第【%d】行，第6个字段，端口必须是一个数字。"%i)
 				
-				_sudo=segment[9].upper()
+				_sudo=segment[6].upper()
 				if not _sudo=="N" and not _sudo=="Y":
-					raise CheungSSHError("在第【%d】行，第10个字段，sudo方式必须为Y或者N！"%(i))
+					raise CheungSSHError("在第【%d】行，第7个字段，sudo方式必须为'Y'或者'N'。"%(i))
 				
-				_su=segment[11].upper()
+				_su=segment[8].upper()
 				if not _su=="N" and  not _su=="Y":
-					raise CheungSSHError("在第【%d】行，第12个字段，su方式必须为Y或者N！"%(i))
-				tid=str(random.randint(90000000000000000000,99999999999999999999))
+					raise CheungSSHError("在第【%d】行，第9个字段，su方式必须为'Y'或者'N'。"%(i))
 				config_line={
-					"id":tid,
 					"ip":segment[0],
 					"alias":segment[1],
 					"owner":request.user.username,
 					"group":segment[2],
 					"username":segment[3],
-					"login_method":_login_method,
-					"password":segment[5],
-					"keyfile":segment[6],
-					"keyfile_password":segment[7],
+					"password":segment[4],
 					"port":_port,
 					"sudo":_sudo,
-					"sudo_password":segment[10],
+					"sudo_password":segment[7],
 					"su":_su,
-					"su_password":segment[12],
-					"description":segment[13],
+					"su_password":segment[9],
+					"os_type":segment[10],
+					"description":segment[11],
 				}
-				config_data.append(config_line)
-		if len(config_data)==0:
-			raise CheungSSHError("您尚未指定有效的服务器配置行！")
-		for _config_line in config_data:
-			
-			tmp=json.dumps(_config_line,encoding="utf8",ensure_ascii=False)
-			REDIS.rpush("servers.config.list",tmp)
-		cheungssh_info["content"]="已成功添加%d条记录"% len(config_data)
+				
+				if ServersInventory().query_server(alias=config_line["alias"])["status"]:
+					raise CheungSSHError("在第【{line_number}】行，别名【{alias}】早已存在，请更换。".format(line_number=i,alias=config_line["alias"]))
+				else:
+					
+					ServersList(**config_line).save()
+		if len(hosts)==0:
+			raise CheungSSHError("您尚未指定有效的服务器置行！")
+		cheungssh_info["content"]="已成功添加配置."
 		cheungssh_info["status"]=True
 	except Exception,e:
 		cheungssh_info["status"]=False
@@ -1826,22 +1521,23 @@ def add_active_ssh_command(request):
 @permission_check("cheungssh.get_crontab_list")
 @ajax_http
 def get_crontab_list(request):
-	return CheungSSHCrontabControler.get_crontab_list_to_web()
+	sid = request.GET.get("sid")
+	return Crontab().get_crontab_list(sid)
 @login_check.login_check("删除计划任务")
 @permission_check("delete.get_crontab_list")
 @ajax_http
 def delete_crontab_list(request):
-	sid=request.GET.get("sid")
-	tid=request.GET.get("tid")
-	return CheungSSHCrontabControler.delete_crontab(sid,tid)
+	data=request.GET.get("data")
+	data = json.loads(data)
+	return Crontab().delete_crontab_list(data)
 @login_check.login_check("创建/修改计划任务")
 @permission_check('cheungssh.create_or_modify_crontab')
 @ajax_http
-def save_crontab_to_server(request):
+def modify_crontab_list(request):
 	action=request.POST.get("action")
 	data=request.POST.get("data")
 	data=json.loads(data)
-	return CheungSSHCrontabControler.save_crontab_to_server(action=action,data=data)
+	return Crontab().modify_crontab_list(action=action,data=data)
 
 @login_check.login_check("分析本地日志文件")
 @ajax_http
@@ -1907,3 +1603,161 @@ def delete_deployment_crontab(request):
 	is_super=request.user.is_superuser
 	tid=request.GET.get("tid")
 	return CheungSSHDeploymentCrontab.delete_deployment_crontab(is_super,owner,tid)
+@login_check.login_check("查看脚本历史版本")
+@ajax_http
+def get_scripts_historic_list(request):
+	return ScriptAdmin(request,REDIS).get_scripts_historic_list()
+@login_check.login_check("重置脚本版本")
+@ajax_http
+def set_script_active_version(request):
+	return ScriptAdmin(request,REDIS).set_script_active_version()
+@login_check.login_check("查看脚本的历史内容")
+@ajax_http
+def get_script_historic_content(request):
+	return ScriptAdmin(request,REDIS).get_script_historic_content();
+@login_check.login_check("查看脚本的历史参数")
+@ajax_http
+def get_script_historic_parameters(request):
+	return ScriptAdmin(request,REDIS).get_script_historic_parameters()
+@login_check.login_check("修改脚本状态")
+@ajax_http
+def change_executable_status(request):
+	return ScriptAdmin(request,None).change_executable_status()
+@login_check.login_check("",False)
+@ajax_http
+def get_server_groups(request):
+	return ServersInventory().get_server_groups(request.GET.get("script_id"),request.GET.get("all_os"))
+@login_check.login_check("",False)
+@ajax_http
+def get_script_parameter(request):
+	return ScriptAdmin(request,None).get_script_parameter()
+@login_check.login_check("",False)
+@ajax_http
+def get_script_init_progress(request):
+	return ScriptAdmin(None,REDIS).get_script_init_progress(request.GET.get("tid"))
+@login_check.login_check("",False)
+@ajax_http
+def get_server_alias(request):
+	return ServersInventory().get_server_alias(request.POST.get("servers"))
+@login_check.login_check("查看远程文件内容")
+@ajax_http
+def get_remote_file_content(request):
+	return RemoteFileAdmin().get_remote_file_content(request)
+@login_check.login_check("创建远程文件路径")
+@ajax_http
+def add_remote_file_path(request):
+	return RemoteFileAdmin().create_path(request)
+@login_check.login_check("创建远程文件路径")
+@ajax_http
+def get_remote_file_list(request):
+	return RemoteFileAdmin().get_remote_file_list()
+@login_check.login_check("编辑远程文件内容")
+@ajax_http
+def write_remote_file_content(request):
+	return RemoteFileAdmin().write_remote_file_content(request)
+@login_check.login_check("查看文件历史清单")
+@ajax_http
+def get_remote_file_historic_list(request):
+	return RemoteFileAdmin().get_remote_file_historic_list(request)
+@login_check.login_check("恢复远程文件历史版本")
+@ajax_http
+def enable_remote_file_history_version(request):
+	return RemoteFileAdmin().enable_remote_file_history_version(request)
+@login_check.login_check("查看远程文件历史内容")
+@ajax_http
+def get_remote_file_historic_content(request):
+	return RemoteFileAdmin().get_remote_file_historic_content(request)
+@login_check.login_check("修改远程文件权限")
+@ajax_http
+def change_file_permission(request):
+	return RemoteFileAdmin().change_file_permission(request)
+@login_check.login_check("删除远程文件清单")
+@permission_check('cheungssh.delete_remote_file_list')
+@ajax_http
+def delete_remote_file_list(request):
+	return RemoteFileAdmin().delete_remote_file_list(request)
+@login_check.login_check("保存批量命令设置")
+@ajax_http
+def save_batch_shell_configuration(request):
+	return BatchShellAdmin().save_batch_shell_configuration(request)
+@login_check.login_check("查看批量命令清单")
+@ajax_http
+def get_batch_shell_list(request):
+	return BatchShellAdmin().get_batch_shell_list(request)
+@login_check.login_check("删除批量命令清单")
+@ajax_http
+def del_batch_shell(request):
+	return BatchShellAdmin().del_batch_shell(request)
+
+@login_check.login_check("保存黑名单")
+@permission_check("cheungssh.save_black_list")
+@ajax_http
+def save_black_list(request):
+	return BlackListAdmin().save_black_list(request)
+@login_check.login_check("查看黑名单")
+@permission_check("cheungssh.get_black_list")
+@ajax_http
+def get_black_list(request):
+	return BlackListAdmin().get_black_list()
+@login_check.login_check("删除黑名单")
+@permission_check("cheungssh.del_black_list")
+@ajax_http
+def del_black_list(request):
+	return BlackListAdmin().del_black_list(request)
+@login_check.login_check("保存黑名单组")
+@permission_check("cheungssh.save_black_list_group")
+@ajax_http
+def save_black_list_group(request):
+	return BlackListGroupAdmin().save_black_list_group(request)
+@login_check.login_check("查看黑名单组")
+@permission_check("cheungssh.get_black_list_group")
+@ajax_http
+def get_black_list_group(request):
+	return BlackListGroupAdmin().get_black_list_group()
+@login_check.login_check("删除黑名单组")
+@permission_check("cheungssh.del_black_list_group")
+@ajax_http
+def del_black_list_group(request):
+	return BlackListGroupAdmin().del_black_list_group(request)
+@login_check.login_check("",False)
+@ajax_http
+def get_user_and_black_list_group(request):
+	return UserAndBlackList().get_user_and_black_list_group()
+@login_check.login_check("绑定用户与黑名单")
+@permission_check("cheungssh.bind_user_with_black_list_group")
+@ajax_http
+def save_user_with_black_list_group(request):
+	return UserAndBlackList().save_user_with_black_list_group(request)
+@login_check.login_check("查看用户绑定的黑名单")
+@permission_check("cheungssh.get_user_with_black_list_group")
+@ajax_http
+def get_user_with_black_list_group(request):
+	return UserAndBlackList().get_user_with_black_list_group(request)
+@login_check.login_check("删除用户绑定的黑名单")
+@permission_check("cheungssh.del_user_with_black_list_group")
+@ajax_http
+def del_user_with_black_list_group(request):
+	return UserAndBlackList().del_user_with_black_list_group(request)
+@login_check.login_check("绑定业务操作")
+@permission_check("cheungssh.save_service_operation")
+@ajax_http
+def save_service_operation(request):
+	return ServiceOperation(request).save_service_operation()
+@login_check.login_check("常看业务操作")
+@permission_check("cheungssh.get_service_operation")
+@ajax_http
+def get_service_operation(request):
+	return ServiceOperation(request).get_service_operation()
+@login_check.login_check("删除业务操作")
+@permission_check("cheungssh.del_service_operation")
+@ajax_http
+def del_service_operation(request):
+	return ServiceOperation(request).del_service_operation()
+@login_check.login_check("执行业务操作")
+@permission_check("cheungssh.init_script_for_service_operation")
+@ajax_http
+def init_script_for_service_operation(request):
+	return ScriptAdmin(request,REDIS).init_script_for_service_operation()
+@ajax_http
+def get_login_progress(r):
+	return CheungSSHCommandSystem(r,REDIS).get_login_progress()

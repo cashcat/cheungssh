@@ -7,7 +7,7 @@
 
     <title>CheungSSH</title>
 
-    <link href="../css/jquery-ui.css" rel="stylesheet">
+    <link href="../css/jquery-ui.min.css" rel="stylesheet">
     <link href="../css/bootstrap-3.3.5-dist/css/bootstrap.css" rel="stylesheet">
     <link href="../css/font-awesome.min.css" rel="stylesheet">
 
@@ -186,8 +186,6 @@
 
 <div id="showErrorInfoDIV"
      style="z-index: 1005;display:none;position: absolute;  top: 0px; bottom: 0px ;left: 0px; right: 0px; ;">
-
-
     <div style="width:auto;height: 200px;position: fixed;left: 0px;right: 0px;top: 40%;bottom: 60%;margin: auto;;"
          id="">
         <div class="modal "
@@ -198,7 +196,9 @@
 
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
 
-                        <h4 class=" glyphicon glyphicon-alert " style="color: red;">错误</h4>
+                        <h4 class=" glyphicon glyphicon-alert " style="color: red;">
+				<span>错误</span>
+			</h4>
                     </div>
 
                     <div class="modal-body  ">
@@ -319,6 +319,36 @@
 </div>
 
 
+<div id="showFileAskDiv"
+     style="z-index: 1005;display:none;position: absolute;  top: 0px; bottom: 0px ;left: 0px; right: 0px; ;">
+    <div style="width:auto;height: 200px;position: fixed;left: 0px;right: 0px;top: 40%;bottom: 60%;margin: auto;;"
+         id="">
+        <div class="modal "
+             style="overflow:hidden;overflow-y:hidden;position:relative;left:0px;right:0px;bottom:0px;top:0px;margin:auto;display:block;">
+            <div class="modal-dialog">
+                <div class="modal-content  ">
+                    <div class="modal-header" style="cursor: move;">
+
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+
+                        <h4 class=" glyphicon glyphicon-alert ">
+				<span>交互提示</span>
+			</h4>
+                    </div>
+
+                    <div class="modal-body  ">
+                        <p id="showFileAskContent" style="text-align:center;;color:red; font-weight:bold;"></p>
+                    </div>
+                    <div class="modal-footer clearfix">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" onclick='$("#showFileAskDiv").hide("fast");stopShadow()' style="float:left">取消</button>
+                        <button type="button" class="btn btn-success" data-dismiss="modal" id="sureCreateFile" style="float:right">创建</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 
 
 
@@ -337,14 +367,13 @@
 <script src="../jqueryui/development-bundle/ui/jquery.effects.core.js"></script>
 <script src="../jqueryui/development-bundle/ui/minified/jquery.effects.shake.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
-
 <script src="../js/CheungSSHGlobal.js"></script>
-
 <script src="../js/index.js"></script>
-<script src="../js/qunee-min.js"></script>
-<script src="../js/PopupMenu.js"></script>
-<script src="../js/q.js"></script>
 
+
+
+	
+</div>
 
 <div style="z-index: 20;display:none;position: fixed;bottom:0px;color: black;letter-spacing: 1px; text-align: center;background: red">
     ©2016

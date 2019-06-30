@@ -1,0 +1,338 @@
+
+
+
+
+<div style=";height: 100%;" id="uploadFileDropz">
+    <div>
+        <h2 style="display:inline;font-family:隶书;font-weight:bold;">CheungSSH任务流程定制-批量并发</h2>
+        <hr/>
+    </div>
+    <!--总的DIV标签-->
+    <div id="allTask" style="margin-top:20px;" class="clearfix">
+        <div >
+            <h1 style="display: inline;">应用名</h1>
+            <input id="taskAppName" type="text"
+                   style="outline: none;;font-size: 150%;;display: inline;margin-left: 2%; border: none; border-bottom: 1px solid black;"
+                   class="stepName"/>
+        </div>
+        <div style="border: 1px dashed;margin-top: 4%;display: block;" class="everyOneServer col-md-12  clearfix  ">
+            <!--每一个服务器,复制这里开始-->
+            <div class="clearfix">
+                <h1 style="float:left;">服务器</h1>
+                <div id="batchDeploymentServer"  style="float:left;margin-left:2%;cursor: pointer;font-size: 150%;background:rgba(0, 0, 0, 0.0); border: none;border-bottom: 1px solid black;outline: none;margin-top:25px;width:80%;height:35px;"    >
+		</div>
+            </div>
+            <div class="serverAllStep col-md-12  ">    <!--服务器的全部步骤，下面包含一个服务器的每一个步骤-->
+                <div style="margin-bottom: 2%;margin-top: 2%;border: dashed white 1px;" class="col-md-12" id="showAllStep">
+                    <!--这里是循环一个服务器的N个步骤，复制的就是这里-->
+
+                    <div class="col-md-12 createEveryOneStep" style="margin-top: 20px;display:none">
+                        <h2 step="0" style="display: inline;" class="showStep">第 1 步</h2>
+                        <input type="text"  style="outline: none;;font-size: 150%;;display: inline;margin-left: 2%;background:rgba(0, 0, 0, 0.0); border: none; border-bottom: 1px solid black;"
+                               class="stepName" />
+
+
+                        <!--模块区域-->
+                        <div class="col-md-12" style="margin-top: 20px;">
+                            <div class="form-group col-md-12">
+                                <div class="col-md-2  input-group" style="padding-bottom: 5px;float:left">
+                                    <span class="input-group-addon" style="width: 40px;">模块</span>
+                                    <select class="form-control col-md-12 taskModulType" style="cursor: pointer;">
+                                        <option value="command" selected="command">命令</option>
+                                        <option value="commandBak">备份</option>
+                                        <option value="svn">SVN</option>
+                                        <option value="git">GIT</option>
+                                        <option value="localUpload" style="display:none">本地上传</option>
+                                        <!--
+                                        <option value="sftp">SFTP</option>
+                                        -->
+                                        <option value="script" style="display:none">脚本</option>
+                                        <option value="owner">文件属主</option>
+                                        <option value="permission">文件权限</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-10 commandModul taskModul" ><!--默认显示这里-->
+                                    <div class="col-md-6">
+                                        <div class="col-md-12 input-group" style="padding-bottom: 5px;">
+                                            <span class="input-group-addon" style="width: 90px;">命令</span>
+                                            <input type="text" class="form-control"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-10 commandBakModul taskModul" style="display: none">
+                                    <div class="col-md-6">
+                                        <div class="col-md-12 input-group" style="padding-bottom: 5px;">
+                                            <span class="input-group-addon" style="width: 90px;">源路径</span>
+                                            <input type="text" class="form-control sourceDir" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="col-md-12 input-group" style="padding-bottom: 5px;">
+                                            <span class="input-group-addon" style="width: 90px;">备份路径</span>
+                                            <input type="text" class="form-control bakDir"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-10 svnModul taskModul" style="display: none">
+                                    <div class="col-md-3">
+                                        <div class="col-md-12 input-group" style="padding-bottom: 5px;">
+                                            <span class="input-group-addon" style="width: 90px;">URL</span>
+                                            <input type="text" class="form-control svnURL"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="col-md-12 input-group" style="padding-bottom: 5px;">
+                                            <span class="input-group-addon" style="width: 90px;">用户名</span>
+                                            <input type="text" class="form-control svnUsername" placeholder="可以为空"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="col-md-12 input-group" style="padding-bottom: 5px;">
+                                            <span class="input-group-addon" style="width: 90px;">密码</span>
+                                            <input type="text" class="form-control svnPassword" placeholder="可以为空"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="col-md-12 input-group" style="padding-bottom: 5px;">
+                                            <span class="input-group-addon" style="width: 90px;">远程目录</span>
+                                            <input type="text" class="form-control svnDir"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-10 gitModul taskModul" style="display: none">
+                                    <div class="col-md-6">
+                                        <div class="col-md-12 input-group" style="padding-bottom: 5px;">
+                                            <span class="input-group-addon" style="width: 90px;">URL</span>
+                                            <input type="text" class="form-control gitURL"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="col-md-12 input-group" style="padding-bottom: 5px;">
+                                            <span class="input-group-addon" style="width: 90px;">远程目录</span>
+                                            <input type="text" class="form-control gitDir"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-10 localUploadModul taskModul" style="display: none;">
+                                    <div class="col-md-6">
+                                        <div class="col-md-12 input-group" style="padding-bottom: 5px;">
+                                            <span class="input-group-addon" style="width: 90px;">本地路径</span>
+                                            <select class="form-control col-md-12  localPath  sftpFileName" style="cursor: pointer;">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="col-md-12 input-group" style="padding-bottom: 5px;">
+                                            <span class="input-group-addon" style="width: 90px;">远程路径</span>
+                                            <input type="text" class="form-control remotePath "/>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="col-md-10 scriptModul taskModul" style="display: none;">
+                                    <div class="col-md-6">
+                                        <div class="col-md-12 input-group" style="padding-bottom: 5px;">
+                                            <span class="input-group-addon" style="width: 90px;">脚本</span>
+                                            <select class="form-control col-md-12  scriptName" style="cursor: pointer;">
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="col-md-12 input-group" style="padding-bottom: 5px;">
+                                            <span class="input-group-addon" style="width: 90px;">参数</span>
+                                            <input type="text" class="form-control scriptParameter"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-10 ownerModul taskModul" style="display: none;">
+                                    <div class="col-md-4">
+                                        <div class="col-md-12 input-group" style="padding-bottom: 5px;">
+                                            <span class="input-group-addon" style="width: 90px;">远程路径</span>
+                                            <input type="text" class="form-control ownerPath"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="col-md-12 input-group" style="padding-bottom: 5px;">
+                                            <span class="input-group-addon" style="width: 90px;">属主</span>
+                                            <input type="text" class="form-control owner"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" style="border: 1px solid;">
+                                        <div class="col-md-12 input-group" style="padding-bottom: 5px;">
+                                            <label style="font-size:150%" class="control-label col-md-6">递归</label>
+                                            <div class="col-md-6">
+                                                <span style="font-size:150%;cursor:pointer;" class="recursionDir glyphicon glyphicon-unchecked"></span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-10 permissionModul taskModul" style="display: none">
+                                    <div class="col-md-4">
+                                        <div class="col-md-12 input-group" style="padding-bottom: 5px;">
+                                            <span class="input-group-addon" style="width: 90px;">远程路径</span>
+                                            <input type="text" class="form-control permissionPath" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="col-md-12 input-group" style="padding-bottom: 5px;">
+                                            <span class="input-group-addon" style="width: 90px;">权限代码</span>
+                                            <input type="text" class="form-control permission" placeholder="比如0655"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" style="border: 1px solid;">
+                                        <div class="col-md-12 input-group" style="padding-bottom: 5px;">
+                                            <label style="font-size:150%" class="control-label col-md-6">递归</label>
+                                            <div class="col-md-6">
+                                                <span style="font-size:150%;cursor:pointer;" class="recursionDir glyphicon glyphicon-unchecked"></span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <!--上面是每一个任务模块-->
+
+
+
+
+
+                            </div>
+
+                        </div>
+                        <div>
+                            <button style="margin-top:20px;"
+                                    class="removeServerStep btn btn-danger btn-xs">
+					<span class="glyphicon glyphicon-trash"></span><span style="margin-left:3px;" >删除步骤</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!--一个服务器只有一个创建步骤的按钮-->
+                <button class="btn btn-success btn-sm  createServerStep" style="margin-bottom: 20px;">
+		<span class="glyphicon glyphicon-plus"></span><span style="margin-left:3px;">添加步骤</span>
+		</button>
+            </div>
+
+            <!--删除步骤和复制服务器步骤-->
+		<!--
+            <div style="margin-top:10px">
+                <button class="btn btn-danger  btn removeTaskServer">
+		<span class="glyphicon glyphicon-trash"></span><span style="margin-left:3px;">删除服务器</span>
+		</button>
+                <button class="btn  btn-warning copyTaskServer" style="margin-left:5px">
+		<span class="fa fa-files-o"></span><span style="margin-left:3px;">复制服务器</span>
+		</button>
+            </div>
+		-->
+        </div>
+    </div>
+    <div  style="width: 100%;margin-top:30px;" class="clearfix">
+        <label class="control-label col-md-2 col-xs-2 col-sm-2 col-lg-2">备注</label>
+        <div class="col-md-10 col-xs-10 col-sm-10 col-lg-10">
+            <textarea  id="description"  class="form-control " placeholder="请写备注"></textarea>
+
+        </div>
+
+    </div>
+    <div class="clearfix" style="margin-top:30px;">
+        <div class=" col-md-10 col-xs-10 col-sm-10 col-lg-10  col-xs-offset-2 ">
+            <button  id="deploymentAddCrond" class="btn btn-success "  style="width:100%;display:none">加入计划任务</button>
+        </div>
+    </div>
+
+
+
+    <div style="margin-top:30px;margin-bottom:50px;" class="clearfix">
+        <button   class="btn btn-primary" id="saveBatchDeploymentTask">
+	<span class="glyphicon glyphicon-floppy-save" ></span><span style="margin-left:3px;">保存设置</span>
+        </button>
+	<!--
+        <button class=" btn btn-success " id="createTaskServer">
+	<span class="glyphicon glyphicon-plus"></span>
+	<span>新增服务器</span>
+        </button>
+	-->
+        <button class="btn btn-default btn-info " id="closeEditBatchDeployment" >返回
+            <span class=" fa fa-reply "></span>
+        </button>
+
+    </div>
+
+    <div id="showDeploymentUploadFileProgresiv"
+         style=";font-weight: bold;font-size: 500%;z-index: 1004;width:80%;height:5%;margin:auto;position:fixed;top:0px;bottom:0px;right:0px;left:0px;display: none;">
+        <div class="progress">
+            <div id="showDeploymentUploadFileProgressText" class="progress-bar progress-bar-success"  ></div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+
+<div id="showBatchDeploymentHost"
+     style="z-index: 1004;position: fixed;left: 0px;right: 0px;top:0px;margin: auto;display:none;">
+    <div class="modal  "
+         style="overflow: visible;position:relative;left:0px;right:0px;bottom:0px;top:0px;margin:auto;display:block;">
+        <div class="modal-dialog" style="left: 0px; margin-top: 0px;padding:0px;padding-top: 0px;">
+            <div class="modal-content " >
+                <div class="modal-header" style="cursor: move;">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+
+                    <h4 class=" glyphicon glyphicon-filter " style="color: green;cursor:pointer;">选择服务器</h4>
+                </div>
+
+                <div class="modal-body">
+                    <table class="table table-bordered table-hover table-striped  table-condensed">
+                        <thead>
+                        <tr>
+                            <th>主机组</th>
+                            <th>主机</th>
+                        </tr>
+                        </thead>
+                        <tbody id="DeploymentSelectServerTbody">
+
+                        <!--
+                        这里是tr，每一行
+
+                        -->
+                        </tbody>
+
+                    </table>
+
+
+                    <!---->
+
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="cancelDeploymentSelect" style="float:left;">取消
+                    </button>
+                    <button type="button" class="btn btn-success" id="confirmBatachDeploymentSelect" style="float:right;">确定
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="../js/batchDeployment-create.js"></script>

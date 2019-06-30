@@ -1,3 +1,80 @@
+var browserInfo = navigator.userAgent.toLowerCase();
+if (!browserInfo.match(/webkit/)) {
+	window.location.href="warning.html"
+}
+//URL列表
+//绑定关闭错误弹窗的按钮事件
+document.getElementById("closeButton").onclick = function () {
+	$("#showErrorInfoDIV").hide("fast");
+	document.getElementById("shadow").style.display = "none";
+}
+
+function searchValue(input) {
+
+    var searchValue = input.value.toLowerCase();
+    var table = $("table").find("tbody tr");
+    table.each(
+        function () {
+            // if(!searchValue)return false;
+            var e = jQuery(this);
+            var eValue = e.text().toLowerCase();
+            if (!eValue.match(searchValue)) {
+                e.hide();
+            }
+            else {
+                e.show()
+            }
+        }
+    );
+
+};
+
+function showSuccessNotice(info) {
+    var element = "";
+    if (window.innerWidth > 737) {
+        var t = document.getElementById("showSuccessNotic");
+        if (info !== undefined) {
+            //后端额外附加信息
+            t.textContent = info
+        }
+        else {
+            t.textContent = "操作成功!";
+        }
+        $("#showSuccessNotic").slideDown("fast");
+    }
+    else {
+        var t = document.getElementById("showSuccessNoticeIphone");
+        t.style.display = "block";
+    }
+    element = t;
+    setTimeout(function () {
+        //element.style.display = "none"
+        $("#showSuccessNotic").slideUp("slow");
+    }, 2000)//三秒钟过后，自动消失
+
+}
+
+
+
+
+
+function getKey(key) {
+    // 获取URL中?之后的字符  
+    var str = location.search;
+    str = str.substring(1,str.length);
+
+    // 以&分隔字符串，获得类似name=123这样的元素数组  
+    var arr = str.split("&");
+    var obj = new Object();
+
+    // 将每一个数组元素以=分隔并赋给obj对象      
+    for(var i = 0; i < arr.length; i++) {
+        var tmp_arr = arr[i].split("=");
+        obj[decodeURIComponent(tmp_arr[0])] = decodeURIComponent(tmp_arr[1]);
+    }
+    return obj[key];
+}
+
 //全局变量
 var serverOption = ["", "IP", "别名", "端口", "主机组", "用户名", "登录方式", "秘钥文件", "密码", "归属用户", "sudo", "sudo密码", "su", "su密码", "状态", "备注"];
 
@@ -66,8 +143,42 @@ window.refuseInfo="抱歉，这里是批量操作，如果您要执行交互动�
 /*
  必须首先加载：服务器信息
  */
-
-
+var getLoginProgressURL = "/cheungssh/get_login_progress/";
+var getCrontabListURL = "/cheungssh/get_crontab_list/"
+var deleteCrontabURL = "/cheungssh/delete_crontab_list/"
+var modifyCrontabURL = "/cheungssh/modify_crontab_list/"
+var initScriptForServiceOperationURL = headURL + "cheungssh/init_script_for_service_operation/";
+var saveServiceOperationURL = "/cheungssh/save_service_operation/";
+var delServiceOperationURL = "/cheungssh/del_service_operation/";
+var getServiceOperationURL = "/cheungssh/get_service_operation/";
+var delUserWithBlackListGroupURL  = "/cheungssh/del_user_with_black_list_group/";
+var getUserWithBlackListGroupURL  = "/cheungssh/get_user_with_black_list_group/";
+var saveUserWithBlackListURL = "/cheungssh/save_user_with_black_list_group/";
+var getUserAndBlackListGroupURL = "/cheungssh/get_user_and_black_list_group/";
+var saveBlackListURL = "/cheungssh/save_black_list/";
+var saveBlackListURL = "/cheungssh/save_black_list/";
+var saveBlackListGroupURL = "/cheungssh/save_black_list_group/";
+var getBlackListGroupURL = "/cheungssh/get_black_list_group/";
+var delBlackListURL = "/cheungssh/del_black_list/";
+var delBlackListGroupURL = "/cheungssh/del_black_list_group/";
+var getBlackListURL = "/cheungssh/get_black_list/";
+var delBatchShellURL = "/cheungssh/del_batch_shell/";
+var saveBatchShellConfigurationURL = "/cheungssh/save_batch_shell_configuration/";
+var getBatchShellListURL = "/cheungssh/get_batch_shell_list/";
+var changeFilePermissionURL = headURL  + "cheungssh/change_file_permission/";
+var getRmoteFileHistoricContentURL = headURL + "cheungssh/get_remote_file_historic_content/";
+var enableRemoteFileHistoryVersionURL = headURL + "cheungssh/enable_remote_file_history_version/";
+var getRemoteFileHistoricListURL = headURL + "cheungssh/get_remote_file_historic_list/";
+var getScriptInitProgressURL = headURL + "cheungssh/get_script_init_progress/";
+var initScriptURL = headURL + "cheungssh/init_script/";
+var getServerGroupsURL = headURL + "cheungssh/get_server_groups/";
+var getScriptParametersURL = headURL + "cheungssh/get_script_parameter/";
+var changeExcutableStatusURL = headURL +"cheungssh/change_executable_status/";
+var getScriptHistoricContentURL = headURL + "cheungssh/get_script_historic_content/";
+var getScriptHistoricParametersURL = headURL + "cheungssh/get_script_historic_parameters/";
+var setScriptActiveVersionURL = headURL + "cheungssh/set_script_active_version/";
+var getScriptsHistoricListURL = headURL + "cheungssh/get_scripts_historic_list/";
+var breakCommandURL = headURL + "cheungssh/break_command/";
 var modifyURL = headURL + "cheungssh/config_modify/";
 var loginURL = "cheungssh/login/";
 var loadServerListURL = headURL + "cheungssh/load_servers_list/";
@@ -97,10 +208,12 @@ var customCreateAssetURL = headURL + "cheungssh/custom_increate_asset/";
 var loadCustomAssetsOptionURL = headURL + "cheungssh/load_assets_list/";
 var deleteAssetURL = headURL + "cheungssh/delete_assets/";
 var executeCommandURL = headURL + "cheungssh/execute_command/";
+var loginServerRquestURL = headURL + "cheungssh/login_server_request/";
 var getCommandResultURL = headURL + "cheungssh/get_command_result/";
 var dockerImageListURL = headURL + "cheungssh/docker_images_list/";
 var dockerContainerListURL = headURL + "cheungssh/docker_containers_list/";
 var dockerContainerRunURL = headURL + "cheungssh/docker_container_start/";
+var markSSHAsActiveURL = headURL + "cheungssh/mark_ssh_as_active/";
 var dockerContainerProgressURL = headURL + "cheungssh/docker_container_progress/";
 var getCurrentAssetsDataURL = headURL + "cheungssh/get_current_assets_data/";
 var getHistoryAssetsDataURL = headURL + "cheungssh/get_history_assets_data/";
@@ -113,23 +226,24 @@ var createTGZPackURL = headURL + "cheungssh/create_tgz_pack/";
 var uploadKeyFileURL = headURL + "cheungssh/upload_keyfile/";
 var deleteKeyFileURL = headURL + "cheungssh/delete_keyfile/";
 var sshStatusURL = headURL + "cheungssh/ssh_status/";//用来获取状态
-var sshCheckURL = headURL + "cheungssh/ssh_check/";//用来请求服务器检查，最后返回服务器状态
 var uploadScriptToCheungSSH = headURL + "cheungssh/upload_script/";
 var scriptListURL = headURL + "cheungssh/scripts_list/";
 var deleteScriptURL = headURL + "cheungssh/delete_script/";
 var getScriptContentURL = headURL + "cheungssh/get_script_content/";
 var writeScriptContentURL = headURL + "cheungssh/write_script_content/";
-var scriptInitURL = headURL + "cheungssh/script_init/";
+var rewriteScriptContentURL = headURL + "cheungssh/rewrite_script_content/";
 var addRemoteFileURL = headURL + "cheungssh/add_remote_file/";
 var getRemoteFileListURL = headURL + "cheungssh/get_remote_file_list/";
 var deleteRemoteFileListURL = headURL + "cheungssh/delete_remote_file_list/";
-var getRemoteFileContentURL = headURL + "cheungssh/get_remote_file_opt/";
-var writeRemoteFileContentURL = headURL + "cheungssh/write_remote_file_opt/";
+var getRemoteFileContentURL = headURL + "cheungssh/get_remote_file_content/";
+var writeRemoteFileContentURL = headURL + "cheungssh/write_remote_file_content/";
 var getUploadFileList = headURL + "cheungssh/get_my_file_list/";
 var createDeploymentTask = headURL + "cheungssh/create_deployment_task/";
 var getDeploymentTaskURL = headURL + "cheungssh/get_deployment_task/";
 var deleteDeploymentTaskURL = headURL + "cheungssh/delete_deployment_task/";
+var deleteBatchDeploymentTaskURL = headURL + "cheungssh/delete_batch_deployment_task/";
 var startDeploymentTaskURL = headURL + "cheungssh/start_deployment_task/";
+var startBatchDeploymentTaskURL = headURL + "cheungssh/start_batch_deployment_task/";
 var getDeploymentProgressURL = headURL + "cheungssh/get_deployment_progress/";
 var getDeploymentCrontabListURL=headURL+"cheungssh/get_deployment_crontab_list/";
 var deleteDeploymentCrontabURL=headURL+"cheungssh/delete_deployment_crontab/";
@@ -160,6 +274,8 @@ var delRemoteAanalysisLogfileInfoURL=headURL+"cheungssh/delete_remote_analysis_l
 var getMiddleWareInfoURL=headURL+"cheungssh/get_to_web_middleware_info/";
 var getCurrentAssetsDataExportURL=headURL+"cheungssh/get_current_assets_data_export/";
 var getSystemVersionURL=headURL+"cheungssh/get_os_type/";
+var batchDeploymentTaskServersURL=headURL+"cheungssh/batch_create_deployment_task/";
+var getBatchDeploymentTaskURL=headURL+"cheungssh/get_batch_deployment_task/";
 
 /*
  iphone6s plus屏幕尺寸  高度   736px  414px
@@ -172,9 +288,15 @@ var getSystemVersionURL=headURL+"cheungssh/get_os_type/";
 //全局变量
 
 
-function start_load_pic() {
-    document.getElementById("loadPic").style.display = "block";
-    //document.getElementById("shadow").style.display = "block";
+function start_load_pic(info) {
+	var t= document.getElementById("loadPic")
+	t.style.display = "block";
+	if (typeof info === "string"){
+		$(t).find("span").text(info)
+	}
+	else{
+		$(t).find("span").text("请稍等...")
+	}
 
 }
 
@@ -250,3 +372,77 @@ function stopShadow() {
     document.getElementById("shadow").style.display = "none"
 
 }
+$(document).on('keyup', '.searchValue', function () {
+    searchValue(this);
+});
+function welcome(){
+	alert("哈哈，欢迎回来！")
+}
+function getRemoteFileSetValue(path,server,alias,description){
+    if(/^ *$/.test(path)  || /^ *$/.test(server) ){
+        //不可以为为空
+        $("#remoteFileEditDiv").effect("shake");
+        return false;
+    }
+    else{
+        var _data={"path":path,"sid":server,"description":description,"alias":alias};
+        //根据保存按钮上是否有id，如果有id则说明是更新，否则是创建
+        jQuery.ajax({
+            "url":addRemoteFileURL,
+            "data":{"data":JSON.stringify(_data)},
+            "dataType":"jsonp",
+            "beforeSend":start_load_pic,
+            "complete":stop_load_pic,
+            "error":errorAjax,
+            "success":function(data){
+		if(data.existing === true){
+		}
+                if(!data.status){
+                    showErrorInfo(data.content);
+                    return false;
+                }
+		else if(data.existing === true){
+                    	closeEditDiv();
+			document.getElementById("writeRemoteFileContentButton").setAttribute("tid",data.remote_file_id)
+			//定义的文件存在，可以直接打开文件进行编辑
+			document.getElementById("showRemoteFileContent").value = data.content;
+			document.getElementById("remoteFileArea").style.display="block";
+			$("#remoteFileArea").animate({
+                    		"top":"0%",
+                	});
+			return true;
+		}
+		else if(data.ask === true){
+                    	closeEditDiv();
+			document.getElementById("writeRemoteFileContentButton").setAttribute("tid",data.remote_file_id)
+			startShadow();
+			document.getElementById("showFileAskContent").textContent = data.content;
+			$("#showFileAskDiv").show("fast")
+		}
+                else{
+                    	closeEditDiv();
+			loadRemoteFileList()
+			return false;
+                }
+            }
+        });
+    }
+}
+
+$(document).on("click",".empty",function(){
+	if($(this).find("span").eq(0).hasClass("glyphicon-unchecked")){
+		console.log("选中")
+		$(this).find("span").eq(0).removeClass("glyphicon-unchecked").addClass("glyphicon-check")
+	}
+	else{
+		console.log("不选中")
+		$(this).find("span").eq(0).removeClass("glyphicon-check").addClass("glyphicon-unchecked")
+	}
+})
+$(document).on("click",".cancelDiv",function(){
+	$(this).parent().parent().parent().parent().parent().hide("fast")
+	stopShadow()
+})
+//拖动部分
+
+    $( ".modal-content" ).draggable();//窗口拖动

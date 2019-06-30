@@ -4,53 +4,14 @@
 
 
 
-
 var menu = [
-    {
-	"培训介绍":{
-		"class":"glyphicon glyphicon-film",
-		"id":"train"
-	}
-    },
-    {
-        "日志绘图": {
-            "class": "glyphicon glyphicon-picture",
-            "id": "home"
-        }
-    },
-
-
     {
         "主机配置": {
             "class": "glyphicon glyphicon-globe",
             "id": "loadServers"
         }
     },
-    {
-        "网络拓扑":{
-            "class":"glyphicon glyphicon-road",
-            "id":"networkTopology",
-            "subMenu":{
-                "拓扑布局":{
-                  "class":"glyphicon glyphicon-magnet",
-                    "id":"top",
-                },
-                "创建节点":{
-                    "class":"glyphicon glyphicon-adjust",
-                    "id":"addDevice"
-                }
-            }
-        }
-    },
-	
 
-
-    {
-        "命令执行": {
-            "class": "glyphicon glyphicon-console",
-            "id": "command"
-        }
-    },
     {
         "文件传输": {
             "class": "glyphicon glyphicon-transfer",
@@ -69,25 +30,29 @@ var menu = [
             }
         }
     },
+	/*
     {
         "计划任务": {
             "class": "glyphicon glyphicon-time",
             "id": "crontab"
         }
-    },
+    }, */
     {
-        "秘钥管理": {
-            "class": "fa fa-key",
-            "id": "SSHKey"
-        }
-    },
-    {
-        "脚本管理": {
+        "脚本&批处理": {
             "class": "glyphicon glyphicon-superscript",
             "id": "scriptMenu"
 
         }
     },
+	/*
+    {
+        "业务操作": {
+            "class": "glyphicon glyphicon-briefcase",
+            "id": "serviceOperation"
+
+        }
+    }, */
+	/*
     {
         "操作审计": {
             "class": "glyphicon glyphicon-facetime-video",
@@ -109,7 +74,7 @@ var menu = [
             }
         }
 
-    },
+    },*/
     {
         // "设置": ["命令黑名单", "登录阈值"]
         "命令拦截": {
@@ -130,7 +95,7 @@ var menu = [
 
     },
     {
-        "远程日志": {
+        "远程文件": {
             "class": "glyphicon glyphicon-folder-open",
             "id": "remoteFile",
             "subMenu": {
@@ -140,95 +105,38 @@ var menu = [
                 },
             },
         },
-    },
-    {
-        "资产管理": {
-            "class": "glyphicon glyphicon-oil",
-            "id": "asset",
-            "subMenu": {
-                "自定义资产": {
-                    "class": "glyphicon glyphicon-cog",
-                    "id": "assetSettings",
-                }
-                ,
-                "资产信息": {
-                    "class": "glyphicon glyphicon-barcode",
-                    "id": "assetsInfo",
-
-                },
-            },
-        }
-    },
-
-    {
-        "应用管理": {
-            "class": "glyphicon glyphicon-apple",
-            "id": "appExecute",
-        }
-    },
+    },/*
     {
         "代码发布": {
             "class": "glyphicon glyphicon-briefcase",
             "id": "appDeploy",
+            "subMenu":{
+                  "灰度发布":{
+ 			"class":"glyphicon glyphicon-credit-card",
+			"id":"singleMode",
+		   },
+		   "批量发布":{
+			"class":"glyphicon glyphicon-random",
+			"id":"batchMode",
+			}
+            }
         }
-    },
+    }, */
+	/*
     {
         "发布计划": {
             "class": "glyphicon glyphicon-blackboard",
             "id": "deploymentCrontab",
         }
-    },
-    {
-        "Docker": {
-            "class": "glyphicon glyphicon-heart",
-            "id": "dockerAdmin",
-            "subMenu": {
-                "镜像": {
-                    "class": "glyphicon glyphicon-fire",
-                    "id": "dockerImage",
-                },
-                "容器": {
-                    "class": "glyphicon glyphicon-cloud",
-                    "id": "dockerContainer",
-                }
-
-            },
-        }
-    },
-	{
-		"中间软件":{
-				"class":"glyphicon glyphicon-briefcase",
-				"id":"middleware",
-				"subMenu":{
-					"Oracle":{
-						"class":"glyphicon glyphicon-king",
-						"id":"oracle",
-					},
-					"MySQL":{
-						"class":"glyphicon glyphicon-queen",
-						"id":"mysql"
-					},
-				}
-				}
-	},
-
+    }, */
 
 
 ];
 
-
-function checkGoogle(){
-var browserInfo = navigator.userAgent.toLowerCase();
-        console.log(browserInfo)
-
-    if (!browserInfo.match(/webkit/)) {
-		alert("抱歉，您必须使用谷歌浏览器访问本系统，或者360浏览器的极速模式!")
-
-    }
-
-
-
-}
+$(document).on("click","#serviceOperation",function(){
+    sectionColor(this);
+    $("#showMainContent").load("../html/serviceOperation.html");
+})
 
 function showAndCloseSection(div) {
     //关闭点击div下一个兄弟元素
@@ -432,11 +340,18 @@ function searchValue(input) {
     );
 
 };
+
+
 function sectionColor(div) {
     //start_load_pic();
     $("#menu").find(".sectionLine").css({"background": ""});
     div.style.background = "#09c"
 }
+$(document).on("click", "#batchShell", function () {
+    sectionColor(this);
+    stop_load_pic();
+    $("#showMainContent").load("../html/batch_shell.html");
+})
 
 $(document).on('keyup', '.searchValue', function () {
     searchValue(this);
@@ -535,20 +450,11 @@ $(document).on("click", "#crontab", function () {
     sectionColor(this)
     loadCrondLog();
 })
-$(document).on("click", "#appExecute", function () {
-    sectionColor(this)
-    loadAppExecute();
-
-})
 $(document).on("click", "#fileDownloadMenu", function () {
     sectionColor(this)
     //文件下载
     loadFileDownHTML();
 
-})
-$(document).on("click", "#SSHKey", function () {
-    sectionColor(this)
-    loadKeyFileAdminHTML();
 })
 $(document).on("click", "#scriptMenu", function () {
     sectionColor(this)
@@ -563,9 +469,6 @@ $(document).on("click", "#catRemoteFile", function () {
     sectionColor(this)
     loadRemoteFileHTML();
 });
-function loadAppExecute() {
-    $("#showMainContent").load("../html/appExecute.html");
-}
 function loadCrondLog() {
     $("#showMainContent").load("../html/crondLog.html")
 }
@@ -662,10 +565,16 @@ $(document).on("click", "#loginRecord", function () {
 
 })
 
-$(document).on("click", "#appDeploy", function () {
+$(document).on("click", "#singleMode", function () {
     sectionColor(this)
     loadAppDeployHTML();
 
+})
+
+
+$(document).on("click","#batchMode",function(){
+	sectionColor(this);
+	loadBatchDeploymentHTML();
 })
 
 
@@ -683,6 +592,10 @@ function loadAppDeployHTML() {
     $("#showMainContent").load("../html/deploymentTable.html");
 }
 
+
+function loadBatchDeploymentHTML(){
+	$("#showMainContent").load("../html/batchDeploymentTable.html");
+}
 
 function loadFileUploadHTML() {
     $("#showMainContent").load("../html/fileUpload.html");
@@ -807,43 +720,8 @@ function loadUserList() {
 }
 
 
-//获取keyfile列表
-function getKeyFileList() {
-    jQuery.ajax({
-        "url": keyAdminURL,
-        "dataType": "jsonp",
-        "error": errorAjax,
-        "success": function (data) {
-            if (!data.status) {
-                showErrorInfo(data.content)
-                return false;
-            }
-            else {
-                window.keyfileList = data.content;
-            }
-        }
-    })
-}
 
 
-function sshCheck(sid) {
-    //用来ssh登录检查服务器状态的，新建和修改的服务器使用，在请求之前就修改状态图标
-    $("#" + sid).children().remove();//删除此前状态图标
-    var i = document.createElement("i");
-    i.className = "fa-refresh   fa-spin  fa fa-lg  fa-li";
-    i.style.position = "static";
-    document.getElementById(sid).appendChild(i);
-
-    jQuery.ajax({
-        "url": sshCheckURL,
-        "dataType": "jsonp",
-        "data": {"sid": sid},
-        "success": function (data) {
-            createServerStatusTd(sid, data);
-
-        }
-    });
-}
 
 
 function createServerStatusTd(sid, data) {
@@ -961,7 +839,6 @@ function getSystemVersion(){
 function initCheungSSH() {
     whoami();//获取当前账户名
     loadUserList();//加载当前用户列表
-    getKeyFileList();//加载keyfile清单
     initGetServersList();
     //绑定关闭错误弹窗的按钮事件
     document.getElementById("closeButton").onclick = function () {
@@ -1152,13 +1029,6 @@ $(function () {
 		this.style.display="none";
         })
     }
-    loadMasterDeviceList();//加载骨干网络数据
-    privateTopology();//加载个人的网络拓扑配置
-    if(window.version==="run"){
-        setInterval(function(){
-            loginUserNotify();
-        }, 30000);
-    }
 
 
 
@@ -1167,8 +1037,5 @@ $(function () {
 
 
 })
-
-
-
 
 

@@ -2,28 +2,111 @@
 # Create your models here.
 from django.db import models
 
+class ServiceOperationList(models.Model):
+	name = models.CharField(max_length=5800,null = True)
+	create_time = models.CharField(max_length=200,null=False)
+	description = models.CharField(max_length=200)
+	list = models.TextField(max_length=20000)
+	class Meta:
+		app_label = 'cheungssh'
 
-class Main_Conf(models.Model):
-	runmod_choices=(("M","多线程"),("S","单线程"))
-	RunMode=models.CharField(max_length=1,choices=runmod_choices)
-	TimeOut=models.IntegerField(max_length=5)
-class ServerConf(models.Model):
+class UserWithBlackListGroup(models.Model):
+	uid = models.IntegerField(max_length=58,null = True)
+	black_list_group_id = models.CharField(max_length=5800,null = True)
+	create_time = models.CharField(max_length=200,null=False)
+	class Meta:
+		app_label = 'cheungssh'
+class BlackListList(models.Model):
+	name = models.CharField(max_length=200,null=False)
+	owner = models.CharField(max_length=200,null=False)
+	create_time = models.CharField(max_length=200,null=False)
+	expression = models.TextField(max_length=500000,)
+	description = models.CharField(max_length=1600,null=True)
+	class Meta:
+		app_label = 'cheungssh'
+	
+class BlackListGroup(models.Model):
+	name = models.CharField(max_length=200,null=False)
+	list =  models.CharField(max_length=2000,null=False)
+	owner = models.CharField(max_length=200,null=False)
+	create_time = models.CharField(max_length=200,null=False)
+	description = models.CharField(max_length=1600,null=True)
+	default = models.CharField(max_length=10,null=False)
+	class Meta:
+		app_label = 'cheungssh'
+
+class BatchShellList(models.Model):
+	name = models.CharField(max_length=200,null=False)
+	group = models.CharField(max_length=200,null=False)
+	create_time = models.CharField(max_length=200,null=False)
+	username = models.CharField(max_length=160,null=False)
+	command = models.TextField(max_length=500000,default="'[]'")
+	description = models.CharField(max_length=1600,null=False)
+	parameters = models.CharField(max_length=1600,default = '[]')
+	os_type = models.CharField(max_length=2000,default="'[]'")
+	class Meta:
+		app_label = 'cheungssh'
+
+class RemoteFileHistoryVersion(models.Model):
+	create_time = models.CharField(max_length=200,null=False)
+	ip = models.CharField(max_length=16,null=False)
+	username = models.CharField(max_length=160,null=False)
+	path = models.CharField(max_length=160,null=False)
+	remote_file_id = models.IntegerField(max_length=58,null = True)
+	class Meta:
+		app_label = 'cheungssh'
+
+class RemoteFile(models.Model):
+	path = models.CharField(max_length=2000,null=False)
+	sid = models.IntegerField(max_length=58,null = False)
+	tid = models.IntegerField(max_length=58,null = False)
+	alias = models.CharField(max_length=200,null=False)
+	description = models.CharField(max_length=160,null=False)
+	class Meta:
+		app_label = 'cheungssh'
+	
+class ScriptsHistoricVersion(models.Model):
+	sid = models.IntegerField(max_length=5,null = False)
+	path = models.CharField(max_length=2000,null=False)
+	create_time = models.CharField(max_length=200,null=False)
+	owner = models.CharField(max_length=20,null=False)
+	active = models.BooleanField(null=False)
+	parameters = models.TextField(max_length=50000,default="'[]'")
+	version = models.CharField(max_length=50,null=False)
+	comment = models.CharField(max_length=20,default="新建")
+	class Meta:
+		app_label = 'cheungssh'
+
+class ScriptsList(models.Model):
+	script_name = models.CharField(max_length=200)
+	type = models.CharField(max_length=20,null=False)
+	script_group = models.CharField(max_length=20)
+	description = models.TextField(max_length=2000,default="")
+	os_type = models.CharField(max_length=2000,default="'[]'")
+	active_version = models.IntegerField(max_length=5,null=False)
+	executable = models.BooleanField(default=False,null=False)
+	class Meta:
+		app_label = 'cheungssh'
+class ServersList(models.Model):
 	sudo_choices=( ("Y","使用sudo登陆"),("N","普通登陆")    )
 	su_choices=( ("Y","su - root 登陆"),("N","普通登陆")    )
-	login_type=(   ("KEY","使用PublickKey登陆"),("PASSWORD","使用密码登陆")  )
-	IP=models.CharField(max_length=200)
-	HostName=models.CharField(max_length=100,null=False,blank=False)
-	Port=models.IntegerField(max_length=5)
-	Group=models.CharField(max_length=200,null=False,verbose_name="主机组")   
-	Username=models.CharField(max_length=200,null=False)
-	Password=models.CharField(('password'),max_length=128)
-	KeyFile=models.CharField(max_length=100,default="N")
-	Sudo=models.CharField(max_length=1,choices=sudo_choices,default="N")
-	SudoPassword=models.CharField(max_length=2000,null=True,blank=True)
-	Su=models.CharField(max_length=1,choices=su_choices,null=True,blank=True,default="N")
-	SuPassword=models.CharField(max_length=2000,null=True,blank=True,default="N")
-	LoginMethod=models.CharField(max_length=10,choices=login_type,null=True,blank=True,default="N")
+	ip=models.CharField(max_length=200)
+	owner=models.CharField(max_length=100,null=True,blank="")
+	hostname=models.CharField(max_length=100,null=True,blank="")
+	port=models.IntegerField(max_length=5,default=22)
+	group=models.CharField(max_length=200,null=False,verbose_name="主机组")   
+	username=models.CharField(max_length=20)
+	alias=models.CharField(max_length=20)
+	status=models.CharField(max_length=20)
+	password=models.CharField(('password'),max_length=128)
+	os_type=models.CharField(('os_type'),max_length=128)
+	sudo=models.CharField(max_length=1,default="N")
+	sudo_password=models.CharField(max_length=2000,null=True,default="")
+	su=models.CharField(max_length=1,default="N")
+	su_password=models.CharField(max_length=2000,null=True,default="")
+	description=models.TextField(max_length=2000,null=True,default="")
 	class Meta:
+		app_label = 'cheungssh'
 		permissions=(
 				("create_server","创建服务器"),
 				("modify_server","修改服务器"),			
@@ -82,32 +165,8 @@ class ServerConf(models.Model):
 
 			)
 	def __unicode__(self):
-		return self.IP
+		return self.ip
 	
-class ServerInfo(models.Model):
-	IP=models.OneToOneField(ServerConf)  
-	Position=models.TextField(null=True,blank=True)
-	Description=models.TextField(null=True,blank=True,default="请在这里写一个对服务器的描述")
-	CPU=models.CharField(max_length=20,default="暂无",null=True,blank=True)
-	CPU_process_must=models.CharField(max_length=10,default="暂无",null=True,blank=True)
-	MEM_process_must=models.CharField(max_length=10,default="暂无",null=True,blank=True)
-	Use_CPU=models.CharField(max_length=20,default="暂无",null=True,blank=True)
-	uSE_MEM=models.CharField(max_length=20,default="暂无",null=True,blank=True)
-	MEM=models.CharField(max_length=20,default="暂无",null=True,blank=True)
-	IO=models.CharField(max_length=200,default="暂无",null=True,blank=True)
-	Platform=models.CharField(max_length=200,default="暂无",blank=True)
-	System=models.CharField(max_length=200,default="暂无",blank=True)
-	InBankWidth=models.IntegerField(max_length=20,null=True,blank=True)
-	OutBankWidth=models.IntegerField(max_length=20,null=True,blank=True)
-	CurrentUser=models.IntegerField(max_length=10,null=True,blank=True)
-	def __unicode__(self):
-		return self.Position
-	
-	
-	
-	
-
-
 
 
 

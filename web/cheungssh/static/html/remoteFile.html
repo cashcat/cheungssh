@@ -1,12 +1,9 @@
-<div  style="background: white;height:100%;display: block;position: relative">
-
-
-    <div class="panel panel-default" id="" style="display: block; overflow: auto;">
+<div>
         <p class="navbar-form" style="width:100%;height:100%;margin-bottom:10px;"><input type="text"
-                                                                                         class="form-control"
+                                                                                         class="form-control searchValue"
                                                                                          placeholder="搜索"
                                                                                          style="width:100%;"
-                                                                                         id="searchRemoteFile">
+                                                                                         >
         </p>
         <div class="panel-heading" style="background: white;">
             <button class="btn btn-xs btn-success" id="createRemoteFile" type="button"><span
@@ -20,13 +17,14 @@
         <table class="table table-bordered table-hover table-striped  table-condensed  table-responsive">
             <thead>
             <tr>
-                <th>属主</th>
+                <th>用户</th>
                 <th>路径</th>
                 <th>主机</th>
+                <th>时间</th>
+                <th>IP</th>
+                <th>历史版本(个)</th>
                 <th>描述</th>
                 <th>操作</th>
-
-
             </tr>
             </thead>
             <tbody id="remoteFileTbody"></tbody>
@@ -44,7 +42,6 @@
 
         </div>
     </div>
-
 </div>
 
 
@@ -71,7 +68,6 @@
                                     <input id="remoteFilePath" class="form-control">
                                 </div>
                             </div>
-
                             <div class="col-md-12" style="margin-top:10px">
                                 <label class="control-label col-md-2">服务器</label>
                                 <div class="col-md-10">
@@ -81,15 +77,6 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-12" style="margin-top:10px">
-                                <label class="control-label col-md-2">属主</label>
-                                <div class="col-md-10">
-                                    <select class="col-md-12 form-control" id="showRemoteFileOwner">
-
-                                    </select>
-
-                                </div>
-                            </div>
                             <div class="col-md-12" style="margin-top:10px">
                                 <label class="control-label col-md-2">描述</label>
                                 <div class="col-md-10">
@@ -108,7 +95,7 @@
                             id="closeRemoteFileDiv">取消
                     </button>
                     <button type="button" style="float:right" class="btn btn-success" data-dismiss="modal"
-                            id="saveRemoteFileManage">保存
+                            id="saveRemoteFileManage">下一步
                     </button>
                 </div>
             </div>
@@ -118,5 +105,46 @@
 
 </div>
 
+<div style="font-family: 微软雅黑;overflow: auto;z-index: 1004;width:auto;height: 100%;position: fixed;left: 0%;right: 0px;top: 0%;bottom: 0px;display:none;"
+     id="KKK">
+    <div class="modal "
+         style="height: 95%;overflow:hidden;overflow-y:hidden;position:relative;left:0px;right:0px;bottom:0px;top:0px;margin:auto;display:block;">
+        <div class="modal-dialog">
+            <div class="modal-content  ">
+                <div class="modal-header" style="cursor: move;">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+
+                    <h4 class=" glyphicon glyphicon-edit " style="color: green;">修改权限</h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+
+                            <div class="col-md-12" style="margin-top:10px">
+                                <label class="control-label col-md-2">权限</label>
+                                <div class="col-md-10">
+                                    <input id="filePermission" class="form-control" style="color:red;" type="number"  placeholder="例如: 0755">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button style="float:left" type="button" class="btn btn-default" data-dismiss="modal"
+                            id="closeT">取消
+                    </button>
+                    <button type="button" style="float:right" class="btn btn-success" data-dismiss="modal"
+                            id="changePermission">保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
 
 <script src="../js/remoteFile.js"></script>

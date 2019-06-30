@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" href="../img/cheungssh.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"
+          charset="UTF-8">
+    <title>CheungSSH</title>
+    <link href="../css/bootstrap-3.3.5-dist/css/bootstrap.css" rel="stylesheet">
+	<script src="../js/jquery-2.2.3.min.js"></script>
+<script src="../js/jquery-ui.min.js"></script>
+<link href="../css/jquery-ui.min.css" rel="stylesheet">
+</head>
+<body >
+    <div class="  glyphicon glyphicon-ok  alert alert-success" id="showSuccessNotic"
+         style="position:fixed;left: 40%;right: 40%;z-index: 1004;top: 10%;display: none;"> 操作成功!
+    </div>
+<div id="showSuccessNoticeIphone"
+     style="z-index: 1004;width:20%;height: 20%;margin:auto;position:fixed;top:0px;bottom:0px;right:0px;left:0px;display: none;"></div>
+
+<div id="showErrorInfoDIV"
+     style="z-index: 1005;display:none;position: absolute;  top: 0px; bottom: 0px ;left: 0px; right: 0px; ;">
+
+
+    <div style="width:auto;height: 200px;position: fixed;left: 0px;right: 0px;top: 40%;bottom: 60%;margin: auto;;"
+         id="">
+        <div class="modal "
+             style="overflow:hidden;overflow-y:hidden;position:relative;left:0px;right:0px;bottom:0px;top:0px;margin:auto;display:block;">
+            <div class="modal-dialog">
+                <div class="modal-content  ">
+                    <div class="modal-header" style="cursor: move;">
+
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+
+                        <h4 class=" glyphicon glyphicon-alert " style="color: red;">
+				<span>错误</span>
+			</h4>
+                    </div>
+
+                    <div class="modal-body  ">
+                        <p id="showWarnContent" style="text-align:center;;color:red; font-weight:bold;">请确认您的消息?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="closeButton">好的</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="shadow"
+     style="display:none;position: absolute;  top: 0px; bottom: 0px ;left: 0px; right: 0px; z-index: 1003;background: rgba(0,0,0,0.4); "></div>
+
+<div id="loadPic"
+     style="text-align: center;padding: 10px;color: white;font-weight:bold   ;border-radius:8px;background: rgba(0,0,0,0.5);;z-index: 1004;width: 200px;height:40px;margin:auto;position:fixed;top:0px;bottom:0px;right:0px;left:0px;display: none;">
+<i class="fa fa-refresh fa-spin"></i>
+    <span style="letter-spacing: 4px;">请稍后...</span>
+</div>
+	<div       class="panel panel-default"   style="background: white;height:100%;display: block;position: relative">
+	 <p class="navbar-form" style="width:100%;margin-bottom:10px;">
+        <div class="input-group" style="padding:10px;z-index: 0">
+                <input type="text" class="form-control searchValue" placeholder="" style="width:100%;" >
+                <span class="input-group-btn" >
+                        <button class="btn btn-success">
+                                <span class="glyphicon glyphicon-search">搜素</span>
+                        </button>
+                </span>
+        </div>
+       </p>
+    <table class="table  table-hover table-striped   table-responsive  table-bordered">
+        <thead style="word-break: keep-all;white-space:nowrap">
+        <tr>
+            <th>名称</th>
+            <th>类型</th>
+            <th>组别</th>
+            <th>操作账户</th>
+            <th style="max-width:100px">适用系统</th>
+            <th class="hidden-xs" >时间</th>
+            <th class="hidden-xs" >版本</th>
+            <th >说明</th>
+            <th style="min-width:130px;">活动版本</th>
+            <th style="min-width:70px">选项</th>
+        </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+        <tr>
+        </tr>
+    </table>
+	<div id="largeDiv">
+	<textarea id="area" style="display:none;top:0px;background:black;z-index:1;width:100%;position:absolute;color:white;"></textarea>
+	<button class="btn btn-sm btn-danger" style="display:none;;position:absolute;top:0px;right:0px;z-index:2;" id="closeArea">关闭</button>
+	</div>
+<div  style="z-index: 1004;width:auto;height:100%;position: fixed;left: 0px;right: 0px;top: 0px;;bottom: 0%;margin: auto;display:none;" id="showScriptName">
+    <div class="modal "
+         style="height: 100%;;position:relative;left:0px;right:0px;bottom:0px;top:0px;margin:auto;display:block;">
+        <div class="modal-dialog">
+            <div class="modal-content  ">
+                <div class="modal-header" style="cursor: move;">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+
+                    <h4 class=" glyphicon glyphicon-edit " style="color: green;">脚本名</h4>
+                </div>
+
+                <div class="modal-body  ">
+                    <div class="form-horizontal clearfix">
+                        <div class="form-group clearfix">
+                            <label class="col-md-2 control-label">名称</label>
+                            <div   class="col-md-10">
+                                <input id="scriptName"  class="form-control"  placeholder="" style="box-shadow:none;outline:none;border-radius:0px;" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label class="col-md-2 control-label">类型</label>
+                            <div   class="col-md-10">
+					<select class="form-control" id="type"  style="border:none;border-bottom:1px solid #b0b0b0;box-shadow:none;outline:none;border-radius:0px;">
+						<option value ="脚本">脚本</option>
+						<option value ="批量命令">批量命令</option>
+					</select>
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label class="col-md-2 control-label">适用系统</label>
+                            <div   class="col-md-10" id="script_os_type">
+                            </div>
+                        </div>
+				
+                        <div class="form-group clearfix  has-feedback">
+                            <label class="col-md-2 control-label">组别</label>
+                            <div   class="col-md-10">
+                                <input id="scriptGroup"  class="form-control"  placeholder="" style=";;box-shadow:none;outline:none;border-radius:0px;" readonly>
+                            </div>
+                        </div>
+                        <div   class="col-md-10 col-md-offset-2 clearfix" id="parameterBody">
+                            <div class="form-group has-feedback scriptParameterTemplate" style="display:none">
+				    <span class="clearfix ">
+					<span   style="width:15%;float:left;margin-top:10px;cursor:pointer" class="empty">
+						<span class="glyphicon glyphicon-unchecked"></span>
+						<span>必填</span>
+					</span>
+                                    	<input class="form-control parameterName"  placeholder="参数名" style="float:left;width:20%;;;;box-shadow:none;outline:none;border-radius:0px;" readonly>
+                                	<input class="form-control parameterName"  placeholder="默认值" style="float:left;margin-left:5%;;width:60%;;box-shadow:none;outline:none;border-radius:0px;" readonly>
+				    </span>
+                                    <input class="form-control parameterDescription"  placeholder="参数描述" style="box-shadow:none;outline:none;border-radius:0px;" readonly>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">备注</label>
+                            <div   class="col-md-10">
+                                <textarea id="scriptDescription"  class="form-control"  placeholder="" style="border:1px dashed #b0b0b0;" readonly></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button  style="float: right;" type="button" class="btn btn-default" data-dismiss="modal" id="closeScriptNameButton">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="shadow"
+     style="display:none;position: absolute;  top: 0px; bottom: 0px ;left: 0px; right: 0px; z-index: 1003;background: rgba(0,0,0,0.4); "></div>
+</body>
+<script src="../js/CheungSSHGlobal.js"></script>
+<script src="../js/scripts_historic_list.js"></script>
+</html>
+
+

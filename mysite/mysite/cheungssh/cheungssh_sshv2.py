@@ -1,18 +1,34 @@
-﻿#!/usr/bin/env python
-#coding:utf-8
+﻿#coding:utf-8
 #Author: Cheung Kei-Chuen CheungSSH 张其川
-import paramiko,re,socket,os,sys,json,time
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
-sys.path.append('/home/cheungssh/mysite')
-sys.path.append('/home/cheungssh/mysite/mysite/cheungssh')
-from cheungssh_error import CheungSSHError
+import paramiko
+import functools
+import socket
+import re
+import os
+import sys
+import json
+import time
 import cheungssh_settings
+# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
+# sys.path.append('/home/cheungssh/mysite')
+# sys.path.append('/home/cheungssh/mysite/mysite/cheungssh')
+from cheungssh_error import CheungSSHError
 from django.core.cache import cache
 REDIS=cache.master_client
+reload(sys)  
+sys.setdefaultencoding('utf8')
+
+def set_progres(REDIS,tid, sid, transferred, toBeTransferred):
+	progress = float(transferred)/float(toBeTransferred) * 100
+	info={"status":True,"content":progress}
+	info = json.dumps(info,encoding="utf8",ensure_ascii=False)
+	REDIS.hset(tid,"progress.{sid}".format(sid=sid),info)
 class CheungSSH_SSH(object):
 	def __init__(self):
-                self.base_prompt = r'[^\[#]([^#+])(>|#|\]|\$|\)|(\[y/N\]:)) *$'
+                self.base_prompt = '(^(\[|\)|<)[^#].+(>|#|\]|\$|\))|([yY]/[nN](\]|\))[:：\?\？]+)|^mysql>|密码：|[pP]assword:) *$'
+		
 		self.prompt=""
+		self.more_flag = '(< *)?(\-)+( |\()?[Mm]ore.*(\)| )?(\-)+( *>)?|\(Q to quit\)'
 	def login(self,**kws):
 		cheungssh_info={"status":False,"content":""}
 		self.kws=kws
@@ -23,10 +39,7 @@ class CheungSSH_SSH(object):
 			self.username=kws["username"]
 			self.password=kws["password"]
 			self.port=kws["port"]
-			self.login_method=kws["login_method"]
 			self.ip=kws["ip"]
-			self.keyfile=os.path.join(cheungssh_settings.keyfile_dir,self.owner,kws["keyfile"])
-			self.keyfile_password=kws["keyfile_password"]
 			self.sudo=kws["sudo"]
 			self.sudo_password=kws["sudo_password"]
 			self.su=kws["su"]
@@ -35,20 +48,10 @@ class CheungSSH_SSH(object):
 			self.os_type=kws["os_type"]
 			self.sid=kws["id"]
 			ssh = paramiko.SSHClient()
-			if self.login_method=='PASSWORD':
-				ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-				ssh.connect(self.ip,self.port,self.username,self.password)
-				
-			else:
-				if  len(self.keyfile_password)>0 and not self.keyfile_password=="******":
-					key=paramiko.RSAKey.from_private_key_file(self.keyfile,password=self.keyfile_password)
-				else:
-					
-					key=paramiko.RSAKey.from_private_key_file(self.keyfile)
-				ssh.load_system_host_keys()
-				ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-				ssh.connect(self.ip,self.port,self.username,pkey=key)
+			ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+			ssh.connect(self.ip,self.port,self.username,self.password)
 			self.channel=ssh
+			self.sftp = self.channel.open_sftp()
 			self.shell = ssh.invoke_shell(width=1000,height=1000)
 			data=self.clean_buffer()
 			if not data["status"]:raise CheungSSHError(data["content"])
@@ -81,15 +84,16 @@ class CheungSSH_SSH(object):
 			cheungssh_info["content"]="账号或者密码错误"
 		except paramiko.ssh_exception.BadAuthenticationType:
 			if login_method=='KEY':cheungssh_info["content"]="认证类型应该是密码"
-                        else:   cheungssh_info["content"]="认证类型应该是秘钥"
+                        else:cheungssh_info["content"]="认证类型应该是秘钥"
 		except Exception,e:
-			cheungssh_info['status'] = False
 			e=str(e)
 			if re.search(re.escape("Error reading SSH protocol banner[Errno 104] Connection reset by peer"),e):
-				cheungssh_info['content'] = "CKC-SSH-Error-CONN-104"
+				cheungssh_info['content'] = "该服务器设置了SSH阻止连接，请查看/etc/hosts.deny配置文件。"
 			elif re.search(re.escape("Incompatible ssh peer (no acceptable kex algorithm)"),e):
-				cheungssh_info['content'] = "CKC-SSH-Error-kEX"
+				cheungssh_info['content'] = "该服务器的SSH加密算法不支持SSH连接，请联系CheungSSH获得配置。"
 			else:
+				if re.search("^ *$",e):
+					e = "登陆失败，原因未知"
 				cheungssh_info['content'] = e
 		if re.search("Not a valid RSA private key file \(bad ber encoding\)",cheungssh_info["content"]):
 			cheungssh_info["content"]="秘钥的密码不正确"
@@ -110,10 +114,12 @@ class CheungSSH_SSH(object):
 		return cheungssh_info
 	def recv(self,sid="",tid="",ignore=False):
 		buff=''
-		while (not re.search(self.base_prompt,buff.split('\n')[-1])) :
-			time.sleep(0.2)
-			_buff=self.shell.recv(1024)
+		while (not re.search(self.base_prompt,re.sub("\\x1b\[m","",buff.split('\n')[-1]))) :
+			time.sleep(0.1)
+			_buff=self.shell.recv(20480)
 			buff+=_buff
+			if re.search(self.more_flag, buff.split("\r\n")[-1]):
+				self.shell.send(" ")
 			if not ignore:self.log(sid=sid,tid=tid,content_segment=_buff)
 		return buff
 	def disk_log(self,sid,content=""):
@@ -135,11 +141,11 @@ class CheungSSH_SSH(object):
 			#self.shell.send('\n')
 			#time.sleep(0.5)
 			buff=""
-			while (not re.search(self.base_prompt.split('\r\n')[-1],buff)):
+			while not re.search(self.base_prompt, buff.split("\r\n")[-1]) :
 				buff+=self.shell.recv(512)
 			cheungssh_info["status"]=True
 		except Exception,e:
-			print "清除缓存失败",str(e)
+			
 			cheungssh_info["status"]=False
 			cheungssh_info["content"]=str(e)
 		return cheungssh_info
@@ -148,40 +154,62 @@ class CheungSSH_SSH(object):
 		log_content={ 	
 			"content":"",
 			"stage":"done",      
-			"status":False,          
+			"status":True,          
 		}
 		log_name=  "log.%s.%s"  %(tid,sid)   
+		result = ""
+		
 		try:
 			#data=self.clean_buffer()
 			#if not data["status"]:raise CheungSSHError(data["content"]) 
 			
 			
 			#self.set_prompt()
-			self.shell.send("%s\n"%cmd)
-			cheungssh_info['content']=self.recv(sid=sid,tid=tid)
-			self.shell.send("echo $?\n")
-			_status=self.recv(sid=sid,tid=tid,ignore=True)
-			#print _status.split("adsfasdf"),self.base_prompt
-			status=re.findall('echo \$\?\\r\\n(\d+)',_status)
-			status=int(status[0])
-			if status==0:
-				cheungssh_info["status"]=True
-				log_content["status"]=True 
+			# 删除开头的空格
+			cmd = re.sub("^ *","",cmd)
+			CMD=cmd.split()
+			_top = os.path.basename(CMD[0])
+			if _top == "top":
+				
+				CMD[0] = CMD[0] + " -b"
+				cmd = " ".join(CMD)
+			if cmd == "BREAK-COMMAND":
+				self.shell.send(chr(3))
+				
 			else:
-				cheungssh_info["status"]=False
+				try:
+					cmd_list = json.loads(cmd)
+					if isinstance(cmd_list,list) is False:
+						raise IOError("none")
+				except Exception,e:
+					cmd_list = [cmd]
+				for cmd in cmd_list:
+					print  "cmd is",cmd
+					self.shell.send("%s\n"%cmd)
+					result = self.recv(sid=sid,tid=tid)
+			#self.shell.send("echo $?\n")
+			#_status=self.recv(sid=sid,tid=tid,ignore=True)
+			#status=re.findall('echo \$\?\\r\\n(\d+)',_status)
+			#status=int(status[0])
+			#if status==0:
+			#	cheungssh_info["status"]=True
+			#	log_content["status"]=True 
+			#else:
+			#	cheungssh_info["status"]=False
 			#REDIS.rpush("command.logs",cheungssh_info)
+			cheungssh_info = {"status":True,"content":result}
 		except Exception,e:
+			print "执行命令发生错误",str(e)
 			cheungssh_info["status"]=False
 			cheungssh_info["content"] =  str(e)
 		_log_content=json.dumps(log_content,encoding="utf-8",ensure_ascii=False)
-		REDIS.lpush(log_name,_log_content)
 		
+		REDIS.rpush(log_name,_log_content)
 		if not ignore:
 			log_content["content"]=cheungssh_info["content"]
 			self.write_command_log(tid,log_content)
 		return cheungssh_info
 	def write_command_log(self,tid,log_content):
-		
 		try:
 			history=REDIS.lrange("command.history",-5,-1)
 			for _line in history:
@@ -208,7 +236,7 @@ class CheungSSH_SSH(object):
 			_buff=""
 			while True:
 				buff+=self.shell.recv(1024)
-				if re.search('\[sudo\] password for %s'%self.username,buff.split('\n')[-1]):
+				if re.search('(\[sudo\] password for {username})|(\[sudo\] {username}.*((assw(or)?d)|密码))'.format(username=self.username),buff.split('\n')[-1]):
 					self.shell.send('%s\n' %self.sudo_password) 
 					while True:
 						_buff+=self.shell.recv(1024)
@@ -271,6 +299,70 @@ class CheungSSH_SSH(object):
 				break
 		self.prompt=re.escape(buff.split('\n')[-1])
 		return buff
+	def sftp_download(self,tid,sid,source,destination):
+		#destination ="/home/cheungssh/download/test/远程.96457938362457704513.aa"
+		callback_info = functools.partial(set_progres,REDIS,tid,sid)
+		cheungssh_info={"status":False,"content":""}
+		try:
+			self.sftp.get(source,destination,callback=callback_info)
+			cheungssh_info["status"] = True
+		except Exception,e:
+			cheungssh_info={"status":False,"content":str(e)}
+			cheungssh_info = json.dumps(cheungssh_info,encoding="utf8",ensure_ascii=False)
+			REDIS.hset(tid,"progress.{sid}".format(sid=sid),cheungssh_info)
+		return cheungssh_info
+
+	def sftp_upload(self,tid,sid,source,destination):
+		callback_info = functools.partial(set_progres,REDIS,tid,sid)
+		cheungssh_info={"status":False,"content":""}
+		try:
+			self.sftp.put(source,destination,callback=callback_info)
+			self.sftp.chmod(destination,7)
+			cheungssh_info["status"] = True
+		except Exception,e:
+			cheungssh_info={"status":False,"content":str(e)}
+			cheungssh_info = json.dumps(cheungssh_info,encoding="utf8",ensure_ascii=False)
+			REDIS.hset(tid,"progress.{sid}".format(sid=sid),cheungssh_info)
+		return cheungssh_info
+
+	def get_remote_file_content(self, path):
+		cheungssh_info={"status":False,"content":""}
+		try:
+			self.sftp.chdir(os.path.dirname(path))
+		except Exception,e:
+			cheungssh_info["content"] = "该文件夹不存在，请确认！"
+			return cheungssh_info
+		try:
+			with self.sftp.open(path) as f:
+				content = f.read()
+			cheungssh_info = {"content":content, "status":True,"existing":True}
+		except Exception,e:
+			ask = False
+			status = False
+			e = str(e)
+			if re.search("Permission denied",e):
+				content = "权限拒绝，您无权操作该文件!"
+			elif re.search("No such file",e):
+				content= "该文件不存在，您确定要创建它吗？"
+				ask = True
+				status = True
+			else:
+				content = e
+			cheungssh_info={"status":status,"content": content,"ask":ask}
+		return cheungssh_info
+	def write_remote_file_content(self, path,content):
+		cheungssh_info={"status":False,"content":""}
+		try:
+			with self.sftp.open(path,"wb") as f:
+				f.write(content)
+			cheungssh_info["status"] = True
+		except Exception,e:
+			content = str(e)
+			if re.search("Permission denied",content):
+				content = "权限拒绝，您无权操作该文件!"
+			cheungssh_info["content"] = content
+		return cheungssh_info
+			
 	def logout(self):
 		try:
 			self.channel.close()

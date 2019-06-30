@@ -29,8 +29,6 @@ class CheungSSHThreadAdmin(object):
 				current="current.%s" %tid
 				self.REDIS.set(total,len(servers))
 				self.REDIS.set(current,0)
-				#CheungSSHConnector.progress[total]=len(servers)
-				#CheungSSHConnector.progress[current]=0
 				if multi_thread:
 					
 					pool=CheungSSHPool()

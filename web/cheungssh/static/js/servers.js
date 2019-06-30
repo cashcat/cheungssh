@@ -84,33 +84,6 @@ function createServerLine(serverLine) {
     td.textContent = serverLine.username;
     tr.appendChild(td);
 
-    //第六个字段登录方式
-    var td = document.createElement("td");
-    td.className = "login_method";
-    //修改登录方式为中文
-    var login_method = serverLine.login_method;
-    td.textContent = login_method;
-    tr.appendChild(td);
-
-    //第七个字段 密码值
-    var td = document.createElement("td");
-	td.style.display="none";
-    td.className = "password";
-    td.textContent = serverLine.password;
-    tr.appendChild(td);
-
-    //第八个字段 秘钥文件
-    var td = document.createElement("td");
-    td.className = "keyfile";
-    td.textContent = serverLine.keyfile;
-    tr.appendChild(td);
-
-    //第九个字段 秘钥密码
-    var td = document.createElement("td");
-	td.style.display="none";
-    td.className = "keyfile_password";
-    td.textContent = serverLine.keyfile_password;
-    tr.appendChild(td);
 
     //第十个字段端口
     var td = document.createElement("td");
@@ -126,12 +99,6 @@ function createServerLine(serverLine) {
     tr.appendChild(td);
 
 
-    //第十二个字段 sudo密码
-    var td = document.createElement("td");
-	td.style.display="none";
-    td.className = "sudo_password";
-    td.textContent = serverLine.sudo_password;
-    tr.appendChild(td);
 
     //第十三个字段 su
     var td = document.createElement("td");
@@ -139,15 +106,8 @@ function createServerLine(serverLine) {
     var su = serverLine.su;
     td.textContent = su;
     tr.appendChild(td);
-
-    //第十三个字段 su密码
-    var td = document.createElement("td");
-	td.style.display="none";
-    td.className = "su_password";
-    td.textContent = serverLine.su_password;
-    tr.appendChild(td);
-
     //第十四个字段 状态
+    /*
     var td = document.createElement("td");
     td.setAttribute("id", sid);//用来服务器状态后台更新检查
     td.className = "status";
@@ -183,6 +143,8 @@ function createServerLine(serverLine) {
 
 
     }
+    */
+    /*
     if (info["status"] == "success") {
         span.className = "label label-success";
         span.textContent = "正常";
@@ -203,6 +165,7 @@ function createServerLine(serverLine) {
 
     }
     tr.appendChild(td);
+    */
 
 
     //第十五个字段 系统
@@ -210,8 +173,9 @@ function createServerLine(serverLine) {
     td.className = "system";
     td.textContent = serverLine.os_type;
     tr.appendChild(td);
-    //第十五个字段 备注
+    //第十六个字段 描述
     var td = document.createElement("td");
+    td.style.cssText="max-width:50px;;overflow: hidden; text-overflow: ellipsis; white-space: nowrap; "
     td.className = "description";
     td.textContent = serverLine.description;
     tr.appendChild(td);
@@ -223,6 +187,7 @@ function createServerLine(serverLine) {
     var editButton = document.createElement("button");
     editButton.className = "btn btn-success btn-xs glyphicon glyphicon-edit";
     editButton.setAttribute("sid", serverLine.id);//服务器的每一个参数在className中
+    editButton.setAttribute("data", JSON.stringify(serverLine));//服务器的每一个参数在className中
     editButton.onclick = function () {
         window.currentEditTr = this;//当前最的编辑行
         //把sid传递给保存按钮
@@ -303,121 +268,45 @@ function loadServerLineToTable(editButton) {
     //首先显示编辑框
     startShadow();
     showEditServerConfigTable();//只是显示编辑框
-    var sid = editButton.getAttribute("sid");
-    var td = $(editButton).parent();
-    var tr = $(td).parent();
-    var ip = $(tr).find(".ip")[0].textContent;
-    var alias = $(tr).find(".alias")[0].textContent;
-    var owner = $(tr).find(".owner")[0].textContent;
-    var group = $(tr).find(".group")[0].textContent;
-    var username = $(tr).find(".username")[0].textContent;
-    var loginMethod = $(tr).find(".login_method")[0].textContent;
-    var password = $(tr).find(".password")[0].textContent;
-    var keyfile = $(tr).find(".keyfile")[0].textContent;
-    var keyfilePassword = $(tr).find(".keyfile_password")[0].textContent;
-    var port = $(tr).find(".port")[0].textContent;
-    var sudo = $(tr).find(".sudo")[0].textContent;
-    var sudoPassword = $(tr).find(".sudo_password")[0].textContent;
-    var su = $(tr).find(".su")[0].textContent;
-    var suPassword = $(tr).find(".su_password")[0].textContent;
-    var description = $(tr).find(".description")[0].textContent;
-    var system=$(tr).find(".system")[0].textContent;
+    var data=editButton.getAttribute("data")
+    data=JSON.parse(data)
     //把数据装载进入编辑框中的对象
 
-    document.getElementById("ip").value = ip;//ip
-    document.getElementById("alias").value = alias;
+    document.getElementById("ip").value = data.ip;//ip
+    document.getElementById("alias").value = data.alias;
     //选中属主
     var ownerSelect = document.getElementById("owner");
-    console.log( typeof ownerSelect.options);
     for(var i=0; i<ownerSelect.options.length; i++){
-        if(ownerSelect.options[i].textContent == owner){
+        if(ownerSelect.options[i].textContent == data.owner){
             ownerSelect.options[i].selected = true;
             break;
         }
     }
-
-
-    document.getElementById("group").value = group;
-    document.getElementById("username").value = username;
-    var loginMethodSelect = document.getElementById("loginMethod");
-    var systemSelect = document.getElementById("system");
-    //选择登录方式
-    for(var i=0; i<loginMethodSelect.options.length; i++){
-        if(loginMethodSelect.options[i].textContent == loginMethod){
-            loginMethodSelect.options[i].selected = true;
-            break;
-        }
-    }
+    document.getElementById("group").value = data.group;
+    document.getElementById("username").value = data.username;
     //选定系统类型
-    for(var i=0; i<systemSelect.options.length; i++){
-        if(systemSelect.options[i].textContent == system){
-            systemSelect.options[i].selected = true;
-            break;
-        }
-    }
-    var keyfileDiv = document.getElementById("keyfileDiv");
-    var passwordDiv = document.getElementById("passwordDiv");
-    if (loginMethod == "PASSWORD") {
-        //密码方式，隐藏key框
-        keyfileDiv.style.display = "none";
-        passwordDiv.style.display = "";
-
-    }
-    else {
-        //key方式，隐藏密码框
-        passwordDiv.style.display = "none";
-        keyfileDiv.style.display = "";
-        loginMethod = "KEY";
-
-        var keyfileSelect=document.getElementById("keyfile");
-        //选择秘钥文件
-        for(var i=0; i<keyfileSelect.options.length; i++){
-            if(keyfileSelect.options[i].textContent == keyfile){
-                keyfileSelect.options[i].selected = true;
-                break;
-            }
-        }
-
-
-
-    }
-    document.getElementById("password").value = password;
-    document.getElementById("port").value = port;
-    if (sudo == "Y") {
+    $("#system").find("option").each(function(){
+	if(this.textContent===data.os_type){
+    		this.setAttribute("selected", true);
+		return true;
+	}
+    });
+    console.log("#system option[text='" + data.os_type + "']")
+    document.getElementById("port").value = data.port;
+    if (data.sudo == "Y") {
         $($("#sudo").find("i")[0]).removeClass("glyphicon-unchecked").addClass("glyphicon-check");
         document.getElementById("sudoPassword").removeAttribute("disabled");
     }
     else {
         //没有启用，封闭输入框
-        $($("#sudo").find("i")[0]).removeClass("glyphicon-check").addClass("glyphicon-unchecked");
-        document.getElementById("sudoPassword").setAttribute("disabled", true);
+    	if (data.su == "Y") {
+	        $($("#sudo").find("i")[0]).removeClass("glyphicon-check").addClass("glyphicon-unchecked");
+		document.getElementById("sudoPassword").setAttribute("disabled", true);
+	}
 
     }
-    document.getElementById("sudoPassword").value = sudoPassword
-    document.getElementById("su").value = su;
-    document.getElementById("suPassword").value = suPassword
-    document.getElementById("description").value = description;
-    //连接设备
+    document.getElementById("description").value = data.description;
 
-    //删除此前的记录
-    $("#linkDevice").find(".glyphicon-check").removeClass("glyphicon-check").addClass("glyphicon-unchecked");
-        $("#linkDevice").find(".glyphicon").each(function(){
-        var name=$(this).siblings()[0].textContent;
-        for(var i=0;i<window.allServersList.length;i++){
-            var edge=window.allServersList[i].link_device.edge;
-            for(var h=0;h<edge.length;h++){//所有线路
-                var from=edge[h].from;
-                if (from===alias){
-                    var to=edge[h].to;
-                    if(name===to){
-                        $(this).removeClass("glyphicon-unchecked").addClass("glyphicon-check");//命中选项
-                    }
-
-                }
-
-            }
-        }
-    })
 
 
 }
@@ -455,25 +344,7 @@ function closeEditServer() {
 function changeServerDataButton() {
     //绑定选择密码登录方式的标签
     var password = document.getElementById("passwordDiv");//密码框
-    var keyfilePassword = document.getElementById("keyfilePasswordDiv");//秘钥框
-    var keyfilePasswordDiv=document.getElementById("keyfilePasswordDiv");//秘钥密码框
 
-    //绑定登录方式选择
-    document.getElementById("loginMethod").onchange=function(){
-        var keyfileDiv=document.getElementById("keyfileDiv");
-        var passwordDiv=document.getElementById("passwordDiv");
-        if(this.value=="KEY"){
-            keyfileDiv.style.display="";
-            passwordDiv.style.display="none";
-            keyfilePasswordDiv.style.display="";
-
-        }
-        else if(this.value="PASSWORD"){
-            keyfileDiv.style.display="none";
-            keyfilePasswordDiv.style.display="none";
-            passwordDiv.style.display="";
-        }
-    }
 
     //绑定别名唯一性检查
     document.getElementById("alias").onchange = function () {
@@ -514,16 +385,6 @@ function createUserList() {
     }
 }
 
-function createKeyFileList(){
-    var keyfile=document.getElementById("keyfile");
-    for(var i=0;i<window.keyfileList.length;i++){
-        var filename=window.keyfileList[i].keyfile;
-        var option=document.createElement("option");
-        option.textContent=filename;
-        option.value=filename;
-        keyfile.appendChild(option);
-    }
-}
 
 function cleanEditServerConfigTableData() {
     //清除编辑框的数据
@@ -532,9 +393,6 @@ function cleanEditServerConfigTableData() {
     document.getElementById("owner").innerHTML = '请选择 <span class="caret">';
     document.getElementById("group").value = "";
     document.getElementById("username").value = "";
-    document.getElementById("loginMethod").innerHTML = 'PASSWORD <span class="caret">';
-    document.getElementById("password").value = "";
-    document.getElementById("keyfile").innerHTML = '请选择 <span class="caret">';
     document.getElementById("port").value = 22;
     document.getElementById("sudo").value = sudo;
     $("#sudo").find("")
@@ -612,17 +470,9 @@ function getServerConfigFromTable() {
     var owner = document.getElementById("owner").value;
     var group = document.getElementById("group").value;
     var username = document.getElementById("username").value;
-    var loginMethod = document.getElementById("loginMethod").value;
     var system=document.getElementById("system").value
     var password = document.getElementById("password").value;
-    var keyfile = document.getElementById("keyfile").value;
-    var keyfilePassword = document.getElementById("keyfilePassword").value;
     var port = document.getElementById("port").value;
-    var link={"nodes":[{"name":alias,"x":0,"y":0}],"edge":[]};
-    $("#linkDevice").find(".glyphicon-check").each(function(){
-        var name=$(this).siblings()[0].textContent;
-        link["edge"].push({"from":alias,"to":name});
-    })
 
 
 
@@ -634,6 +484,16 @@ function getServerConfigFromTable() {
         sudo = "N";
     }
     var sudoPassword = document.getElementById("sudoPassword").value;
+    var suPassword = document.getElementById("suPassword").value;
+    if(password.match(/^$/)){
+        password=null
+    }
+    if(sudoPassword.match(/^$/)){
+        sudoPassword=null
+    }
+    if(suPassword.match(/^$/)){
+        suPassword=null
+    }
     if ($($($("#su")).find("i")).hasClass("glyphicon-check")) {
         //sudo下面的i才是复选框
         var su = "Y"
@@ -641,7 +501,6 @@ function getServerConfigFromTable() {
     else {
         su = "N";
     }
-    var suPassword = document.getElementById("suPassword").value;
     var description = document.getElementById("description").value;
 
 
@@ -660,17 +519,13 @@ function getServerConfigFromTable() {
         "owner": owner,
         "group": group,
         "username": username,
-        "login_method": loginMethod,
         "password": password,
-        "keyfile": keyfile,
-        "keyfile_password": keyfilePassword,
         "port": port,
         "sudo": sudo,
         "sudo_password": sudoPassword,
         "su": su,
         "su_password": suPassword,
         "description": description,
-        "link_device":link,
 	"os_type":system,
     };
 
@@ -691,13 +546,8 @@ function getServerConfigFromTable() {
                 }
                 else {
 			showSuccessNotic();
-                    serverConfig.sudo_password = "******"
-                    serverConfig.su_password = "******"
-                    serverConfig.keyfile_password = "******"
                     modifyServerConfigTable(serverConfig);
                     initGetServersList();//重新加载服务器清单
-                    //立马请求检查服务器状态
-                    sshCheck(sid);
                 }
 
             }
@@ -723,17 +573,11 @@ function getServerConfigFromTable() {
                     var sid = data.content;
                     var status = {"status": "checking", "content": ""};//为了显示在表格中为*符号
                     serverConfig["status"] = status;
-                    serverConfig["password"] = "******";
-                    serverConfig["sudo_password"] = "******";
-                    serverConfig["su_password"] = "******";
-                    serverConfig["keyfile_password"] = "******";//当有值的时候才显示为***，后端需要判断字符长度是否有密码
                     serverConfig["id"] = sid;
                     //把值加入内存记录中，避免了从网络加载
                     window.allServersList.push(serverConfig);
                     createServerLine(serverConfig);
                     showSuccessNotic();
-                    //开启检查
-                    sshCheck(sid);
                 }
             }
         });
@@ -755,15 +599,9 @@ function modifyServerConfigTable(serverConfig) {
     $(tr).find(".owner")[0].textContent = serverConfig.owner;
     $(tr).find(".group")[0].textContent = serverConfig.group;
     $(tr).find(".username")[0].textContent = serverConfig.username;
-    $(tr).find(".login_method")[0].textContent = serverConfig.login_method;
-    $(tr).find(".password")[0].textContent = serverConfig.password;
-    $(tr).find(".keyfile")[0].textContent = serverConfig.keyfile;
-    $(tr).find(".keyfile_password")[0].textContent = serverConfig.keyfile_password;
     $(tr).find(".port")[0].textContent = serverConfig.port;
-    $(tr).find(".sudo")[0].textContent = serverConfig.sudo;
-    $(tr).find(".sudo_password")[0].textContent = serverConfig.sudo_password;
     $(tr).find(".su")[0].textContent = serverConfig.su;
-    $(tr).find(".su_password")[0].textContent = serverConfig.su_password;
+    $(tr).find(".sudo")[0].textContent = serverConfig.sudo;
     $(tr).find(".system")[0].textContent = serverConfig.os_type;
     $(tr).find(".description")[0].textContent = serverConfig.description;
 
@@ -787,7 +625,9 @@ function batchDeleteServersFromTbody() {
 
 function batchCreateServers(){
 	//批量创建服务器
-	var info="#首先，以'#'开头的都是注释，系统将不解析这样的行。\n#第二，每一个字段请使用空格分开区分。\n#第三,服务器字段格式为(如果该字段您不添加值，请使用'#'占位,登录方式为PASSWORD/KEY,su和sudo字段请填写Y/N):\n#IP 别名 主机组 用户名 登录方式 密码 秘钥 秘钥密码 端口 sudo sudo密码 su su密码 备注\n#192.168.1.1 测试主机 测试组 admin PASSWORD password-haha # # 22 N # N # 这里是备注信息"
+	var info="#首先，以'#'开头的都是注释，系统将不解析这样的行。\n#第二，每一个字段请使用空格分开区分。\n#第三,服务器字段格式为(如果某字段为空值，请使用'#'占位,su和sudo字段请填写Y/N):"
+	info += "\n#IP                别名     主机组 用户名  密码          端口 sudo sudo密码 su su密码 操作系统版本    备注"
+	info += "\n#192.168.1.1 测试主机 测试组 admin  your-pass 22   N      #            N    #     CentOS5/Redhat5 某IDC机房"
 	var textarea=document.getElementById("batchCreateServers");
 	textarea.value=info;
 }
@@ -842,42 +682,32 @@ function sendCreateServerRequest(){
 }
 
 
-function createServerAndDevice(){
-    //创建连接列表
-    var linkDevice=document.getElementById("linkDevice");
-    $(linkDevice).children().remove();
-    var t=window.allDeviceList;
-    //console.log(t);
-    t["CheungSSH自动化系统"]={"link":{"node":[{"name":"CheungSSH自动化系统","x":0,"y":0}],"edge":[],}};
-    for( var name in t){
-        var div=document.createElement("span");
-        var check=document.createElement("span");
-        check.className="glyphicon glyphicon-unchecked";
-        check.style.cssText="margin-left:5px;cursor:pointer;";
-        check.onclick=function(){
-            if( $(this).hasClass("glyphicon-unchecked")    ){
-                $(this).addClass("glyphicon-check").removeClass("glyphicon-unchecked");
-            }
-            else{
-                $(this).addClass("glyphicon-unchecked").removeClass("glyphicon-check");
-            }
-        }
 
-        var span=document.createElement("span");
-        span.style.cssText="margin-left:3px;color:black";
-        span.className="label label-defualt";
-        span.textContent=name;
 
-        div.appendChild(check)
-        div.appendChild(span)
-
-        linkDevice.appendChild(div);
-    }
+//绑定命令终端
+document.getElementById("terminal").onclick=function(){
+	var serverList = [];
+	$("#serversConfigTbody").find(".glyphicon-check").each(function () {
+		//this是每一个复选框,也就是span标签
+		//目标是把当前行的deleteButton按钮传递给删除函数deleteServerConfig,deleteButtonElements是[deleteButton1,deleteButton2]
+		var td = $(this).parent();
+		var tr = $(td).parent();
+		var td = this.parentNode;
+		var tr=td.parentNode;
+		var sid= tr.getAttribute("sid")
+		var alias=$(tr).find(".alias").eq(0).text();
+		var username=$(tr).find(".username").eq(0).text();
+		serverList.push({"sid":sid,"username":username,"alias":alias})
+	})
+	
+	if (serverList.length===0){
+		showErrorInfo("请选择主机！")
+		return false;
+	}
+	serverList = JSON.stringify(serverList)
+	//window.open("command.html?serverList="+serverList,"_blank","location=no,scrollbars=yes,resizable=1,modal=false,alwaysRaised=yes,weight=100%,height=100%")
+	window.open("command.html?serverList="+serverList,"_blank","location=no,scrollbars=yes,resizable=1,modal=false,alwaysRaised=yes,width=2000px,height=10000px")
 }
-
-
-
-
 
 
 
@@ -923,17 +753,12 @@ $(function () {//c
     //悬停显示提示信息
     $("[data-toggle='tooltip']").tooltip();
 
-    setInterval(function () {
-        allSSHCheck();
-    }, 600000)//十分钟一次，从服务器获取状态信息
-
     //绑定关闭显示检查服务器信息的按钮
     document.getElementById("closeCheckInfo").onclick=function(){
         $("#showServerCheckInfo").hide("fast");
         stopShadow();
     }
     createUserList();//默认加载用户列表到编辑框中
-    createKeyFileList();//加载key清单到用户列表
 	//绑定批量创建DIv
 	document.getElementById("closeBatchDiv").onclick=function(){
 		stopShadow();
@@ -944,11 +769,28 @@ $(function () {//c
         sendCreateServerRequest();//发送数据到后端
     }
 
-    createServerAndDevice();//加载设备连接列表
+    //createServerAndDevice();//加载设备连接列表
 
 
 })
 
 
+document.getElementById("crond").onclick=function(){
+	var servers = [];
+	$("table td .glyphicon-check").each(function(){
+		var sid = this.parentNode.parentNode.getAttribute("sid")
+		servers.push(sid)
+	})
+	if(servers.length===0){
+		showErrorInfo("请选择一个服务器！")
+		return false;
+	}
+	else if(servers.length>1){
+		showErrorInfo("只能选择一个服务器！")
+		return false;
+	}
+
+	window.open("crontab.html?sid="+servers[0],"_blank","location=no,scrollbars=yes,resizable=1,modal=false,alwaysRaised=yes,width=2000px,height=10000px")
+}
 
 

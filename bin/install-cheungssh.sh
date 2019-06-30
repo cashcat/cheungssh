@@ -9,11 +9,9 @@ useradd cheungssh 2>/dev/null
 pwd=`dirname $0`
 mkdir -p $CHOME/pid
 mkdir -p $CHOME/logs
-mkdir -p $CHOME/script
-mkdir -p $CHOME/keyfile
+mkdir -p $CHOME/scripts
 mkdir -p $CHOME/download
 mkdir -p $CHOME/upload
-mkdir -p $CHOME/analysis_logfile
 
 chown -R  cheungssh.cheungssh /var/spool/cron/
 chown     cheungssh.cheungssh /var/log/cron
@@ -251,7 +249,16 @@ make_install_software(){
 		exit 1
 	fi
 
-
+	# 安装jinja2
+	cd $CHOME/soft
+	tar xvf Jinja2-2.10.1.tar.gz
+	cd Jinja2-2.10.1
+	python setup.py install
+	if [ $? -ne 0 ]
+	then
+		echo  "安装jinja2失败，请联系CheungSSH作者"
+		exit 1
+	fi
 	# 安装msgpack
 	cd $CHOME/soft
 	tar xvf msgpack-python-0.4.8.tar.gz
@@ -391,8 +398,8 @@ Alias /cheungssh/static /home/cheungssh/web/cheungssh/static/
 <Location "/cheungssh/static">
         SetHandler None
 </Location>
-Alias /cheungssh/download/file  "/home/cheungssh/download/"
-<Location "/cheungssh/download/file">
+Alias /home/cheungssh/download/file  "/home/cheungssh/download/"
+<Location "/home/cheungssh/download/file">
         SetHandler None
 </Location>
 Alias /static  "/home/cheungssh/web/cheungssh/static/admin/"

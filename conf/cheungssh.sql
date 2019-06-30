@@ -84,7 +84,7 @@ CREATE TABLE `auth_permission` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `content_type_id` (`content_type_id`,`codename`),
   KEY `auth_permission_e4470c6e` (`content_type_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=84 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=135 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,7 +93,7 @@ CREATE TABLE `auth_permission` (
 
 LOCK TABLES `auth_permission` WRITE;
 /*!40000 ALTER TABLE `auth_permission` DISABLE KEYS */;
-INSERT INTO `auth_permission` VALUES (25,'创建服务器',8,'create_server'),(26,'修改服务器',8,'modify_server'),(27,'删除服务器',8,'delete_server'),(28,'执行命令',8,'execute_command'),(29,'远程文件上传',8,'remote_file_upload'),(30,'远程文件下载',8,'remote_file_download'),(31,'秘钥删除',8,'delete_keyfile'),(32,'创建和更新脚本',8,'create_script'),(33,'查看脚本内容',8,'show_script_content'),(34,'查看脚本清单',8,'show_script_list'),(35,'脚本执行',8,'execute_script'),(36,'命令历史',8,'command_history'),(37,'访问记录',8,'access_history'),(38,'登录记录',8,'login_success_history'),(39,'命令黑名单添加',8,'command_black_create'),(40,'命令黑名单查看',8,'command_black_list'),(41,'命令黑名单删除',8,'command_black_delete'),(42,'登录失败清单',8,'login_fail_list'),(43,'登录阈值设置',8,'login_limit_set'),(44,'IP解锁',8,'unlock_ip'),(45,'远程文件管理创建',8,'remote_file_admin_create'),(46,'远程文件管理列表',8,'remote_file_admin_list'),(47,'远程文件内容查看',8,'remote_file_admin_content_show'),(48,'远程文件内容更新',8,'remote_file_admin_content_update'),(49,'自定义资产项查看',8,'custom_assets_list'),(50,'自定义资产创建/修改',8,'custom_assets_create'),(51,'自定义资产删除',8,'custom_assets_delete'),(52,'查看资产信息',8,'assets_list'),(53,'查看App应用列表',8,'view_app'),(54,'创建和修改App应用',8,'create_app'),(55,'删除App应用',8,'delete_app'),(56,'执行App应用',8,'execute_app'),(57,'部署清单查看',8,'deployment_list'),(58,'创建/修改部署任务',8,'deployment_create'),(59,'删除部署任务',8,'deployment_delete'),(60,'部署进度查看',8,'deployment_progress'),(61,'执行部署任务',8,'deployment_execute'),(62,'Docker镜像清单查看',8,'docker_image_list'),(63,'Docker镜像下载',8,'docker_image_create'),(64,'Docker镜像删除',8,'docker_image_delete'),(65,'Docker容器清单查看',8,'docker_containner_list'),(66,'Docker创建容器',8,'docker_create_containner'),(67,'Docker删除容器',8,'docker_containner_delete'),(68,'Docker启动容器',8,'docker_containner_start'),(69,'Dokcer关闭容器',8,'docker_containner_stop'),(70,'Docker容器保存为镜像',8,'docker_containner_save'),(71,'创建网络设备节点',8,'create_device'),(72,'查看网络拓扑图',8,'get_device'),(73,'保存拓扑布局',8,'save_topology'),(74,'单独登录SSH',8,'active_ssh'),(75,'查看Linux计划任务列表',8,'get_crontab_list'),(76,'删除Linux计划任务列表',8,'delete_crontab_list'),(77,'创建/修改Linux计划任务列表',8,'create_or_modify_crontab');
+INSERT INTO `auth_permission` VALUES (25,'Can add servers list',9,'add_serverslist'),(26,'Can change servers list',9,'change_serverslist'),(27,'Can delete servers list',9,'delete_serverslist'),(28,'创建服务器',9,'create_server'),(29,'修改服务器',9,'modify_server'),(30,'删除服务器',9,'delete_server'),(31,'执行命令',9,'execute_command'),(32,'远程文件上传',9,'remote_file_upload'),(33,'远程文件下载',9,'remote_file_download'),(34,'秘钥删除',9,'delete_keyfile'),(35,'创建和更新脚本',9,'create_script'),(36,'查看脚本内容',9,'show_script_content'),(37,'查看脚本清单',9,'show_script_list'),(38,'脚本执行',9,'execute_script'),(39,'命令历史',9,'command_history'),(40,'访问记录',9,'access_history'),(41,'登录记录',9,'login_success_history'),(42,'命令黑名单添加',9,'command_black_create'),(43,'命令黑名单查看',9,'command_black_list'),(44,'命令黑名单删除',9,'command_black_delete'),(45,'登录失败清单',9,'login_fail_list'),(46,'登录阈值设置',9,'login_limit_set'),(47,'IP解锁',9,'unlock_ip'),(48,'远程文件管理创建',9,'remote_file_admin_create'),(49,'远程文件管理列表',9,'remote_file_admin_list'),(50,'远程文件内容查看',9,'remote_file_admin_content_show'),(51,'远程文件内容更新',9,'remote_file_admin_content_update'),(52,'自定义资产项查看',9,'custom_assets_list'),(53,'自定义资产创建/修改',9,'custom_assets_create'),(54,'自定义资产删除',9,'custom_assets_delete'),(55,'查看资产信息',9,'assets_list'),(56,'查看App应用列表',9,'view_app'),(57,'创建和修改App应用',9,'create_app'),(58,'删除App应用',9,'delete_app'),(59,'执行App应用',9,'execute_app'),(60,'部署清单查看',9,'deployment_list'),(61,'创建/修改部署任务',9,'deployment_create'),(62,'删除部署任务',9,'deployment_delete'),(63,'部署进度查看',9,'deployment_progress'),(64,'执行部署任务',9,'deployment_execute'),(65,'Docker镜像清单查看',9,'docker_image_list'),(66,'Docker镜像下载',9,'docker_image_create'),(67,'Docker镜像删除',9,'docker_image_delete'),(68,'Docker容器清单查看',9,'docker_containner_list'),(69,'Docker创建容器',9,'docker_create_containner'),(70,'Docker删除容器',9,'docker_containner_delete'),(71,'Docker启动容器',9,'docker_containner_start'),(72,'Dokcer关闭容器',9,'docker_containner_stop'),(73,'Docker容器保存为镜像',9,'docker_containner_save'),(74,'创建网络设备节点',9,'create_device'),(75,'查看网络拓扑图',9,'get_device'),(76,'保存拓扑布局',9,'save_topology'),(77,'单独登录SSH',9,'active_ssh'),(84,'Can add permission',1,'add_permission'),(85,'Can change permission',1,'change_permission'),(86,'Can delete permission',1,'delete_permission'),(87,'Can add group',2,'add_group'),(88,'Can change group',2,'change_group'),(89,'Can delete group',2,'delete_group'),(90,'Can add user',3,'add_user'),(91,'Can change user',3,'change_user'),(92,'Can delete user',3,'delete_user'),(93,'Can add content type',4,'add_contenttype'),(94,'Can change content type',4,'change_contenttype'),(95,'Can delete content type',4,'delete_contenttype'),(96,'Can add session',5,'add_session'),(97,'Can change session',5,'change_session'),(98,'Can delete session',5,'delete_session'),(99,'Can add cors model',6,'add_corsmodel'),(100,'Can change cors model',6,'change_corsmodel'),(101,'Can delete cors model',6,'delete_corsmodel'),(102,'Can add service operation list',11,'add_serviceoperationlist'),(103,'Can change service operation list',11,'change_serviceoperationlist'),(104,'Can delete service operation list',11,'delete_serviceoperationlist'),(105,'Can add user with black list group',12,'add_userwithblacklistgroup'),(106,'Can change user with black list group',12,'change_userwithblacklistgroup'),(107,'Can delete user with black list group',12,'delete_userwithblacklistgroup'),(108,'Can add black list list',13,'add_blacklistlist'),(109,'Can change black list list',13,'change_blacklistlist'),(110,'Can delete black list list',13,'delete_blacklistlist'),(111,'Can add black list group',14,'add_blacklistgroup'),(112,'Can change black list group',14,'change_blacklistgroup'),(113,'Can delete black list group',14,'delete_blacklistgroup'),(114,'Can add batch shell list',15,'add_batchshelllist'),(115,'Can change batch shell list',15,'change_batchshelllist'),(116,'Can delete batch shell list',15,'delete_batchshelllist'),(117,'Can add remote file history version',16,'add_remotefilehistoryversion'),(118,'Can change remote file history version',16,'change_remotefilehistoryversion'),(119,'Can delete remote file history version',16,'delete_remotefilehistoryversion'),(120,'Can add remote file',17,'add_remotefile'),(121,'Can change remote file',17,'change_remotefile'),(122,'Can delete remote file',17,'delete_remotefile'),(123,'Can add scripts historic version',7,'add_scriptshistoricversion'),(124,'Can change scripts historic version',7,'change_scriptshistoricversion'),(125,'Can delete scripts historic version',7,'delete_scriptshistoricversion'),(126,'Can add scripts list',8,'add_scriptslist'),(127,'Can change scripts list',8,'change_scriptslist'),(128,'Can delete scripts list',8,'delete_scriptslist'),(129,'查看Linux计划任务列表',9,'get_crontab_list'),(130,'删除Linux计划任务列表',9,'delete_crontab_list'),(131,'创建/修改Linux计划任务列表',9,'create_or_modify_crontab'),(132,'Can add log entry',10,'add_logentry'),(133,'Can change log entry',10,'change_logentry'),(134,'Can delete log entry',10,'delete_logentry');
 /*!40000 ALTER TABLE `auth_permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -127,7 +127,7 @@ CREATE TABLE `auth_user` (
 
 LOCK TABLES `auth_user` WRITE;
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-INSERT INTO `auth_user` VALUES (1,'cheungssh','','','a@q.com','pbkdf2_sha256$10000$Fk57SqVxAfLo$jBaNwQXPqC5VD+knd5gWi0Bn3bGcMIjtpUp9VxWuzn0=',1,1,1,'2017-08-28 10:35:05','2017-06-09 13:48:08'),(2,'test','','','','pbkdf2_sha256$10000$lQGGiken7dDB$TbBL52R6oQvRQvc8FJcuSfYx8ERI1BXhJDiEooi5+zk=',0,1,0,'2017-08-27 10:51:57','2017-08-26 04:05:26');
+INSERT INTO `auth_user` VALUES (1,'admin','','','admin@q.com','pbkdf2_sha256$10000$1TqR1fl3RgEJ$5avrZfCzq7CslEfoDXpp6PMHL6iqJwu5637qy3YMthc=',1,1,1,'2019-05-11 14:10:22','2019-05-11 14:10:22'),(2,'cheungssh','','','a@q.com','pbkdf2_sha256$10000$O6UZW8bi7aDN$yqiJ33LM8pdkV/LrCaJehPMCVQfeZc73jCDiVaVJz94=',1,1,1,'2019-06-30 13:58:43','2019-06-30 13:44:33');
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -173,7 +173,7 @@ CREATE TABLE `auth_user_user_permissions` (
   UNIQUE KEY `user_id` (`user_id`,`permission_id`),
   KEY `auth_user_user_permissions_fbfc09f1` (`user_id`),
   KEY `auth_user_user_permissions_1e014c8f` (`permission_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=54 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -182,104 +182,292 @@ CREATE TABLE `auth_user_user_permissions` (
 
 LOCK TABLES `auth_user_user_permissions` WRITE;
 /*!40000 ALTER TABLE `auth_user_user_permissions` DISABLE KEYS */;
-INSERT INTO `auth_user_user_permissions` VALUES (1,2,25),(2,2,26),(3,2,27),(4,2,28),(5,2,29),(6,2,30),(7,2,31),(8,2,32),(9,2,33),(10,2,34),(11,2,35),(12,2,36),(13,2,37),(14,2,38),(15,2,39),(16,2,40),(17,2,41),(18,2,42),(19,2,43),(20,2,44),(21,2,45),(22,2,46),(23,2,47),(24,2,48),(25,2,49),(26,2,50),(27,2,51),(28,2,52),(29,2,53),(30,2,54),(31,2,55),(32,2,56),(33,2,57),(34,2,58),(35,2,59),(36,2,60),(37,2,61),(38,2,62),(39,2,63),(40,2,64),(41,2,65),(42,2,66),(43,2,67),(44,2,68),(45,2,69),(46,2,70),(47,2,71),(48,2,72),(49,2,73),(50,2,74),(51,2,75),(52,2,76),(53,2,77);
 /*!40000 ALTER TABLE `auth_user_user_permissions` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `cheungssh_main_conf`
+-- Table structure for table `cheungssh_batchshelllist`
 --
 
-DROP TABLE IF EXISTS `cheungssh_main_conf`;
+DROP TABLE IF EXISTS `cheungssh_batchshelllist`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `cheungssh_main_conf` (
+CREATE TABLE `cheungssh_batchshelllist` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `RunMode` varchar(1) NOT NULL,
-  `TimeOut` int(11) NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `group` varchar(200) NOT NULL,
+  `create_time` varchar(200) NOT NULL,
+  `username` varchar(160) NOT NULL,
+  `command` longtext NOT NULL,
+  `description` varchar(1600) NOT NULL,
+  `parameters` varchar(1600) NOT NULL,
+  `os_type` varchar(2000) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `cheungssh_main_conf`
+-- Dumping data for table `cheungssh_batchshelllist`
 --
 
-LOCK TABLES `cheungssh_main_conf` WRITE;
-/*!40000 ALTER TABLE `cheungssh_main_conf` DISABLE KEYS */;
-/*!40000 ALTER TABLE `cheungssh_main_conf` ENABLE KEYS */;
+LOCK TABLES `cheungssh_batchshelllist` WRITE;
+/*!40000 ALTER TABLE `cheungssh_batchshelllist` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cheungssh_batchshelllist` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `cheungssh_serverconf`
+-- Table structure for table `cheungssh_blacklistgroup`
 --
 
-DROP TABLE IF EXISTS `cheungssh_serverconf`;
+DROP TABLE IF EXISTS `cheungssh_blacklistgroup`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `cheungssh_serverconf` (
+CREATE TABLE `cheungssh_blacklistgroup` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `IP` varchar(200) NOT NULL,
-  `HostName` varchar(100) NOT NULL,
-  `Port` int(11) NOT NULL,
-  `Group` varchar(200) NOT NULL,
-  `Username` varchar(200) NOT NULL,
-  `Password` varchar(128) NOT NULL,
-  `KeyFile` varchar(100) NOT NULL,
-  `Sudo` varchar(1) NOT NULL,
-  `SudoPassword` varchar(2000) DEFAULT NULL,
-  `Su` varchar(1) DEFAULT NULL,
-  `SuPassword` varchar(2000) DEFAULT NULL,
-  `LoginMethod` varchar(10) DEFAULT NULL,
+  `name` varchar(200) NOT NULL,
+  `list` varchar(2000) NOT NULL,
+  `owner` varchar(200) NOT NULL,
+  `create_time` varchar(200) NOT NULL,
+  `description` varchar(1600) DEFAULT NULL,
+  `default` varchar(10) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `cheungssh_serverconf`
+-- Dumping data for table `cheungssh_blacklistgroup`
 --
 
-LOCK TABLES `cheungssh_serverconf` WRITE;
-/*!40000 ALTER TABLE `cheungssh_serverconf` DISABLE KEYS */;
-/*!40000 ALTER TABLE `cheungssh_serverconf` ENABLE KEYS */;
+LOCK TABLES `cheungssh_blacklistgroup` WRITE;
+/*!40000 ALTER TABLE `cheungssh_blacklistgroup` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cheungssh_blacklistgroup` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `cheungssh_serverinfo`
+-- Table structure for table `cheungssh_blacklistlist`
 --
 
-DROP TABLE IF EXISTS `cheungssh_serverinfo`;
+DROP TABLE IF EXISTS `cheungssh_blacklistlist`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `cheungssh_serverinfo` (
+CREATE TABLE `cheungssh_blacklistlist` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `IP_id` int(11) NOT NULL,
-  `Position` longtext,
-  `Description` longtext,
-  `CPU` varchar(20) DEFAULT NULL,
-  `CPU_process_must` varchar(10) DEFAULT NULL,
-  `MEM_process_must` varchar(10) DEFAULT NULL,
-  `Use_CPU` varchar(20) DEFAULT NULL,
-  `uSE_MEM` varchar(20) DEFAULT NULL,
-  `MEM` varchar(20) DEFAULT NULL,
-  `IO` varchar(200) DEFAULT NULL,
-  `Platform` varchar(200) NOT NULL,
-  `System` varchar(200) NOT NULL,
-  `InBankWidth` int(11) DEFAULT NULL,
-  `OutBankWidth` int(11) DEFAULT NULL,
-  `CurrentUser` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `IP_id` (`IP_id`)
+  `name` varchar(200) NOT NULL,
+  `owner` varchar(200) NOT NULL,
+  `create_time` varchar(200) NOT NULL,
+  `expression` longtext NOT NULL,
+  `description` varchar(1600) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `cheungssh_serverinfo`
+-- Dumping data for table `cheungssh_blacklistlist`
 --
 
-LOCK TABLES `cheungssh_serverinfo` WRITE;
-/*!40000 ALTER TABLE `cheungssh_serverinfo` DISABLE KEYS */;
-/*!40000 ALTER TABLE `cheungssh_serverinfo` ENABLE KEYS */;
+LOCK TABLES `cheungssh_blacklistlist` WRITE;
+/*!40000 ALTER TABLE `cheungssh_blacklistlist` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cheungssh_blacklistlist` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cheungssh_remotefile`
+--
+
+DROP TABLE IF EXISTS `cheungssh_remotefile`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cheungssh_remotefile` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `path` varchar(2000) NOT NULL,
+  `sid` int(11) NOT NULL,
+  `tid` int(11) NOT NULL,
+  `alias` varchar(200) NOT NULL,
+  `description` varchar(160) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cheungssh_remotefile`
+--
+
+LOCK TABLES `cheungssh_remotefile` WRITE;
+/*!40000 ALTER TABLE `cheungssh_remotefile` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cheungssh_remotefile` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cheungssh_remotefilehistoryversion`
+--
+
+DROP TABLE IF EXISTS `cheungssh_remotefilehistoryversion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cheungssh_remotefilehistoryversion` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `create_time` varchar(200) NOT NULL,
+  `ip` varchar(16) NOT NULL,
+  `username` varchar(160) NOT NULL,
+  `path` varchar(160) NOT NULL,
+  `remote_file_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cheungssh_remotefilehistoryversion`
+--
+
+LOCK TABLES `cheungssh_remotefilehistoryversion` WRITE;
+/*!40000 ALTER TABLE `cheungssh_remotefilehistoryversion` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cheungssh_remotefilehistoryversion` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cheungssh_scriptshistoricversion`
+--
+
+DROP TABLE IF EXISTS `cheungssh_scriptshistoricversion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cheungssh_scriptshistoricversion` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sid` int(11) NOT NULL,
+  `path` varchar(2000) NOT NULL,
+  `create_time` varchar(200) NOT NULL,
+  `owner` varchar(20) NOT NULL,
+  `active` tinyint(1) NOT NULL,
+  `parameters` longtext NOT NULL,
+  `version` varchar(50) NOT NULL,
+  `comment` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cheungssh_scriptshistoricversion`
+--
+
+LOCK TABLES `cheungssh_scriptshistoricversion` WRITE;
+/*!40000 ALTER TABLE `cheungssh_scriptshistoricversion` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cheungssh_scriptshistoricversion` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cheungssh_scriptslist`
+--
+
+DROP TABLE IF EXISTS `cheungssh_scriptslist`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cheungssh_scriptslist` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `script_name` varchar(200) NOT NULL,
+  `script_group` varchar(20) NOT NULL,
+  `description` longtext NOT NULL,
+  `os_type` varchar(2000) NOT NULL,
+  `active_version` int(11) NOT NULL,
+  `executable` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cheungssh_scriptslist`
+--
+
+LOCK TABLES `cheungssh_scriptslist` WRITE;
+/*!40000 ALTER TABLE `cheungssh_scriptslist` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cheungssh_scriptslist` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cheungssh_serverslist`
+--
+
+DROP TABLE IF EXISTS `cheungssh_serverslist`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cheungssh_serverslist` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ip` varchar(200) NOT NULL,
+  `owner` varchar(100) DEFAULT NULL,
+  `hostname` varchar(100) DEFAULT NULL,
+  `port` int(11) NOT NULL,
+  `group` varchar(200) NOT NULL,
+  `username` varchar(20) NOT NULL,
+  `alias` varchar(20) NOT NULL,
+  `status` varchar(20) NOT NULL,
+  `password` varchar(128) NOT NULL,
+  `os_type` varchar(128) NOT NULL,
+  `sudo` varchar(1) NOT NULL,
+  `sudo_password` varchar(2000) DEFAULT NULL,
+  `su` varchar(1) NOT NULL,
+  `su_password` varchar(2000) DEFAULT NULL,
+  `description` longtext,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cheungssh_serverslist`
+--
+
+LOCK TABLES `cheungssh_serverslist` WRITE;
+/*!40000 ALTER TABLE `cheungssh_serverslist` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cheungssh_serverslist` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cheungssh_serviceoperationlist`
+--
+
+DROP TABLE IF EXISTS `cheungssh_serviceoperationlist`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cheungssh_serviceoperationlist` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(5800) DEFAULT NULL,
+  `create_time` varchar(200) NOT NULL,
+  `description` varchar(200) NOT NULL,
+  `list` longtext NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cheungssh_serviceoperationlist`
+--
+
+LOCK TABLES `cheungssh_serviceoperationlist` WRITE;
+/*!40000 ALTER TABLE `cheungssh_serviceoperationlist` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cheungssh_serviceoperationlist` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cheungssh_userwithblacklistgroup`
+--
+
+DROP TABLE IF EXISTS `cheungssh_userwithblacklistgroup`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cheungssh_userwithblacklistgroup` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) DEFAULT NULL,
+  `black_list_group_id` varchar(5800) DEFAULT NULL,
+  `create_time` varchar(200) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cheungssh_userwithblacklistgroup`
+--
+
+LOCK TABLES `cheungssh_userwithblacklistgroup` WRITE;
+/*!40000 ALTER TABLE `cheungssh_userwithblacklistgroup` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cheungssh_userwithblacklistgroup` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -324,7 +512,7 @@ CREATE TABLE `django_admin_log` (
   PRIMARY KEY (`id`),
   KEY `django_admin_log_fbfc09f1` (`user_id`),
   KEY `django_admin_log_e4470c6e` (`content_type_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -333,7 +521,6 @@ CREATE TABLE `django_admin_log` (
 
 LOCK TABLES `django_admin_log` WRITE;
 /*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
-INSERT INTO `django_admin_log` VALUES (1,'2017-08-26 04:05:26',1,3,'2','test',1,''),(2,'2017-08-26 04:06:11',1,3,'2','test',2,'已修改 password 和 user_permissions 。');
 /*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -351,7 +538,7 @@ CREATE TABLE `django_content_type` (
   `model` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `app_label` (`app_label`,`model`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -360,7 +547,7 @@ CREATE TABLE `django_content_type` (
 
 LOCK TABLES `django_content_type` WRITE;
 /*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
-INSERT INTO `django_content_type` VALUES (1,'permission','auth','permission'),(2,'group','auth','group'),(3,'user','auth','user'),(4,'content type','contenttypes','contenttype'),(5,'session','sessions','session'),(6,'cors model','corsheaders','corsmodel'),(7,'main_ conf','cheungssh','main_conf'),(8,'server conf','cheungssh','serverconf'),(9,'server info','cheungssh','serverinfo'),(10,'log entry','admin','logentry');
+INSERT INTO `django_content_type` VALUES (1,'permission','auth','permission'),(2,'group','auth','group'),(3,'user','auth','user'),(4,'content type','contenttypes','contenttype'),(5,'session','sessions','session'),(6,'cors model','corsheaders','corsmodel'),(7,'scripts historic version','cheungssh','scriptshistoricversion'),(8,'scripts list','cheungssh','scriptslist'),(9,'servers list','cheungssh','serverslist'),(10,'log entry','admin','logentry'),(11,'service operation list','cheungssh','serviceoperationlist'),(12,'user with black list group','cheungssh','userwithblacklistgroup'),(13,'black list list','cheungssh','blacklistlist'),(14,'black list group','cheungssh','blacklistgroup'),(15,'batch shell list','cheungssh','batchshelllist'),(16,'remote file history version','cheungssh','remotefilehistoryversion'),(17,'remote file','cheungssh','remotefile');
 /*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -386,7 +573,7 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('cfc2b250a063fb24d41d4d107e132c73','ZTJjNTY1Yzk2ZWFhY2Q0ODBiZDJmNGRlNTE3YTY5ZDhjMzNkYTVlMjqAAn1xAShVCHVzZXJuYW1l\ncQJYCQAAAGNoZXVuZ3NzaHEDVQ9fc2Vzc2lvbl9leHBpcnlxBEsAVRJfYXV0aF91c2VyX2JhY2tl\nbmRxBVUpZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmRxBlUNX2F1dGhf\ndXNlcl9pZHEHigEBdS4=\n','2017-08-22 14:37:09'),('a800611dd8f88a89a4acfbbf25deb266','ZTJjNTY1Yzk2ZWFhY2Q0ODBiZDJmNGRlNTE3YTY5ZDhjMzNkYTVlMjqAAn1xAShVCHVzZXJuYW1l\ncQJYCQAAAGNoZXVuZ3NzaHEDVQ9fc2Vzc2lvbl9leHBpcnlxBEsAVRJfYXV0aF91c2VyX2JhY2tl\nbmRxBVUpZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmRxBlUNX2F1dGhf\ndXNlcl9pZHEHigEBdS4=\n','2017-08-27 05:33:57'),('5c2935c6652c147593f3d78862b1604f','ZTJjNTY1Yzk2ZWFhY2Q0ODBiZDJmNGRlNTE3YTY5ZDhjMzNkYTVlMjqAAn1xAShVCHVzZXJuYW1l\ncQJYCQAAAGNoZXVuZ3NzaHEDVQ9fc2Vzc2lvbl9leHBpcnlxBEsAVRJfYXV0aF91c2VyX2JhY2tl\nbmRxBVUpZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmRxBlUNX2F1dGhf\ndXNlcl9pZHEHigEBdS4=\n','2017-09-01 04:32:18'),('0b3f1cb925501edb6c4c4d0d52588fb9','ZTJjNTY1Yzk2ZWFhY2Q0ODBiZDJmNGRlNTE3YTY5ZDhjMzNkYTVlMjqAAn1xAShVCHVzZXJuYW1l\ncQJYCQAAAGNoZXVuZ3NzaHEDVQ9fc2Vzc2lvbl9leHBpcnlxBEsAVRJfYXV0aF91c2VyX2JhY2tl\nbmRxBVUpZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmRxBlUNX2F1dGhf\ndXNlcl9pZHEHigEBdS4=\n','2017-09-01 12:48:39'),('62f0c668a0caf0c8c96bf80f97d30f54','ZTJjNTY1Yzk2ZWFhY2Q0ODBiZDJmNGRlNTE3YTY5ZDhjMzNkYTVlMjqAAn1xAShVCHVzZXJuYW1l\ncQJYCQAAAGNoZXVuZ3NzaHEDVQ9fc2Vzc2lvbl9leHBpcnlxBEsAVRJfYXV0aF91c2VyX2JhY2tl\nbmRxBVUpZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmRxBlUNX2F1dGhf\ndXNlcl9pZHEHigEBdS4=\n','2017-09-01 14:24:20'),('67b680e5b8861a8b74d1a7a45f2be7ba','ZTJjNTY1Yzk2ZWFhY2Q0ODBiZDJmNGRlNTE3YTY5ZDhjMzNkYTVlMjqAAn1xAShVCHVzZXJuYW1l\ncQJYCQAAAGNoZXVuZ3NzaHEDVQ9fc2Vzc2lvbl9leHBpcnlxBEsAVRJfYXV0aF91c2VyX2JhY2tl\nbmRxBVUpZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmRxBlUNX2F1dGhf\ndXNlcl9pZHEHigEBdS4=\n','2017-09-02 01:21:28'),('d986d833bb94903032ff51dcbc720551','ZTJjNTY1Yzk2ZWFhY2Q0ODBiZDJmNGRlNTE3YTY5ZDhjMzNkYTVlMjqAAn1xAShVCHVzZXJuYW1l\ncQJYCQAAAGNoZXVuZ3NzaHEDVQ9fc2Vzc2lvbl9leHBpcnlxBEsAVRJfYXV0aF91c2VyX2JhY2tl\nbmRxBVUpZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmRxBlUNX2F1dGhf\ndXNlcl9pZHEHigEBdS4=\n','2017-09-02 02:56:22'),('13d0c1505ced994d62e6f3ddf2258b95','ZTJjNTY1Yzk2ZWFhY2Q0ODBiZDJmNGRlNTE3YTY5ZDhjMzNkYTVlMjqAAn1xAShVCHVzZXJuYW1l\ncQJYCQAAAGNoZXVuZ3NzaHEDVQ9fc2Vzc2lvbl9leHBpcnlxBEsAVRJfYXV0aF91c2VyX2JhY2tl\nbmRxBVUpZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmRxBlUNX2F1dGhf\ndXNlcl9pZHEHigEBdS4=\n','2017-09-02 03:13:50'),('0f795fa0a61d552f84984719cb1e3041','ZTJjNTY1Yzk2ZWFhY2Q0ODBiZDJmNGRlNTE3YTY5ZDhjMzNkYTVlMjqAAn1xAShVCHVzZXJuYW1l\ncQJYCQAAAGNoZXVuZ3NzaHEDVQ9fc2Vzc2lvbl9leHBpcnlxBEsAVRJfYXV0aF91c2VyX2JhY2tl\nbmRxBVUpZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmRxBlUNX2F1dGhf\ndXNlcl9pZHEHigEBdS4=\n','2017-09-06 11:49:53'),('cbe0ee6940a49a76c1d8fd32d4f0d775','ZTJjNTY1Yzk2ZWFhY2Q0ODBiZDJmNGRlNTE3YTY5ZDhjMzNkYTVlMjqAAn1xAShVCHVzZXJuYW1l\ncQJYCQAAAGNoZXVuZ3NzaHEDVQ9fc2Vzc2lvbl9leHBpcnlxBEsAVRJfYXV0aF91c2VyX2JhY2tl\nbmRxBVUpZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmRxBlUNX2F1dGhf\ndXNlcl9pZHEHigEBdS4=\n','2017-09-07 11:01:17'),('786a1722e2ec4f169d1925cb355ae669','ZTJjNTY1Yzk2ZWFhY2Q0ODBiZDJmNGRlNTE3YTY5ZDhjMzNkYTVlMjqAAn1xAShVCHVzZXJuYW1l\ncQJYCQAAAGNoZXVuZ3NzaHEDVQ9fc2Vzc2lvbl9leHBpcnlxBEsAVRJfYXV0aF91c2VyX2JhY2tl\nbmRxBVUpZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmRxBlUNX2F1dGhf\ndXNlcl9pZHEHigEBdS4=\n','2017-09-07 15:39:31'),('c6c964f5559375da60f2fdb3c276326b','YjJjZmM3YmM1YWUyOTNkN2MzMmU2MzZhNDdmZGJiOTY5Mzg0ZDU0MzqAAn1xAShVCHVzZXJuYW1l\ncQJYBAAAAHRlc3RxA1UPX3Nlc3Npb25fZXhwaXJ5cQRLAFUSX2F1dGhfdXNlcl9iYWNrZW5kcQVV\nKWRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kcQZVDV9hdXRoX3VzZXJf\naWRxB4oBAnUu\n','2017-09-09 11:45:46'),('ce9d6935f8aa847afa78a6d3221fe424','YjJjZmM3YmM1YWUyOTNkN2MzMmU2MzZhNDdmZGJiOTY5Mzg0ZDU0MzqAAn1xAShVCHVzZXJuYW1l\ncQJYBAAAAHRlc3RxA1UPX3Nlc3Npb25fZXhwaXJ5cQRLAFUSX2F1dGhfdXNlcl9iYWNrZW5kcQVV\nKWRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kcQZVDV9hdXRoX3VzZXJf\naWRxB4oBAnUu\n','2017-09-09 04:06:27'),('8e8c05065e7b93fa83941137a850cf35','ZTJjNTY1Yzk2ZWFhY2Q0ODBiZDJmNGRlNTE3YTY5ZDhjMzNkYTVlMjqAAn1xAShVCHVzZXJuYW1l\ncQJYCQAAAGNoZXVuZ3NzaHEDVQ9fc2Vzc2lvbl9leHBpcnlxBEsAVRJfYXV0aF91c2VyX2JhY2tl\nbmRxBVUpZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmRxBlUNX2F1dGhf\ndXNlcl9pZHEHigEBdS4=\n','2017-09-09 12:09:58'),('3643ceb80e5fc3f4658814f2478e0481','ZTJjNTY1Yzk2ZWFhY2Q0ODBiZDJmNGRlNTE3YTY5ZDhjMzNkYTVlMjqAAn1xAShVCHVzZXJuYW1l\ncQJYCQAAAGNoZXVuZ3NzaHEDVQ9fc2Vzc2lvbl9leHBpcnlxBEsAVRJfYXV0aF91c2VyX2JhY2tl\nbmRxBVUpZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmRxBlUNX2F1dGhf\ndXNlcl9pZHEHigEBdS4=\n','2017-09-11 10:35:05'),('b50feb3892750bb336670efb7a282702','ZTJjNTY1Yzk2ZWFhY2Q0ODBiZDJmNGRlNTE3YTY5ZDhjMzNkYTVlMjqAAn1xAShVCHVzZXJuYW1l\ncQJYCQAAAGNoZXVuZ3NzaHEDVQ9fc2Vzc2lvbl9leHBpcnlxBEsAVRJfYXV0aF91c2VyX2JhY2tl\nbmRxBVUpZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmRxBlUNX2F1dGhf\ndXNlcl9pZHEHigEBdS4=\n','2017-09-10 10:52:12');
+INSERT INTO `django_session` VALUES ('02918c2222f84640f5798620418e3d64','ZmIwZDMwM2YzYzE5NTg4ZDJkOWQ2MjE3YzAzZjc1MzU0NTNlN2VkZTqAAn1xAShVCHVzZXJuYW1l\ncQJYCQAAAGNoZXVuZ3NzaHEDVQ9fc2Vzc2lvbl9leHBpcnlxBEsAVRJfYXV0aF91c2VyX2JhY2tl\nbmRxBVUpZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmRxBlUNX2F1dGhf\ndXNlcl9pZHEHigECdS4=\n','2019-07-14 13:58:43');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -399,4 +586,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-08-29 22:21:14
+-- Dump completed on 2019-06-30 22:38:07

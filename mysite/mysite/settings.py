@@ -159,7 +159,7 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-	'corsheaders', 
+	'corsheaders', ####
     #'django.contrib.sites',
     #'mysite.books',
     'mysite.cheungssh',

@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 #coding:utf-8
 import os,sys,json
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
-sys.path.append('/home/cheungssh/mysite')
 from django.core.cache import cache
 from cheungssh_error import CheungSSHError
 from cheungssh_sshv2 import CheungSSH_SSH
 import threading
+from ServersInventory import ServersInventory
 REDIS=cache.master_client
 class CheungSSHControler(object):	
 	def __init__(self):
@@ -23,16 +22,9 @@ class CheungSSHControler(object):
 	def connect(self,sid=""): 
 		cheungssh_info={"content":"","status":False}
 		try:
-			server_config=self.convert_id_to_ip(sid) 
-			if not server_config["status"]:raise CheungSSHError(server_config["content"]) 
-			#ip=server_config["content"]["ip"]
-			#alias=server_config["content"]["alias"]
-			if server_config["status"]:
-				cheungssh_info=self.SSH.login(**server_config["content"]) 
-				
-			else:
-				
-				cheungssh_info["content"]=server_config["content"]
+			server_config=ServersInventory().get_server(sid=sid)
+			cheungssh_info=self.SSH.login(**server_config["content"]) 
+			
 		except Exception,e:
 			print "connect错误",str(e)
 			cheungssh_info["content"]=str(e)
@@ -74,6 +66,7 @@ class CheungSSHControler(object):
 	@staticmethod
 	def convert_id_to_ip(sid=""):
 		
+		print sid,111111111111111111
 		cheungssh_info={"status":False,"content":"指定的ID不存在"}
 		try:
 			servers_list=REDIS.lrange("servers.config.list",0,-1) 

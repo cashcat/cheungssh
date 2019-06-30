@@ -1,6 +1,5 @@
 <!--fileUpload-->
 <div>
-    <button class="btn btn-primary" id="fileDownloadSelectServerButton">服务器</button>
     <button class="btn btn-success " id="startFileDownloadButton" disabled>
         <span class="glyphicon glyphicon-play-circle"></span>
     </button>
@@ -18,58 +17,6 @@
     </div>
 </div>
 
-
-<div id="showFileDownloadServerDIV"
-     style="z-index: 1004;position: absolute;left: 0px;right: 0px;top:0px;margin: auto;display:none;">
-    <div class="modal  "
-         style="overflow: visible;position:relative;left:0px;right:0px;bottom:0px;top:0px;margin:auto;display:block;">
-        <div class="modal-dialog" style="left: 0px; margin-top: 0px;padding:0px;padding-top: 0px;">
-            <div class="modal-content " id="">
-                <div class="modal-header" style="cursor: move;">
-
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-
-                    <h4 class=" glyphicon glyphicon-filter " style="color: green;cursor:pointer;">选择服务器</h4>
-                </div>
-
-                <div class="modal-body">
-                    <div style="height: 40px;">
-                        <span id="fileDownloadSelectAllServers" class="glyphicon glyphicon-check"
-                              style="cursor: pointer;">&nbsp;全选</span>
-                    </div>
-                    <table class="table table-bordered table-hover table-striped  table-condensed">
-                        <thead>
-                        <tr>
-                            <th>主机组</th>
-                            <th>主机</th>
-                        </tr>
-                        </thead>
-                        <tbody id="downloadFileSelectServerTbody">
-
-                        <!--
-                        这里是tr，每一行
-
-                        -->
-                        </tbody>
-
-                    </table>
-
-
-                    <!---->
-
-
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" id="cancelfileDownloadSelect" style="float:left;">取消
-                    </button>
-                    <button type="button" class="btn btn-success" id="fileDownloadSelectNext" style="float:right;">确定
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 <!--输入路径框-->
@@ -119,7 +66,7 @@
 
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
 
-                    <h4 class=" glyphicon  glyphicon-pencil " style="color: green;cursor:pointer;">请输入远程路径</h4>
+                    <h4 class=" glyphicon  glyphicon-pencil " style="color: green;cursor:pointer;">提醒</h4>
                 </div>
 
                 <div class="modal-body">
