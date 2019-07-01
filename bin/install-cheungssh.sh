@@ -89,19 +89,18 @@ update_yum(){
 }
 
 install_setuptools(){
-	echo  "import setuptools"|python 2>/dev/null
+	#echo  "import setuptools"|python 2>/dev/null
+	#if [ $? -ne 0 ]
+	#then
+	#如果没有setuptools需要安装
+	cd $CHOME/soft
+	tar xvf setuptools-27.0.0.tar.gz
+	cd setuptools-27.0.0
+	python setup.py install
 	if [ $? -ne 0 ]
 	then
-		#如果没有setuptools需要安装
-		cd $CHOME/soft
-		tar xvf setuptools-0.6c11.tar.gz
-		cd setuptools-0.6c11
-		python setup.py install
-		if [ $? -ne 0 ]
-		then
-			echo  "安装setuptools失败，请联系CheungSSH作者解决."
-			exit 1
-		fi
+		echo  "安装setuptools失败，请联系CheungSSH作者解决."
+		exit 1
 	fi
 	
 }
