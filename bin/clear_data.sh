@@ -2,21 +2,6 @@
 #导出数据库最新表
 python /home/cheungssh/mysite/manage.py createsuperuser cheungssh
 python /home/cheungssh/mysite/manage.py changepassword cheungssh
-mysql  -uroot  -pzhang cheungssh -e " delete  from auth_permission where id in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,78,79,80,81,82,83);"
-mysql  -uroot  -pzhang cheungssh -e " delete  from cheungssh_serverslist;"
-mysql  -uroot  -pzhang cheungssh -e " delete  from cheungssh_batchshelllist;"
-mysql  -uroot  -pzhang cheungssh -e " delete  from cheungssh_blacklistgroup;"
-mysql  -uroot  -pzhang cheungssh -e " delete  from cheungssh_blacklistlist;"
-mysql  -uroot  -pzhang cheungssh -e " delete  from cheungssh_remotefile;"
-mysql  -uroot  -pzhang cheungssh -e " delete  from cheungssh_remotefilehistoryversion;"
-mysql  -uroot  -pzhang cheungssh -e " delete  from cheungssh_scriptshistoricversion;"
-mysql  -uroot  -pzhang cheungssh -e " delete  from cheungssh_scriptslist;"
-mysql  -uroot  -pzhang cheungssh -e " delete  from cheungssh_serviceoperationlist;"
-mysql  -uroot  -pzhang cheungssh -e " delete  from cheungssh_userwithblacklistgroup ;"
-echo  "DROP database IF EXISTS cheungssh;" >  /home/cheungssh/conf/cheungssh.sql
-echo  "create database cheungssh default charset='utf8';" >>  /home/cheungssh/conf/cheungssh.sql
-echo  "use cheungssh;" >> /home/cheungssh/conf/cheungssh.sql
-mysqldump  -uroot -pzhang cheungssh >> /home/cheungssh/conf/cheungssh.sql
 /bin/rm -r /issue/cheungssh* 2>/dev/null
 /bin/cp  -r /home/cheungssh /issue/
 /bin/rm -r /issue/cheungssh/cheungssh/.ssh 2>/dev/null

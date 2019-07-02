@@ -168,10 +168,13 @@ create_service(){
 
 
 import_sql(){
-	mysql -uroot  -p$mysql_password  < /home/cheungssh/conf/cheungssh.sql
+	mysql -uroot  -p$mysql_password  -e 'DROP database IF EXISTS cheungssh;'
+	mysql -uroot  -p$mysql_password  -e 'create database cheungssh default charset="utf8";'
+	echo  "下面即将创建管理员账户，请牢记您将输入的账户名和密码！"
+	python /home/cheungssh/mysite/manage.py syncdb
 	if [ $? -ne 0 ]
 	then
-		echo  "导入Mysql失败，请联系CheungSSH解决"
+		echo  "初始化数据库失败了，请联系CheungSSH作者解决！"
 		exit 1
 	fi
 }
