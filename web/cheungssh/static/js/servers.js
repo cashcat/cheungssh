@@ -362,12 +362,6 @@ function changeServerDataButton() {
         //this是div，
         suProgress(this)
     }
-    //绑定创建服务器按钮
-    document.getElementById("createServer").onclick = function () {
-        startShadow();
-        cleanEditServerConfigTableData();
-        $("#editServerConfigTable").slideUp("fast");
-    }
 }
 function createUserList() {
     //绑定用户归属选择
@@ -388,6 +382,7 @@ function createUserList() {
 
 function cleanEditServerConfigTableData() {
     //清除编辑框的数据
+    console.log(1111)
     document.getElementById("ip").value = "";
     document.getElementById("alias").value = "";
     document.getElementById("owner").innerHTML = '请选择 <span class="caret">';
@@ -736,6 +731,14 @@ $(function () {//c
     document.getElementById("createServer").onclick = function () {
         window.currentEditServerModel = "create";//当前编辑模式是创建
         startShadow();
+	document.getElementById("ip").value = "";
+	document.getElementById("alias").value = "";
+	document.getElementById("group").value = "";
+	document.getElementById("username").value = "";
+	document.getElementById("password").value = "";
+	document.getElementById("port").value = "22";
+	document.getElementById("description").value = "";
+	document.getElementById("ip").focus();
         showEditServerConfigTable();//显示服务器编辑框
     }
     //绑定保存服务器配置按钮

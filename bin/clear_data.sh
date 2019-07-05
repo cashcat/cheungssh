@@ -1,7 +1,10 @@
 #!/bin/bash
 #导出数据库最新表
-python /home/cheungssh/mysite/manage.py createsuperuser cheungssh
-python /home/cheungssh/mysite/manage.py changepassword cheungssh
+echo 'DROP database IF EXISTS cheungssh;' > /home/cheungssh/conf/cheungssh.sql
+echo 'create database cheungssh default charset="utf8";' >> /home/cheungssh/conf/cheungssh.sql
+echo 'use cheungssh;' >> /home/cheungssh/conf/cheungssh.sql
+mysqldump -uroot -pzhang -d cheungssh >> /home/cheungssh/conf/cheungssh.sql
+echo  "INSERT INTO auth_user VALUES (1,'cheungssh','','','cheun@q.com','pbkdf2_sha256\$10000\$DrpqKF21yQiL\$pF2hEsrlI1YI0tHMRZveOzjqMaXN3JfJ+tuPbuRhaCc=',1,1,1,'2019-07-05 07:30:33','2019-07-05 07:29:58');" >> /home/cheungssh/conf/cheungssh.sql
 /bin/rm -r /issue/cheungssh* 2>/dev/null
 /bin/cp  -r /home/cheungssh /issue/
 /bin/rm -r /issue/cheungssh/cheungssh/.ssh 2>/dev/null
@@ -42,7 +45,3 @@ cd -
 /bin/rm  -r /issue/cheungssh/.mysql_history
 /bin/rm  -r /issue/cheungssh/bin/2
 /bin/rm  -r /issue/cheungssh/bin/auth.sql
-cd /issue/
-filename=cheungssh_web4.0_source_`date +%F`.tar.gz
-tar zcvf $filename cheungssh
-echo "sz $filename"
