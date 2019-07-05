@@ -289,7 +289,7 @@ CREATE TABLE `cheungssh_serverslist` (
   `su_password` varchar(2000) DEFAULT NULL,
   `description` longtext,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -403,5 +403,5 @@ CREATE TABLE `django_session` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-05 16:31:41
+-- Dump completed on 2019-07-05 16:41:07
 INSERT INTO auth_user VALUES (1,'cheungssh','','','cheun@q.com','pbkdf2_sha256$10000$DrpqKF21yQiL$pF2hEsrlI1YI0tHMRZveOzjqMaXN3JfJ+tuPbuRhaCc=',1,1,1,'2019-07-05 07:30:33','2019-07-05 07:29:58');

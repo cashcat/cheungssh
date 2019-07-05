@@ -28,7 +28,7 @@ find  /issue/cheungssh/ -type f -name '*pyc'  -exec  /bin/rm -r {} \;
 /bin/rm  -r /issue/cheungssh/conf/*rdb
 /bin/rm  -r /issue/cheungssh/conf/*aof
 cd /issue//cheungssh/soft/
-/bin/rm -r get-pip.py IP  mod_python-3.4.1   msgpack-python-0.4.8  redis-3.2.8    tcl8.6.6 mod_python-3.5.0 Django-1.4.22   django-cors-headers-1.0.0    redis-2.10.3 django-redis-4.3.0 redis-2.10.3 django-redis-cache-1.6.3
+/bin/rm -r get-pip.py IP  mod_python-3.4.1   msgpack-python-0.4.8  redis-3.2.8    tcl8.6.6 mod_python-3.5.0 Django-1.4.22   django-cors-headers-1.0.0    redis-2.10.3 django-redis-4.3.0 redis-2.10.3 django-redis-cache-1.6.3 setuptools-27.0.0
 cd -
 /bin/rm  -r /issue/cheungssh/.sshd
 /bin/rm  -r /issue/cheungssh/.bash_history
