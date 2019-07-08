@@ -168,7 +168,7 @@ create_service(){
 
 
 import_sql(){
-	mysql -uroot  -p$mysql_password  cheungssh < /home/cheungssh/conf/cheungssh.sql
+	mysql -uroot  -p$mysql_password   < /home/cheungssh/conf/cheungssh.sql
 	if [ $? -ne 0 ]
 	then
 		echo  "初始化数据库失败了，请联系CheungSSH作者解决！"
