@@ -130,12 +130,13 @@ class ServersInventory(object):
 				}
 		if script_id is not None:
 			os_type = ScriptsList.objects.get(id=script_id).os_type
+			os_type = json.loads(os_type)
 		else:
 			if all_os is None:
 				os_type = CheungSSHOSVersion.os_type
 			else:
 				os_type = json.loads(all_os)
-			os_type = [x.lower() for x in os_type]
+		os_type = [x.lower() for x in os_type]
 		for line in data:
 			##### 是否符合执行要求
 			if not line.os_type.lower() in os_type:
