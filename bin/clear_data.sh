@@ -8,6 +8,7 @@ echo  "INSERT INTO auth_user VALUES (1,'cheungssh','','','cheun@q.com','pbkdf2_s
 /bin/rm -r /issue/cheungssh* 2>/dev/null
 /bin/cp  -r /home/cheungssh /issue/
 /bin/rm -r /issue/cheungssh/cheungssh/.ssh 2>/dev/null
+/bin/rm -r /issue/cheungssh/packages 2>/dev/null
 /bin/rm -r /issue/cheungssh/cheungssh/script 2>/dev/null
 /bin/rm -r /issue/cheungssh/cheungssh/logs 2>/dev/null
 /bin/rm -r /issue/cheungssh/cheungssh/remote_files 2>/dev/null
