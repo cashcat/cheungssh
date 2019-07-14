@@ -1,0 +1,96 @@
+<div>
+        <p class="navbar-form" style="width:100%;height:100%;margin-bottom:10px;"><input type="text"
+                                                                                         class="form-control searchValue"
+                                                                                         placeholder="搜索"
+                                                                                         style="width:100%;"
+                                                                                         >
+        </p>
+        <div class="panel-heading" style="background: white;">
+            <button class="btn btn-xs btn-success" id="addSoftware" type="button"><span
+                    class="glyphicon glyphicon-plus "></span></button>
+            <button class="btn btn-xs btn-default" type="button" id="refreshSoftwareList"><span
+                    class="glyphicon glyphicon-refresh"></span></button>
+
+        </div>
+
+
+        <table class="table table-bordered table-hover table-striped  table-condensed  table-responsive">
+            <thead>
+            <tr>
+                <th>包名</th>
+                <th>执行环境</th>
+                <th>执行文件</th>
+                <th>时间</th>
+                <th>备注</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="softwareTbody"></tbody>
+        </table>
+    </div>
+
+
+</div>
+
+<div id="descriptionDIV"
+     style="z-index: 1004;position: absolute;left: 0px;right: 0px;top:0px;margin: auto;display:none;">
+    <div class="modal  "
+         style="overflow: visible;position:relative;left:0px;right:0px;bottom:0px;top:0px;margin:auto;display:block;">
+        <div class="modal-dialog" style="left: 0px; margin-top: 0px;padding:0px;padding-top: 0px;">
+            <div class="modal-content " id="">
+                <div class="modal-header" style="cursor: move;">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+
+                    <h4 class=" glyphicon  glyphicon-pencil " style="color: green;cursor:pointer;">软件包备注</h4>
+                </div>
+
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">执行环境</label>
+                            <div class="col-sm-8">
+				<select class="form-control" id="env">
+					<option value="sh">sh</option>
+					<option value="python">python</option>
+					<option value="php">php</option>
+					<option value="perl">perl</option>
+				</select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">执行文件</label>
+                            <div class="col-sm-8">
+                                <input id="scriptName" type="text" class="form-control"
+					placeholder = "比如 install.sh 或 setup.py等"
+                                       style="border: dashed 1px lightsteelblue">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">备注</label>
+                            <div class="col-sm-8">
+                                <input id="description" type="text" class="form-control"
+                                       style="border: dashed 1px lightsteelblue">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button style="float: left;" type="button" class="btn btn-default cancelDiv" >取消
+                    </button>
+                    <button style="float:right; " type="button" class="btn btn-success" id="replaceDescription">确定
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--拖动上传-->
+<div id="dropz"
+     style="display:none;position: fixed;  top: 0px; bottom: 0px ;left: 0px; right: 0px; z-index: 1003;background:white;">
+    <span class="glyphicon glyphicon-remove-sign" id="dumpUploadFile"  style="display:none;float:right;font-size: 300%;cursor:pointer"></span>
+    <div style="position: absolute;margin: auto;top: 30px; bottom: 30px ;left: 30px; right: 30px;border:2px dashed #b0b0b0;border-radius: 20px;text-align:center;font-weight:bold;">请把软件包拖动到这里
+    </div>
+</div>
+<div id="uploadFileProgress" style="color: none;font-weight: bold;font-size: 500%;z-index: 1004;width:5%;height:5%;margin:auto;position:fixed;top:0px;bottom:0px;right:0px;left:0px;display: none;"> 0% </div> 
+<script src="../js/software.js"></script>

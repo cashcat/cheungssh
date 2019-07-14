@@ -2,6 +2,16 @@
 # Create your models here.
 from django.db import models
 
+class SoftwareList(models.Model):
+	name =        models.CharField(max_length=888)
+	script_name =        models.CharField(max_length=888)
+	env =        models.CharField(max_length=888)
+	create_time = models.CharField(max_length=888)
+	description = models.CharField(max_length=888,default="",null=True)
+	username =    models.CharField(max_length=888)
+	class Meta:
+		app_label = 'cheungssh'
+	
 class ServiceOperationList(models.Model):
 	name = models.CharField(max_length=5800,null = True)
 	create_time = models.CharField(max_length=200,null=False)

@@ -289,7 +289,7 @@ CREATE TABLE `cheungssh_serverslist` (
   `su_password` varchar(2000) DEFAULT NULL,
   `description` longtext,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -307,6 +307,25 @@ CREATE TABLE `cheungssh_serviceoperationlist` (
   `list` longtext NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `cheungssh_softwarelist`
+--
+
+DROP TABLE IF EXISTS `cheungssh_softwarelist`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cheungssh_softwarelist` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(888) NOT NULL,
+  `create_time` varchar(888) NOT NULL,
+  `description` varchar(888) DEFAULT NULL,
+  `username` varchar(888) NOT NULL,
+  `script_name` varchar(888) DEFAULT NULL,
+  `env` varchar(90) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=46 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -403,5 +422,5 @@ CREATE TABLE `django_session` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-08 10:49:39
+-- Dump completed on 2019-07-14 19:56:13
 INSERT INTO auth_user VALUES (1,'cheungssh','','','cheun@q.com','pbkdf2_sha256$10000$DrpqKF21yQiL$pF2hEsrlI1YI0tHMRZveOzjqMaXN3JfJ+tuPbuRhaCc=',1,1,1,'2019-07-05 07:30:33','2019-07-05 07:29:58');

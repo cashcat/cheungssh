@@ -18,6 +18,7 @@ urlpatterns = patterns('',
 	url(r'^cheungssh/command_history/$','mysite.cheungssh.cheungssh.command_history'),#####命令操作日志
 	url(r'^cheungssh/my_command_history/?$','mysite.cheungssh.cheungssh.my_command_history'),
 	url(r'^cheungssh/upload/test/$','mysite.cheungssh.cheungssh.upload_file_test'),
+	url(r'^cheungssh/upload_software/$','mysite.cheungssh.cheungssh.upload_software'),
 	url(r'^cheungssh/get_my_file_list/$','mysite.cheungssh.cheungssh.get_my_file_list'),#####获取自己上传过的文件清单
 	url(r'^cheungssh/pathsearch/$','mysite.cheungssh.cheungssh.pathsearch'),
 	url(r'^cheungssh/config_del/$','mysite.cheungssh.cheungssh.config_del'),
@@ -145,5 +146,8 @@ urlpatterns = patterns('',
 	url(r"^cheungssh/get_service_operation/$","mysite.cheungssh.cheungssh.get_service_operation"),
 	url(r"^cheungssh/del_service_operation/$","mysite.cheungssh.cheungssh.del_service_operation"),
 	url(r"^cheungssh/init_script_for_service_operation/$","mysite.cheungssh.cheungssh.init_script_for_service_operation"),
+	url(r"^cheungssh/description_software/$","mysite.cheungssh.cheungssh.description_software"),
+	url(r"^cheungssh/get_software_list/$","mysite.cheungssh.cheungssh.get_software_list"),
+	url(r"^cheungssh/del_software/$","mysite.cheungssh.cheungssh.del_software"),
 	)
 

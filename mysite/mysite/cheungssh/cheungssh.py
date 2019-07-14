@@ -12,7 +12,7 @@ import codecs
 from BlackListAdmin import BlackListAdmin, BlackListGroupAdmin,UserAndBlackList
 from ServiceOperation import ServiceOperation
 from BatchShellAdmin import  BatchShellAdmin
-from models import ServersList
+from models import ServersList,SoftwareList
 from RemoteFileAdmin import RemoteFileAdmin
 from ScriptAdmin import ScriptAdmin
 from CheungSSHCommandSystem import CheungSSHCommandSystem
@@ -136,7 +136,73 @@ def cheungssh_logout(request):
 	else:
 		info="%s(%s)"  % (callback,info)
 	return HttpResponse(info)
+@login_check.login_check('上传软件包') ####################临时注释
+@ajax_http#####
+def upload_software(request):
+	cheungssh_info={"status":True,"content":""}
+	create_time = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())
+	tid = time.strftime("%Y%m%d%H%M%S",time.localtime())
+	username=request.user.username
+	if request.method=="POST":
+		filename=str(request.FILES.get("file"))
+		file_content=request.FILES.get('file').read()
+		_dir=os.path.join(cheungssh_settings.package)
+		if not os.path.isdir(_dir):
+			os.mkdir(_dir)
+		dfile=os.path.join(_dir,filename + "_" + tid)
+		with open(dfile.encode('utf8'),"wb") as f:
+			f.write(file_content)
+		data={
+			"name":dfile,
+			"create_time":create_time,
+			"description":"",
+			"username":username,
+			"env":"",
+			"script_name":"",
+		}
+		a=SoftwareList(**data)
+		a.save()
+		data["id"] = a.id
+		cheungssh_info["content"] = data
+		cheungssh_info["content"]["name"] = os.path.basename("".join(cheungssh_info["content"]["name"].split("_")[:-1]))
+	return cheungssh_info
 
+@login_check.login_check('查看软件包列表')
+@ajax_http
+def get_software_list(request):
+	cheungssh_info={"content":[],"status":True}
+	data = SoftwareList.objects.all()
+	for line in data:
+		cheungssh_info["content"].insert(0,{
+			"name":os.path.basename("".join(line.name.split("_")[:-1])),
+			"create_time":line.create_time,
+			"username":line.username,
+			"description":line.description,
+			"script_name":line.script_name,
+			"id":line.id,
+			"env":line.env,
+		})
+	return cheungssh_info
+@login_check.login_check('删除软件包列表')
+@ajax_http
+def del_software(request):
+	cheungssh_info={"status":True,"content":""}
+	data = SoftwareList.objects.filter(id=request.GET.get("id"))
+	if len(data)==1:
+		os.remove(data[0].name)
+	data.delete()
+	return cheungssh_info
+
+
+
+
+@login_check.login_check('修改软件备注',False)
+@ajax_http
+def description_software(request):
+	data = request.POST.get("data")
+	data = json.loads(data)
+	SoftwareList.objects.filter(id=data["id"]).update(description=data["description"],script_name=data["script_name"],env=data["env"])
+	return {"status":True,"content":""}
 @login_check.login_check('PC上传') ####################临时注释
 ######@permission_check('cheungssh.local_file_upload') #####权限拒绝，但是前段没有提示
 #####注意用户名没有

@@ -42,19 +42,26 @@ document.getElementById("confirm").onclick=function(){
 		showErrorInfo("请最少选择一个主机！")
 		return false;
 	}
-    window.opener.$("#remotePathDIV").slideDown("fast");
-	try{
-    window.opener.document.getElementById("remotePath").focus();
-    window.opener.document.getElementById("shadow").style.display="block"
+	var action = getKey("action")
+	if (action==="package"){
+		window.open("command.html","_blank","location=no,scrollbars=yes,resizable=1,modal=false,alwaysRaised=yes,width=2000px,height=10000px")
 	}
-	catch(e){
-		//下载功能
-		window.opener.document.getElementById("shadow").style.display="block"
-		window.opener.$("#remoteDownloadPathDIV").show("fast");
-		window.opener.document.getElementById("remoteDownloadPath").focus();
+	else{
+		//文件上传和下载部分的功能
+ 		window.opener.$("#remotePathDIV").slideDown("fast");
+		try{
+			window.opener.document.getElementById("remotePath").focus();
+			window.opener.document.getElementById("shadow").style.display="block"
+		}
+		catch(e){
+			//下载功能
+			window.opener.document.getElementById("shadow").style.display="block"
+			window.opener.$("#remoteDownloadPathDIV").show("fast");
+			window.opener.document.getElementById("remoteDownloadPath").focus();
+		}
+    		window.opener.window.currentfileUploadSelectedServers=servers
+	    	window.opener.window.currentfileDownloadSelectedServers=servers
 	}
-    	window.opener.window.currentfileUploadSelectedServers=servers
-    	window.opener.window.currentfileDownloadSelectedServers=servers
 	window.close()
 }
 getServerGroups()

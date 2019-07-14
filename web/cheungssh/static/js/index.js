@@ -44,6 +44,12 @@ var menu = [
 
         }
     },
+	{
+		"安装软件":{
+			"class":"glyphicon glyphicon-briefcase",
+			"id":"installSoftware",
+		}
+	},
 	/*
     {
         "业务操作": {
@@ -137,7 +143,11 @@ $(document).on("click","#serviceOperation",function(){
     sectionColor(this);
     $("#showMainContent").load("../html/serviceOperation.html");
 })
-
+$(document).on("click","#installSoftware",function(){
+    sectionColor(this);
+	$("#showMainContent").load("../html/software.html")
+	
+})
 function showAndCloseSection(div) {
     //关闭点击div下一个兄弟元素
     //加颜色

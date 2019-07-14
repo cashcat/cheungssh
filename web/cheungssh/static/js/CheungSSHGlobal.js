@@ -143,6 +143,10 @@ window.refuseInfo="抱歉，这里是批量操作，如果您要执行交互动�
 /*
  必须首先加载：服务器信息
  */
+var descriptionSoftwareURL = "/cheungssh/description_software/";
+var delSoftwareURL = "/cheungssh/del_software/";
+var getSoftwareListURL ="/cheungssh/get_software_list/";
+var uploadSoftwareURL = "/cheungssh/upload_software/";
 var getLoginProgressURL = "/cheungssh/get_login_progress/";
 var getCrontabListURL = "/cheungssh/get_crontab_list/"
 var deleteCrontabURL = "/cheungssh/delete_crontab_list/"
